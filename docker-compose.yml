@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  mysql:
+    image: mysql:8.1.0
+    container_name: my-mysql-container
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_DATABASE: gaboot
+      MYSQL_USER: docker
+      MYSQL_ROOT_PASSWORD: gaboot
+      MYSQL_PASSWORD: gaboot
+    ports:
+      - "3306:3306"
+  
+  cms-gaboot:
+    build: .
+    container_name: cms-gaboot-container
+    init: true
+    environment:
+      MYSQL_HOST: "localhost"
+    ports:
+      - 3000:3000
+    depends_on:
+      - mysql
+    volumes:
+      - ./log:/app/log
+      - ./data:/app/data
