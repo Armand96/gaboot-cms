@@ -3,11 +3,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { InjectModel } from '@nestjs/sequelize';
-import { ResponseSuccessProduct } from './interfaces/response-success-product';
 import { Request } from 'express';
 import { Op } from 'sequelize';
 import { PathImageObj } from 'src/services/general/interfaces/path-image';
 import { GeneralService } from 'src/services/general/general.service';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class ProductsService {
@@ -17,16 +17,8 @@ export class ProductsService {
     private gen : GeneralService
   ) { }
 
-  private resSuccess: ResponseSuccessProduct = {
-    message: '',
-    datum: <Product>{},
-    data: <Product[]>[],
-    success: false,
-    lastPage: 0,
-    totalData: 0
-  };
-
   async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
+    const resSuccess = new ResponseSuccess<Product>();
     let pathObj = {} as PathImageObj;
 
     if (image != null) {
@@ -46,14 +38,15 @@ export class ProductsService {
     const dataCreate: any = createProductDto;
     const product = await this.product.create(dataCreate);
 
-    this.resSuccess.message = 'Success Insert Product Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = product;
+    resSuccess.message = 'Success Insert Product Data';
+    resSuccess.success = true;
+    resSuccess.datum = product;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findAll(req: Request) {
+    const resSuccess = new ResponseSuccess<Product>();
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
@@ -71,24 +64,25 @@ export class ProductsService {
       where: filterData
     });
 
-    this.resSuccess.message = 'Success Get Product';
-    this.resSuccess.success = true;
-    this.resSuccess.data = categories;
+    resSuccess.message = 'Success Get Product';
+    resSuccess.success = true;
+    resSuccess.data = categories;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findOne(id: number) {
+    const resSuccess = new ResponseSuccess<Product>();
     const categories = await this.product.findOne({
       where: { id: id },
     });
 
-    this.resSuccess.message = 'Success Get Product';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = categories;
-    delete this.resSuccess.lastPage;
+    resSuccess.message = 'Success Get Product';
+    resSuccess.success = true;
+    resSuccess.datum = categories;
+    delete resSuccess.lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async update(
@@ -96,6 +90,7 @@ export class ProductsService {
     updateProductDto: UpdateProductDto, 
     image: Express.Multer.File) 
     {
+      const resSuccess = new ResponseSuccess<Product>();
     const dataUpdate: any = updateProductDto;
 
     let pathObj = {} as PathImageObj;
@@ -117,22 +112,23 @@ export class ProductsService {
     await this.product.update(dataUpdate, { where: { id: id } });
     const data = await this.product.findOne({ where: { id: id } });
 
-    this.resSuccess.message = 'Success Update Product Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = data;
+    resSuccess.message = 'Success Update Product Data';
+    resSuccess.success = true;
+    resSuccess.datum = data;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async remove(id: number) {
+    const resSuccess = new ResponseSuccess<Product>();
     await this.product.destroy({
       where: { id: id },
     });
 
-    this.resSuccess.message = 'Success Delete Product Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = null;
+    resSuccess.message = 'Success Delete Product Data';
+    resSuccess.success = true;
+    resSuccess.datum = null;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 }

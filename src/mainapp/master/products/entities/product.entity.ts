@@ -28,6 +28,9 @@ export class Product extends Model
   description: string
 
   @Column
+  price: number
+
+  @Column
   stock: number
 
   @Column

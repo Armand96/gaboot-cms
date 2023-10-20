@@ -15,6 +15,7 @@ import { RbacMiddleware } from './middlewares/rbac/rbac.middleware';
 import { CategoriesModule } from './mainapp/categories/categories.module';
 import { ProductsModule } from './mainapp/master/products/products.module';
 import { CustomersModule } from './mainapp/master/customers/customers.module';
+import { CartsModule } from './mainapp/carts/carts.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CustomersModule } from './mainapp/master/customers/customers.module';
     CategoriesModule,
     ProductsModule,
     CustomersModule,
+    CartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

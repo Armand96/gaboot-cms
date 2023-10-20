@@ -7,9 +7,9 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import * as bcrypt from 'bcrypt';
 import { GeneralService } from 'src/services/general/general.service';
 import { PathImageObj } from 'src/services/general/interfaces/path-image';
-import { ResponseSuccessCustomer } from './interfaces/response-success-product';
 import { Request } from 'express';
 import { Op } from 'sequelize';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class CustomersService {
@@ -46,7 +46,7 @@ export class CustomersService {
 
     delete customer.password;
 
-    let resSuccess = {} as ResponseSuccessCustomer;
+    const resSuccess = new ResponseSuccess<Customer>();
     resSuccess.message = 'Success Insert Customer Data';
     resSuccess.success = true;
     resSuccess.datum = customer;
@@ -79,7 +79,7 @@ export class CustomersService {
       Number((customer.count / limit).toFixed(0)) +
       (customer.count % limit == 0 ? 0 : 1);
 
-    let resSuccess = {} as ResponseSuccessCustomer;
+    const resSuccess = new ResponseSuccess<Customer>();
     resSuccess.message = 'Success Get Customer Data';
     resSuccess.success = true;
     resSuccess.data = customer.rows;
@@ -93,7 +93,7 @@ export class CustomersService {
       where: { id: id },
     });
 
-    let resSuccess = {} as ResponseSuccessCustomer;
+    const resSuccess = new ResponseSuccess<Customer>();
     resSuccess.message = 'Success Get Customer';
     resSuccess.success = true;
     resSuccess.datum = customer;
@@ -134,7 +134,7 @@ export class CustomersService {
 
     const user = await this.customer.findOne({ where: { id: id } });
 
-    let resSuccess = {} as ResponseSuccessCustomer;
+    const resSuccess = new ResponseSuccess<Customer>();
     resSuccess.message = 'Success Update Customer Data';
     resSuccess.success = true;
     resSuccess.datum = user;
@@ -154,7 +154,7 @@ export class CustomersService {
       this.gen.removeImage(user.thumbnailPath);
     }
 
-    let resSuccess = {} as ResponseSuccessCustomer;
+    const resSuccess = new ResponseSuccess<Customer>();
     resSuccess.message = 'Success Delete Customer Data';
     resSuccess.success = true;
     resSuccess.data = null;
