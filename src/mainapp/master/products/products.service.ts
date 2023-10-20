@@ -24,12 +24,7 @@ export class ProductsService {
   };
 
   async create(createProductDto: CreateProductDto) {
-    let dataCreate: any = {};
-    dataCreate.name = createProductDto.name;
-    dataCreate.description = createProductDto.description;
-    dataCreate.size = createProductDto.size;
-    dataCreate.stock = createProductDto.stock;
-    dataCreate.category_id = createProductDto.category_id;
+    const dataCreate: any = createProductDto;
 
     console.log(createProductDto);
     const product = await this.product.create(dataCreate);
@@ -80,12 +75,7 @@ export class ProductsService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    let dataUpdate: any = {};
-    dataUpdate.name = updateProductDto.name;
-    dataUpdate.description = updateProductDto.description;
-    dataUpdate.size = updateProductDto.size;
-    dataUpdate.stock = updateProductDto.stock;
-    dataUpdate.category_id = updateProductDto.category_id;
+    const dataUpdate: any = updateProductDto;
 
     await this.product.update(dataUpdate, { where: { id: id } });
     const data = await this.product.findOne({ where: { id: id } });

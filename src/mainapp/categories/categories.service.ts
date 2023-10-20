@@ -25,12 +25,8 @@ export class CategoriesService {
   };
 
   async create(createCategoryDto: CreateCategoryDto) {
-    let dataCreate: any = {};
-    dataCreate.name = createCategoryDto.name;
-    dataCreate.description = createCategoryDto.description;
-    dataCreate.imagePath = createCategoryDto.imagePath;
-    dataCreate.thumbnailPath = createCategoryDto.thumbnailPath;
-
+    let dataCreate: any = createCategoryDto;
+    
     const category = await this.category.create(dataCreate);
 
     this.resSuccess.message = 'Success Insert Category Data';
@@ -43,8 +39,6 @@ export class CategoriesService {
   async findAll(req : Request) {
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
-
-
     /* FILTER DATA */
     // console.log(req.query)
     let filterData: any = {};

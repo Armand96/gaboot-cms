@@ -31,11 +31,17 @@ export class Product extends Model
   stock: number
 
   @Column
-  size: number
+  dimension: string
+
+  @Column
+  weight: number
+
+  @Column
+  weightUnit: string
 
   @ForeignKey(() => Category)
   @Column
-  category_id: number
+  categoryId: number
   
   @BelongsTo(() => Category)
   category: Category
