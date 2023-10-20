@@ -1,8 +1,6 @@
 import {
   BelongsTo,
   Column,
-  DataType,
-  Default,
   ForeignKey,
   Model,
   Table,
@@ -12,7 +10,6 @@ import { IUser } from './user.interface';
 import { Role } from '../../role/entities/role.entity';
 
 @Table({
-
   tableName: 'master_users',
   timestamps: true,
   defaultScope: {

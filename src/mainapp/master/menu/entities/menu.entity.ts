@@ -34,6 +34,6 @@ export class Menu extends Model {
     @HasMany(() => Submenu)
     submenus: Submenu[];
 
-    @HasOne(() => RoleAccess)
+    @HasMany(() => RoleAccess)
     access: RoleAccess[];
 }

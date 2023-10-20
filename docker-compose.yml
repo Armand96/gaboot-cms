@@ -2,26 +2,35 @@ version: "3.5"
 services:
   mysql:
     image: mysql:8.1.0
+    restart: always
     container_name: my-mysql-container
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      #MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: gaboot
       MYSQL_DATABASE: gaboot
       MYSQL_USER: docker
-      MYSQL_ROOT_PASSWORD: gaboot
       MYSQL_PASSWORD: gaboot
     ports:
       - "3306:3306"
   
-  cms-gaboot:
+  nestjs-cms-api:
     build: .
-    container_name: cms-gaboot-container
+    container_name: nestjs-cms-container
     init: true
     environment:
-      MYSQL_HOST: "localhost"
+      MYSQL_HOST: "mysql"
     ports:
       - 3000:3000
     depends_on:
       - mysql
-    volumes:
-      - ./log:/app/log
-      - ./data:/app/data
+
+  # cpp-dragon-api:
+  #   build: bin/
+  #   container_name: cpp-dragon-container
+  #   init: true
+  #   environment:
+  #     MYSQL_HOST: "mysql"
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - mysql

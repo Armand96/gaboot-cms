@@ -12,6 +12,9 @@ import { RoleMenuModule } from './mainapp/access/role_menu/role_menu.module';
 import { RoleSubmenuModule } from './mainapp/access/role_submenu/role_submenu.module';
 import { RouteInfo } from '@nestjs/common/interfaces';
 import { RbacMiddleware } from './middlewares/rbac/rbac.middleware';
+import { CategoriesModule } from './mainapp/categories/categories.module';
+import { ProductsModule } from './mainapp/master/products/products.module';
+import { CustomersModule } from './mainapp/master/customers/customers.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { RbacMiddleware } from './middlewares/rbac/rbac.middleware';
     RoleAccessModule,
     RoleMenuModule,
     RoleSubmenuModule,
+    CategoriesModule,
+    ProductsModule,
+    CustomersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
