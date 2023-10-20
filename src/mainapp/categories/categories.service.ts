@@ -133,4 +133,12 @@ export class CategoriesService {
 
     return this.resSuccess;
   }
+
+  async getImage(id: number): Promise<Category> {
+    console.log('image');
+    const category = await this.category.findOne({
+      where: { id: id },
+    });
+    return category;
+  }
 }

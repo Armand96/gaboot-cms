@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common"
 import { IsNotEmpty } from "class-validator"
 
 export class CreateCategoryDto 
@@ -6,8 +7,8 @@ export class CreateCategoryDto
   readonly name: string
   @IsNotEmpty()
   readonly description: string
-  @IsNotEmpty()
+  @Optional()
   readonly imagePath: string
-  @IsNotEmpty()
+  @Optional()
   readonly thumbnailPath: string
 }

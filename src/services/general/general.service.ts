@@ -21,20 +21,8 @@ export class GeneralService {
         let pathImage = '';
         let pathThumbImage = '';
 
-        switch (category) {
-            case 'user':
-                pathImage = 'storage/users/pictures';
-                pathThumbImage = 'storage/users/pictures/thumb';
-                break;
-
-            case 'item':
-                pathImage = 'storage/items/pictures';
-                pathThumbImage = 'storage/items/pictures/thumb';
-                break;
-
-            default:
-                break;
-        }
+        pathImage = `storage/${category}/pictures`;
+        pathThumbImage = `storage/${category}/pictures/thumb`;
 
         const pathObj: PathImageObj = {
             path: pathImage,
