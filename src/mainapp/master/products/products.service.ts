@@ -6,12 +6,15 @@ import { InjectModel } from '@nestjs/sequelize';
 import { ResponseSuccessProduct } from './interfaces/response-success-product';
 import { Request } from 'express';
 import { Op } from 'sequelize';
+import { PathImageObj } from 'src/services/general/interfaces/path-image';
+import { GeneralService } from 'src/services/general/general.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product)
     private product: typeof Product,
+    private gen : GeneralService
   ) { }
 
   private resSuccess: ResponseSuccessProduct = {
@@ -23,10 +26,24 @@ export class ProductsService {
     totalData: 0
   };
 
-  async create(createProductDto: CreateProductDto) {
-    const dataCreate: any = createProductDto;
+  async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
+    let pathObj = {} as PathImageObj;
 
-    console.log(createProductDto);
+    if (image != null) {
+      pathObj = await this.gen.uploadImage(
+        image,
+        `${createProductDto.name}${Date.now()}`,
+        'product',
+      );
+      console.log('after upload');
+    }
+
+    if (image != null) {
+      createProductDto.imagePath = pathObj.path;
+      createProductDto.thumbnailPath = pathObj.thumbPath;
+    }
+
+    const dataCreate: any = createProductDto;
     const product = await this.product.create(dataCreate);
 
     this.resSuccess.message = 'Success Insert Product Data';
@@ -74,8 +91,28 @@ export class ProductsService {
     return this.resSuccess;
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(
+    id: number, 
+    updateProductDto: UpdateProductDto, 
+    image: Express.Multer.File) 
+    {
     const dataUpdate: any = updateProductDto;
+
+    let pathObj = {} as PathImageObj;
+
+    if (image != null) {
+      //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
+      pathObj = await this.gen.uploadImage(
+        image,
+        `${updateProductDto.name}${Date.now()}`,
+        'product',
+      );
+    }
+
+    if (image != null) {
+      updateProductDto.imagePath = pathObj.path;
+      updateProductDto.thumbnailPath = pathObj.thumbPath;
+    }
 
     await this.product.update(dataUpdate, { where: { id: id } });
     const data = await this.product.findOne({ where: { id: id } });

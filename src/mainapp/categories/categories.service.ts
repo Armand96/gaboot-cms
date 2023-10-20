@@ -6,12 +6,15 @@ import { InjectModel } from '@nestjs/sequelize';
 import { ResponseSuccessCategory } from './interfaces/response-success-category';
 import { Request } from 'express';
 import { Op } from 'sequelize';
+import { GeneralService } from 'src/services/general/general.service';
+import { PathImageObj } from 'src/services/general/interfaces/path-image';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel(Category)
     private category: typeof Category,
+    private gen : GeneralService
   ) { }
 
   /* RESPONSE SUCCES */
@@ -24,8 +27,23 @@ export class CategoriesService {
     totalData: 0
   };
 
-  async create(createCategoryDto: CreateCategoryDto) {
+  async create(createCategoryDto: CreateCategoryDto, 
+    image: Express.Multer.File) {
     let dataCreate: any = createCategoryDto;
+    let pathObj = {} as PathImageObj;
+
+    if (image != null) {
+      pathObj = await this.gen.uploadImage(
+        image,
+        `${dataCreate.name}${Date.now()}`,
+        'category',
+      );
+    }
+
+    if (image != null) {
+      dataCreate.imagePath = pathObj.path;
+      dataCreate.thumbnailPath = pathObj.thumbPath;
+    }
     
     const category = await this.category.create(dataCreate);
 
@@ -72,12 +90,27 @@ export class CategoriesService {
     return this.resSuccess;
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    let dataUpdate: any = {};
-    dataUpdate.name = updateCategoryDto.name;
-    dataUpdate.description = updateCategoryDto.description;
-    dataUpdate.imagePath = updateCategoryDto.imagePath;
-    dataUpdate.thumbnailPath = updateCategoryDto.thumbnailPath;
+  async update(id: number, 
+    updateCategoryDto: UpdateCategoryDto,
+    image: Express.Multer.File) 
+    {
+    let dataUpdate: any = updateCategoryDto;
+
+    let pathObj = {} as PathImageObj;
+
+    if (image != null) {
+      //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
+      pathObj = await this.gen.uploadImage(
+        image,
+        `${dataUpdate.name}${Date.now()}`,
+        'product',
+      );
+    }
+
+    if (image != null) {
+      dataUpdate.imagePath = pathObj.path;
+      dataUpdate.thumbnailPath = pathObj.thumbPath;
+    }
 
     await this.category.update(dataUpdate, { where: { id: id } });
     const menu = await this.category.findOne({ where: { id: id } });
