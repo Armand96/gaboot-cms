@@ -15,6 +15,7 @@ import { RoleMenu } from 'src/mainapp/access/role_menu/entities/role_menu.entity
 import { RoleSubmenu } from 'src/mainapp/access/role_submenu/entities/role_submenu.entity';
 import { Menu } from '../menu/entities/menu.entity';
 import { Submenu } from '../submenu/entities/submenu.entity';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class UserService {
@@ -63,7 +64,7 @@ export class UserService {
 
     delete user.password;
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Insert User Data';
     resSuccess.success = true;
     resSuccess.datum = user;
@@ -103,7 +104,7 @@ export class UserService {
       Number((dataUser.count / limit).toFixed(0)) +
       (dataUser.count % limit == 0 ? 0 : 1);
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Get User Data';
     resSuccess.success = true;
     resSuccess.data = dataUser.rows;
@@ -139,7 +140,7 @@ export class UserService {
       ],
     });
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Get User';
     resSuccess.success = true;
     resSuccess.datum = dataUser;
@@ -185,7 +186,7 @@ export class UserService {
 
     const user = await this.user.findOne({ where: { id: id } });
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Update User Data';
     resSuccess.success = true;
     resSuccess.datum = user;
@@ -206,7 +207,7 @@ export class UserService {
       this.gen.removeImage(user.imgThumbPath);
     }
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Delete User Data';
     resSuccess.success = true;
     resSuccess.data = null;
@@ -229,7 +230,7 @@ export class UserService {
       where: { id: id },
     });
 
-    let resSuccess = {} as ResponseSuccessUser;
+    const resSuccess = new ResponseSuccess<User>();
     resSuccess.message = 'Success Get User';
     resSuccess.success = true;
     resSuccess.datum = dataUser;

@@ -8,6 +8,7 @@ import { ResponseSuccessSubmenu } from './interfaces/response-success-submenu';
 import { Sequelize } from 'sequelize-typescript';
 import { Op } from 'sequelize';
 import { RoleSubmenuService } from 'src/mainapp/access/role_submenu/role_submenu.service';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class SubmenuService {
@@ -18,29 +19,22 @@ export class SubmenuService {
     private roleSubmSvc: RoleSubmenuService,
   ) { }
 
-  /* RESPONSE SUCCES */
-  private resSuccess = {} as ResponseSuccessSubmenu;
-
   async create(createSubmenuDto: CreateSubmenuDto) {
-    let dataCreate: any = {};
-    dataCreate.menuId = createSubmenuDto.menuId;
-    dataCreate.submenuName = createSubmenuDto.submenuName;
-    dataCreate.submenuIcon = createSubmenuDto.submenuIcon;
-    dataCreate.backendUrl = createSubmenuDto.backendUrl;
-    dataCreate.frontendUrl = createSubmenuDto.frontendUrl;
-    dataCreate.submenuIsActive = createSubmenuDto.submenuIsActive;
+    const resSuccess = new ResponseSuccess<Submenu>();
+    let dataCreate: any = createSubmenuDto;
 
     const submenu = await this.submenu.create(dataCreate);
 
-    this.resSuccess.message = 'Success Insert Submenu Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = submenu;
-    delete this.resSuccess.lastPage;
+    resSuccess.message = 'Success Insert Submenu Data';
+    resSuccess.success = true;
+    resSuccess.datum = submenu;
+    delete resSuccess.lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findAll(req: Request) {
+    const resSuccess = new ResponseSuccess<Submenu>();
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
@@ -60,53 +54,51 @@ export class SubmenuService {
     const lastPage =
       Number((dataSubmenu.count / limit).toFixed(0)) +
       (dataSubmenu.count % limit == 0 ? 0 : 1);
-    this.resSuccess.message = 'Success Get Submenus';
-    this.resSuccess.success = true;
-    this.resSuccess.data = dataSubmenu.rows;
-    this.resSuccess.lastPage = lastPage;
+    resSuccess.message = 'Success Get Submenus';
+    resSuccess.success = true;
+    resSuccess.data = dataSubmenu.rows;
+    resSuccess.lastPage = lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findByMenuId(menuId: number) {
+    const resSuccess = new ResponseSuccess<Submenu>();
     const dataSubmenu = await this.submenu.findAll({ where: { menuId: menuId } })
-    this.resSuccess.message = 'Success Get Submenus';
-    this.resSuccess.success = true;
-    this.resSuccess.data = dataSubmenu;
-    return this.resSuccess;
+    resSuccess.message = 'Success Get Submenus';
+    resSuccess.success = true;
+    resSuccess.data = dataSubmenu;
+    return resSuccess;
   }
 
   async findOne(id: number) {
+    const resSuccess = new ResponseSuccess<Submenu>();
     const dataSubmenu = await this.submenu.findOne({ where: { id: id } });
-    this.resSuccess.message = 'Success Get Submenu';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = dataSubmenu;
-    delete this.resSuccess.lastPage;
+    resSuccess.message = 'Success Get Submenu';
+    resSuccess.success = true;
+    resSuccess.datum = dataSubmenu;
+    delete resSuccess.lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async update(id: number, updateSubmenuDto: UpdateSubmenuDto) {
-    let dataUpdate: any = {};
-    dataUpdate.menuId = updateSubmenuDto.menuId;
-    dataUpdate.submenuName = updateSubmenuDto.submenuName;
-    dataUpdate.submenuIcon = updateSubmenuDto.submenuIcon;
-    dataUpdate.backendUrl = updateSubmenuDto.backendUrl;
-    dataUpdate.frontendUrl = updateSubmenuDto.frontendUrl;
-    dataUpdate.submenuIsActive = updateSubmenuDto.submenuIsActive;
+    const resSuccess = new ResponseSuccess<Submenu>();
+    let dataUpdate: any = updateSubmenuDto;
 
     await this.submenu.update(dataUpdate, { where: { id: id } });
     const submenu = await this.submenu.findOne({ where: { id: id } });
 
-    this.resSuccess.message = 'Success Update Submenu Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = submenu;
-    delete this.resSuccess.lastPage;
+    resSuccess.message = 'Success Update Submenu Data';
+    resSuccess.success = true;
+    resSuccess.datum = submenu;
+    delete resSuccess.lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async remove(id: number) {
+    const resSuccess = new ResponseSuccess<Submenu>();
 
     await this.seq.transaction(async (trx) => {
 
@@ -118,11 +110,11 @@ export class SubmenuService {
     })
 
 
-    this.resSuccess.message = 'Success Delete Submenu Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = null;
-    delete this.resSuccess.lastPage;
+    resSuccess.message = 'Success Delete Submenu Data';
+    resSuccess.success = true;
+    resSuccess.datum = null;
+    delete resSuccess.lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 }

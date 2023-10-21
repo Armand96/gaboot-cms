@@ -27,6 +27,7 @@ import { RoleMenuService } from 'src/mainapp/access/role_menu/role_menu.service'
 import { CreateRoleSubmenuDto } from 'src/mainapp/access/role_submenu/dto/create-role_submenu.dto';
 import { RoleSubmenu } from 'src/mainapp/access/role_submenu/entities/role_submenu.entity';
 import { RoleSubmenuService } from 'src/mainapp/access/role_submenu/role_submenu.service';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class RoleService {
@@ -43,29 +44,20 @@ export class RoleService {
 
   wslog = wsLogger;
 
-  /* RESPONSE SUCCES */
-  private resSuccess: ResponseSuccessRole = {
-    message: '',
-    datum: <Role>{},
-    data: <Role[]>[],
-    success: false,
-    lastPage: 0,
-    totalData: 0
-  };
-
   async create(createRoleDto: CreateRoleDto) {
-    let dataCreate: any = {};
-    dataCreate.roleName = createRoleDto.roleName;
+    const resSuccess = new ResponseSuccess<Role>();
+    let dataCreate: any = createRoleDto;
     const role = await this.role.create(dataCreate);
 
-    this.resSuccess.message = 'Success Insert Role Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = role;
+    resSuccess.message = 'Success Insert Role Data';
+    resSuccess.success = true;
+    resSuccess.datum = role;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findAll(req: Request) {
+    const resSuccess = new ResponseSuccess<Role>();
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
@@ -97,15 +89,16 @@ export class RoleService {
     const lastPage =
       Number((dataRole.count / limit).toFixed(0)) +
       (dataRole.count % limit == 0 ? 0 : 1);
-    this.resSuccess.message = 'Success Get Roles';
-    this.resSuccess.success = true;
-    this.resSuccess.data = dataRole.rows;
-    this.resSuccess.lastPage = lastPage;
+    resSuccess.message = 'Success Get Roles';
+    resSuccess.success = true;
+    resSuccess.data = dataRole.rows;
+    resSuccess.lastPage = lastPage;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async findOne(id: number) {
+    const resSuccess = new ResponseSuccess<Role>();
     const dataRole = await this.role.findOne({
       where: { id: id },
       include: [
@@ -131,14 +124,15 @@ export class RoleService {
         },
       ],
     });
-    this.resSuccess.message = 'Success Get Role';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = dataRole;
+    resSuccess.message = 'Success Get Role';
+    resSuccess.success = true;
+    resSuccess.datum = dataRole;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
+    const resSuccess = new ResponseSuccess<Role>();
     let dataUpdate: any = {};
     dataUpdate.roleName = updateRoleDto.roleName;
 
@@ -147,14 +141,15 @@ export class RoleService {
     });
 
     const role = await this.role.findOne({ where: { id: id } });
-    this.resSuccess.message = 'Success Update Role Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = role;
+    resSuccess.message = 'Success Update Role Data';
+    resSuccess.success = true;
+    resSuccess.datum = role;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   async remove(id: number) {
+    const resSuccess = new ResponseSuccess<Role>();
     await this.role.destroy({
       where: { id: id },
     });
@@ -162,11 +157,11 @@ export class RoleService {
     await this.roleMenu.bulkDelete(id);
     await this.roleSubmenu.bulkDelete(id);
 
-    this.resSuccess.message = 'Success Delete Role Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = null;
+    resSuccess.message = 'Success Delete Role Data';
+    resSuccess.success = true;
+    resSuccess.datum = null;
 
-    return this.resSuccess;
+    return resSuccess;
   }
 
   /* ========================== NON CRUD ========================== */
@@ -189,6 +184,7 @@ export class RoleService {
 
   /* CREATE ROLE */
   async createNewRole(createRoleDto: CreateRoleDetailDto) {
+    let resSuccess = new ResponseSuccess<Role>();
     let dataArrayRoleAccess: CreateRoleAccessDto[] = [];
     let dataRoleSubmenu: CreateRoleSubmenuDto[] = [];
     let dataArrayMenu = createRoleDto.roleMenus;
@@ -265,11 +261,11 @@ export class RoleService {
 
         /* INSERT */
         await this.rolac.bulkInsert(dataArrayRoleAccess);
-        this.resSuccess = await this.findOne(id);
-        this.resSuccess.message = 'Success Create Role';
+        resSuccess = await this.findOne(id);
+        resSuccess.message = 'Success Create Role';
       });
 
-      return this.resSuccess;
+      return resSuccess;
     } catch (error) {
       this.wslog.error(error);
       this.throwingError(error);
@@ -279,6 +275,7 @@ export class RoleService {
   /* UPDATE */
   /* ===================================================================== */
   async updateRole(roleId: number, updateRoleDto: UpdateRoleDetailDto) {
+    let resSuccess = new ResponseSuccess<Role>();
     let dataArrayRoleAccess: CreateRoleAccessDto[] = [];
     let dataRoleSubmenu: CreateRoleSubmenuDto[] = [];
     let dataArrayMenu = updateRoleDto.roleMenus;
@@ -359,10 +356,10 @@ export class RoleService {
         /* INSERT */
         await this.roleSubmenu.bulkInsert(dataRoleSubmenu);
         await this.rolac.bulkInsert(dataArrayRoleAccess);
-        this.resSuccess = await this.findOne(roleId);
-        this.resSuccess.message = 'Success Update Role';
+        resSuccess = await this.findOne(roleId);
+        resSuccess.message = 'Success Update Role';
       });
-      return this.resSuccess;
+      return resSuccess;
     } catch (error) {
       this.wslog.error(error);
       this.throwingError(error);
