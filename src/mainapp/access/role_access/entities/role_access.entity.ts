@@ -38,16 +38,16 @@ export class RoleAccess extends Model {
   backendUrl: string;
 
   @Column
-  create: boolean;
+  createz: boolean;
 
   @Column
-  read: boolean;
+  readz: boolean;
 
   @Column
-  updates: boolean;
+  updatez: boolean;
 
   @Column
-  delete: boolean;
+  deletez: boolean;
 
   /* RELATION */
   @BelongsTo(() => Role)

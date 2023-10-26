@@ -17,14 +17,14 @@ export class CreateRoleAccessDto {
   backendUrl: string;
 
   @IsNotEmpty()
-  create: boolean;
+  createz: boolean;
 
   @IsNotEmpty()
-  read: boolean;
+  readz: boolean;
 
   @IsNotEmpty()
-  updates: boolean;
+  updatez: boolean;
 
   @IsNotEmpty()
-  delete: boolean;
+  deletez: boolean;
 }
