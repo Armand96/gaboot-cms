@@ -1,34 +1,36 @@
-import { Optional } from '@nestjs/common';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 // import { IsUserAlreadyExist } from './rule/is-unique-username.decorator';
 
 export class UpdateUserDto {
-    @IsNotEmpty()
-    // @IsUserAlreadyExist({ message: "username has been taken", always: true})
-    userName: string;
+  @IsNotEmpty()
+  // @IsUserAlreadyExist({ message: "username has been taken", always: true})
+  userName: string;
 
-    @IsNotEmpty()
-    // @IsUserAlreadyExist({ message: "username has been taken", always: true})
-    email: string;
+  @IsNotEmpty()
+  // @IsUserAlreadyExist({ message: 'username has been taken', always: true })
+  email: string;
 
-    @IsNotEmpty()
-    fullName: string;
+  @IsNotEmpty()
+  firstName: string;
 
-    @IsOptional()
-    password: string;
+  @IsNotEmpty()
+  lastName: string;
 
-    @IsNotEmpty()
-    isActive: boolean;
+  @IsOptional()
+  password: string;
 
-    @IsNotEmpty()
-    roleId: number;
+  @IsNotEmpty()
+  isActive: boolean;
 
-    @Optional()
-    imgPath: string;
-  
-    @Optional()
-    imgThumbPath: string;
+  @IsNotEmpty()
+  roleId: number;
 
-    @Optional()
-    updatedAt: string;
+  @IsOptional()
+  imgPath: string;
+
+  @IsOptional()
+  imgThumbPath: string;
+
+  @IsOptional()
+  updatedAt: string;
 }

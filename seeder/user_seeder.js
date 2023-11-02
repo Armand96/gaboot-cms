@@ -16,8 +16,8 @@ async function seedUsers() {
     const password = await getHash('admin');
     // Insert seed data
     await sequelize.query(`
-      INSERT INTO master_users (firstName, lastName, userName, email, password) VALUES
-      ('admin', 'admin', 'admin', 'admin@example.com', '${password}');
+      INSERT INTO master_users (firstName, lastName, userName, email, password, roleId) VALUES
+      ('admin', 'admin', 'admin', 'admin@example.com', '${password}', 1);
       -- Add more INSERT statements for additional users
     `);
 
