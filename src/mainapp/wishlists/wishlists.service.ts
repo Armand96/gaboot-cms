@@ -4,23 +4,23 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 
 @Injectable()
 export class WishlistsService {
-  create(createWishlistDto: CreateWishlistDto) {
+  async create(createWishlistDto: CreateWishlistDto) {
     return 'This action adds a new wishlist';
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all wishlists`;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} wishlist`;
   }
 
-  update(id: number, updateWishlistDto: UpdateWishlistDto) {
+  async update(id: number, updateWishlistDto: UpdateWishlistDto) {
     return `This action updates a #${id} wishlist`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} wishlist`;
   }
 }
