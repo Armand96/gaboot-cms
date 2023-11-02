@@ -154,6 +154,7 @@ export class UserService {
     updateUserDto: UpdateUserDto,
     image: Express.Multer.File,
   ) {
+    
     // let pathName = '';
     let pathObj = {} as PathImageObj;
 
@@ -166,12 +167,15 @@ export class UserService {
       );
     }
 
-    if (updateUserDto.password != null || updateUserDto.password != "")
+    if (updateUserDto.password != "") {
+      console.log('ganti password');
       updateUserDto.password = await this.getHash(updateUserDto.password);
+    } else {
+      console.log('kaga');
+      delete updateUserDto.password;
+    }
 
-    if (updateUserDto.password != null || updateUserDto.password != "")
-      updateUserDto.password = updateUserDto.password;
-
+    console.log('UPDATE USER', updateUserDto);
     updateUserDto.isActive = updateUserDto.isActive;
     if (image != null) {
       updateUserDto.imgPath = pathObj.path;

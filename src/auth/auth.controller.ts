@@ -1,12 +1,12 @@
 import {
-    Controller,
-    Get,
-    Post,
-    UseGuards,
-    Request,
-    Body,
-    UsePipes,
-    ValidationPipe,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
@@ -16,29 +16,42 @@ import { ResponseSuccessUser } from 'src/mainapp/master/user/interfaces/response
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authSvc: AuthService, private usrSvc: UserService) { }
-    users: ResponseSuccessUser[] = [];
+  constructor(private authSvc: AuthService, private usrSvc: UserService) { }
+  users: ResponseSuccessUser[] = [];
 
-    // @UseGuards(LocalAuthGuard)
-    @Post('login')
-    @UsePipes(new ValidationPipe())
-    async login(@Body() atuhDto: AuthDto) {
-        return this.authSvc.login(atuhDto);
-    }
+  // @UseGuards(LocalAuthGuard)
+  @Post('login')
+  @UsePipes(new ValidationPipe())
+  async login(@Body() atuhDto: AuthDto) {
+    return this.authSvc.login(atuhDto);
+  }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('check')
-    async getProfile(@Request() req: any) {
-        let currentUser = this.users.find(obj => {
-            return obj.datum.id == req.user.userId
-        })
+  @UseGuards(JwtAuthGuard)
+  @Get('check')
+  async getProfile(@Request() req: any) {
 
-        if(!currentUser) {
-            let userResponse = await this.usrSvc.findOne(req.user.userId);
-            this.users.push(userResponse);
-            currentUser = userResponse;
+    let currentUser: ResponseSuccessUser = {} as ResponseSuccessUser;
+
+    if (this.users.length != 0) {
+      currentUser = this.users.find(obj => {
+        if(obj.datum == null) return {} as ResponseSuccessUser;
+
+        if(obj.datum.id == req.user.userId) {
+          return obj;
         }
+      })
 
-        return currentUser;
     }
+
+    // console.log(currentUser, req.user);
+
+    if (JSON.stringify(currentUser) == JSON.stringify({} as ResponseSuccessUser)) {
+      let userResponse = await this.usrSvc.findOne(req.user.userId);
+      // console.log(userResponse);
+      this.users.push(userResponse);
+      currentUser = userResponse;
+    }
+
+    return currentUser;
+  }
 }
