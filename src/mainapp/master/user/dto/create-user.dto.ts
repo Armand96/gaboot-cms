@@ -1,10 +1,9 @@
 import { IsNotEmpty } from 'class-validator';
-import { IsUserAlreadyExist } from './rule/is-unique-username.decorator';
 import { Optional } from '@nestjs/common';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @IsUserAlreadyExist({ message: 'username has been taken', always: true })
+  // @IsUserAlreadyExist({ message: 'username has been taken', always: true })
   userName: string;
 
   @IsNotEmpty()

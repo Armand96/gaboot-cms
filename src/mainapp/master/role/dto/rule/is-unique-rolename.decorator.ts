@@ -12,10 +12,11 @@ import { RoleService } from '../../role.service';
 @Injectable()
 export class IsRoleAlreadyExistConstraint
   implements ValidatorConstraintInterface {
-  constructor(private usr: RoleService) { }
+  constructor(private role: RoleService) { }
 
-  async validate(roleNmae: string) {
-    return this.usr.findByRoleName(roleNmae).then((user) => {
+  async validate(roleName: string) {
+    console.log(this.role);
+    return this.role.findByRoleName(roleName).then((user) => {
       if (user) return false;
       return true;
     });

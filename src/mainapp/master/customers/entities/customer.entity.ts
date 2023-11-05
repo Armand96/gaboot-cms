@@ -41,10 +41,10 @@ export class Customer extends Model
   addressDetail: string
 
   @Column
-  latitude: string
+  latitude: number
 
   @Column
-  longitude: string
+  longitude: number
 
   @Column
   password: string
