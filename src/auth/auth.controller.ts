@@ -34,9 +34,9 @@ export class AuthController {
 
     if (this.users.length != 0) {
       currentUser = this.users.find(obj => {
-        if(obj.datum == null) return {} as ResponseSuccessUser;
+        if (obj.datum == null) return {} as ResponseSuccessUser;
 
-        if(obj.datum.id == req.user.userId) {
+        if (obj.datum.id == req.user.userId) {
           return obj;
         }
       })

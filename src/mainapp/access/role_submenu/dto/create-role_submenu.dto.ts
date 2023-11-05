@@ -15,14 +15,14 @@ export class CreateRoleSubmenuDto {
   submenuId: number;
 
   @IsNotEmpty()
-  create: boolean;
+  createz: boolean;
 
   @IsNotEmpty()
-  read: boolean;
+  readz: boolean;
 
   @IsNotEmpty()
-  updates: boolean;
+  updatez: boolean;
 
   @IsNotEmpty()
-  delete: boolean;
+  deletez: boolean;
 }

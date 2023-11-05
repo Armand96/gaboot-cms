@@ -6,11 +6,11 @@ const { seedRole } = require('./role_seeder');
 const { seedAccess } = require('./role_menu_access_seeder');
 
 async function seedDB() {
-  await seedRole();
+  // await seedRole();
   await seedUsers();
-  await seedMenu();
-  await seedSubmenu();
-  await seedAccess();
+  // await seedMenu();
+  // await seedSubmenu();
+  // await seedAccess();
 
   sequelize.close();
 }

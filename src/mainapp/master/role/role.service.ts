@@ -213,10 +213,10 @@ export class RoleService {
                 submenuId: null,
                 frontendUrl: menuHaveChild.datum.frontendUrl,
                 backendUrl: menuHaveChild.datum.backendUrl,
-                createz: element.create,
-                readz: element.read,
-                updatez: element.updates,
-                deletez: element.delete,
+                createz: element.createz,
+                readz: element.readz,
+                updatez: element.updatez,
+                deletez: element.deletez,
               };
 
               dataArrayRoleAccess.push(tempDataRoleAccess);
@@ -239,10 +239,10 @@ export class RoleService {
                   submenuId: elm2.submenuId,
                   frontendUrl: dataSubmenu.datum.frontendUrl,
                   backendUrl: dataSubmenu.datum.backendUrl,
-                  createz: elm2.create,
-                  readz: elm2.read,
-                  updatez: elm2.updates,
-                  deletez: elm2.delete,
+                  createz: elm2.createz,
+                  readz: elm2.readz,
+                  updatez: elm2.updatez,
+                  deletez: elm2.deletez,
                 } as CreateRoleAccessDto;
                 dataArrayRoleAccess.push(tempDataRoleAccess);
                 dataRoleSubmenu.push(elm2);
@@ -314,10 +314,10 @@ export class RoleService {
                 submenuId: null,
                 frontendUrl: menuHaveChild.datum.frontendUrl,
                 backendUrl: menuHaveChild.datum.backendUrl,
-                createz: element.create,
-                readz: element.read,
-                updatez: element.updates,
-                deletez: element.delete,
+                createz: element.createz,
+                readz: element.readz,
+                updatez: element.updatez,
+                deletez: element.deletez,
               };
 
               dataArrayRoleAccess.push(tempDataRoleAccess);
@@ -338,10 +338,10 @@ export class RoleService {
                   submenuId: elm2.submenuId,
                   frontendUrl: dataSubmenu.datum.frontendUrl,
                   backendUrl: dataSubmenu.datum.backendUrl,
-                  createz: elm2.create,
-                  readz: elm2.read,
-                  updatez: elm2.updates,
-                  deletez: elm2.delete,
+                  createz: elm2.createz,
+                  readz: elm2.readz,
+                  updatez: elm2.updatez,
+                  deletez: elm2.deletez,
                 };
 
                 dataArrayRoleAccess.push(tempDataRoleAccess);

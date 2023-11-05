@@ -2,10 +2,9 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
-  HasOne,
+  HasMany,
   Model,
   Table,
-  Unique,
 } from 'sequelize-typescript';
 import { Category } from 'src/mainapp/categories/entities/category.entity';
 import { Wishlist } from 'src/mainapp/wishlists/entities/wishlist.entity';
@@ -46,14 +45,10 @@ export class Product extends Model
   @ForeignKey(() => Category)
   @Column
   categoryId: number
-
-  @ForeignKey(() => Wishlist)
-  @Column
-  wishlistId: number
   
   @BelongsTo(() => Category)
   category: Category
 
-  @BelongsTo(() => Wishlist)
-  wishlist: Wishlist
+  @HasMany(() => Wishlist)
+  wishlists: Wishlist[]
 }
