@@ -1,42 +1,43 @@
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Optional } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @IsString()
+  @ApiProperty()
   // @IsUserAlreadyExist({ message: 'username has been taken', always: true })
   userName: string;
 
   @IsNotEmpty()
-  @IsString()
+  @ApiProperty()
   // @IsUserAlreadyExist({ message: 'username has been taken', always: true })
   email: string;
 
   @IsNotEmpty()
-  @IsString()
+  @ApiProperty()
   firstName: string;
 
   @IsNotEmpty()
-  @IsString()
+  @ApiProperty()
   lastName: string;
 
   @IsNotEmpty()
-  @IsString()
+  @ApiProperty()
   password: string;
 
   @IsNotEmpty()
-  @IsBoolean()
+  @ApiProperty()
   isActive: boolean;
 
   @IsNotEmpty()
-  @IsInt()
+  @ApiProperty()
   roleId: number;
 
   @Optional()
-  @IsString()
+  @ApiProperty()
   imgPath: string;
 
   @Optional()
-  @IsString()
+  @ApiProperty()
   imgThumbPath: string;
 }
