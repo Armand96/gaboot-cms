@@ -66,7 +66,7 @@ export class User extends Model<IUser, IUser> {
   @Column
   imgThumbPath: string;
 
-  @ApiProperty({ example: 1, description: 'Path Foto Thumb' })
+  @ApiProperty({ example: 1, description: 'Role pengguna' })
   @ForeignKey(() => Role)
   @Column
   roleId: number;

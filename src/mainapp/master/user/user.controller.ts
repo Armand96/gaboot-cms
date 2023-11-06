@@ -25,7 +25,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 // import * as fs from 'fs';
 
-@ApiBearerAuth()
+@ApiBearerAuth('jwt')
 @ApiTags('user')
 @Controller('user')
 export class UserController {
