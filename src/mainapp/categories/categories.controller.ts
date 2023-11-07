@@ -68,15 +68,15 @@ export class CategoriesController {
   @Get('image/:id')
   async getImage(@Param('id') id: number, @Res() res: Response) {
     const user = await this.categoriesService.getImage(id);
-    if (user.imagePath == null || user.imagePath == '') {
+    if (user.imgPath == null || user.imgPath == '') {
       return res
         .status(404)
         .json({ statusCode: 404, error: 'Not Found', message: 'Not Found' });
     }
 
-    let exist = existsSync(join(process.cwd(), user.imagePath));
+    let exist = existsSync(join(process.cwd(), user.imgPath));
     if (exist) {
-      const file = createReadStream(join(process.cwd(), user.imagePath));
+      const file = createReadStream(join(process.cwd(), user.imgPath));
       file.pipe(res);
     } else {
       return res

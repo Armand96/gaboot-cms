@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
@@ -22,7 +22,6 @@ export class CategoriesService {
   async create(createCategoryDto: CreateCategoryDto, 
     image: Express.Multer.File) 
     {
-    const resSuccess = new ResponseSuccess<Category>();
     let dataCreate: any = createCategoryDto;
     let pathObj = {} as PathImageObj;
 
@@ -35,24 +34,23 @@ export class CategoriesService {
     }
 
     if (image != null) {
-      dataCreate.imagePath = pathObj.path;
-      dataCreate.thumbnailPath = pathObj.thumbPath;
+      dataCreate.imgPath = pathObj.path;
+      dataCreate.imgThumbPath = pathObj.thumbPath;
     }
     
     const category = await this.category.create(dataCreate);
 
-    resSuccess.message = 'Success Insert Category Data';
-    resSuccess.success = true;
-    resSuccess.datum = category;
+    this.response.message = 'Success Insert Category Data';
+    this.response.success = true;
+    this.response.datum = category;
     
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async findAll(req : Request) {
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
-    /* FILTER DATA */
-    // console.log(req.query)
+    
     let filterData: any = {};
     if (req.query.name != undefined && req.query.name != "") filterData.name = {
       [Op.like]: `%${req.query.name}%`
@@ -64,11 +62,16 @@ export class CategoriesService {
       where: filterData
     });
 
+    if (categories.length == 0)
+    {
+      throw new NotFoundException("No Data Found");
+    }
+
     this.response.message = 'Success Get Category';
     this.response.success = true;
     this.response.data = categories;
 
-    return this.response;
+    return this.response.toJson();
   }
 
   async findOne(id: number) {
@@ -76,18 +79,22 @@ export class CategoriesService {
       where: { id: id },
     });
 
+    if (categories == null)
+    {
+      throw new NotFoundException("Not Data Found");
+    }
+
     this.response.message = 'Success Get product';
     this.response.success = true;
     this.response.datum = categories;
 
-    return this.response;
+    return this.response.toJson();
   }
 
   async update(id: number, 
     updateCategoryDto: UpdateCategoryDto,
     image: Express.Multer.File) 
     {
-      const resSuccess = new ResponseSuccess<Category>();
     let dataUpdate: any = updateCategoryDto;
 
     let pathObj = {} as PathImageObj;
@@ -102,31 +109,30 @@ export class CategoriesService {
     }
 
     if (image != null) {
-      dataUpdate.imagePath = pathObj.path;
-      dataUpdate.thumbnailPath = pathObj.thumbPath;
+      dataUpdate.imgPath = pathObj.path;
+      dataUpdate.imgThumbPath = pathObj.thumbPath;
     }
 
     await this.category.update(dataUpdate, { where: { id: id } });
     const menu = await this.category.findOne({ where: { id: id } });
 
-    resSuccess.message = 'Success Update Category Data';
-    resSuccess.success = true;
-    resSuccess.datum = menu;
+    this.response.message = 'Success Update Category Data';
+    this.response.success = true;
+    this.response.datum = menu;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async remove(id: number) {
-    const resSuccess = new ResponseSuccess<Category>();
     await this.category.destroy({
       where: { id: id },
     });
 
-    resSuccess.message = 'Success Delete Category Data';
-    resSuccess.success = true;
-    resSuccess.datum = null;
+    this.response.message = 'Success Delete Category Data';
+    this.response.success = true;
+    this.response.datum = null;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async getImage(id: number): Promise<Category> {

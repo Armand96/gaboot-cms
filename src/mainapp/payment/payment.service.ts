@@ -4,23 +4,23 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
+  async create(createPaymentDto: CreatePaymentDto) {
     return 'This action adds a new payment';
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all payment`;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} payment`;
   }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
+  async update(id: number, updatePaymentDto: UpdatePaymentDto) {
     return `This action updates a #${id} payment`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} payment`;
   }
 }

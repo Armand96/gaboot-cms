@@ -27,10 +27,10 @@ export class Category extends Model
   description: string
 
   @Column
-  imagePath: string
+  imgPath: string
 
   @Column
-  thumbnailPath: string
+  imgThumbPath: string
   
   @HasMany(() => Product)
   products: Product[]

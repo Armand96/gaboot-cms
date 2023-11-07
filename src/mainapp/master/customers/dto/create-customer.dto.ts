@@ -11,6 +11,6 @@ export class CreateCustomerDto
   password: string
   token: string
   isActive: boolean
-  imagePath: string
-  thumbnailPath: string
+  imgPath: string
+  imgThumbPath: string
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -14,11 +14,11 @@ export class ProductsService {
   constructor(
     @InjectModel(Product)
     private product: typeof Product,
-    private gen : GeneralService
+    private gen : GeneralService,
+    private response : ResponseSuccess<Product>
   ) { }
 
   async create(createProductDto: CreateProductDto, image: Express.Multer.File) {
-    const resSuccess = new ResponseSuccess<Product>();
     let pathObj = {} as PathImageObj;
 
     if (image != null) {
@@ -38,51 +38,49 @@ export class ProductsService {
     const dataCreate: any = createProductDto;
     const product = await this.product.create(dataCreate);
 
-    resSuccess.message = 'Success Insert Product Data';
-    resSuccess.success = true;
-    resSuccess.datum = product;
+    this.response.message = 'Success Insert Product Data';
+    this.response.success = true;
+    this.response.datum = product;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async findAll(req: Request) {
-    const resSuccess = new ResponseSuccess<Product>();
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
-
-    /* FILTER DATA */
-    // console.log(req.query)
     let filterData: any = {};
     if (req.query.name != undefined && req.query.name != "") filterData.name = {
       [Op.like]: `%${req.query.name}%`
     };
     
-    const categories = await this.product.findAll({
+    const products = await this.product.findAll({
       limit: limit,
       offset: page * limit,
       where: filterData
     });
 
-    resSuccess.message = 'Success Get Product';
-    resSuccess.success = true;
-    resSuccess.data = categories;
+    if (products?.length == 0) throw new NotFoundException("No Data Found");
+    
+    this.response.message = 'Success Get Products';
+    this.response.success = true;
+    this.response.data = products;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async findOne(id: number) {
-    const resSuccess = new ResponseSuccess<Product>();
-    const categories = await this.product.findOne({
+    const product = await this.product.findOne({
       where: { id: id },
     });
 
-    resSuccess.message = 'Success Get Product';
-    resSuccess.success = true;
-    resSuccess.datum = categories;
-    delete resSuccess.lastPage;
+    if (product == null) throw new NotFoundException();
+    
+    this.response.message = 'Success Get Product';
+    this.response.success = true;
+    this.response.datum = product;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async update(
@@ -90,7 +88,6 @@ export class ProductsService {
     updateProductDto: UpdateProductDto, 
     image: Express.Multer.File) 
     {
-      const resSuccess = new ResponseSuccess<Product>();
     const dataUpdate: any = updateProductDto;
 
     let pathObj = {} as PathImageObj;
@@ -112,23 +109,22 @@ export class ProductsService {
     await this.product.update(dataUpdate, { where: { id: id } });
     const data = await this.product.findOne({ where: { id: id } });
 
-    resSuccess.message = 'Success Update Product Data';
-    resSuccess.success = true;
-    resSuccess.datum = data;
+    this.response.message = 'Success Update Product Data';
+    this.response.success = true;
+    this.response.datum = data;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 
   async remove(id: number) {
-    const resSuccess = new ResponseSuccess<Product>();
     await this.product.destroy({
       where: { id: id },
     });
 
-    resSuccess.message = 'Success Delete Product Data';
-    resSuccess.success = true;
-    resSuccess.datum = null;
+    this.response.message = 'Success Delete Product Data';
+    this.response.success = true;
+    this.response.datum = null;
 
-    return resSuccess;
+    return this.response.toJson();
   }
 }

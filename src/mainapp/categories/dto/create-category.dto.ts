@@ -8,7 +8,7 @@ export class CreateCategoryDto
   @IsNotEmpty()
   readonly description: string
   @Optional()
-  readonly imagePath: string
+  readonly imgPath: string
   @Optional()
-  readonly thumbnailPath: string
+  readonly imgThumbPath: string
 }

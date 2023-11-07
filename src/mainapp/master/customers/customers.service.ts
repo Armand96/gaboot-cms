@@ -36,8 +36,8 @@ export class CustomersService {
     // console.log(createCustomerDto);
 
     if (image != null) {
-      createCustomerDto.imagePath = pathObj.path;
-      createCustomerDto.thumbnailPath = pathObj.thumbPath;
+      createCustomerDto.imgPath = pathObj.path;
+      createCustomerDto.imgThumbPath = pathObj.thumbPath;
     }
 
     const dataCreation : any = createCustomerDto;
@@ -122,8 +122,8 @@ export class CustomersService {
 
     updateCustomerDto.isActive = updateCustomerDto.isActive;
     if (image != null) {
-      updateCustomerDto.imagePath = pathObj.path;
-      updateCustomerDto.thumbnailPath = pathObj.thumbPath;
+      updateCustomerDto.imgPath = pathObj.path;
+      updateCustomerDto.imgThumbPath = pathObj.thumbPath;
     }
     // console.log(updateCustomerDto, updateCustomerDto);
     updateCustomerDto.updatedAt = this.gen.dateNow();
@@ -149,9 +149,9 @@ export class CustomersService {
       where: { id: id },
     });
 
-    if (user.imagePath != "" || user.imagePath != null) {
-      this.gen.removeImage(user.imagePath);
-      this.gen.removeImage(user.thumbnailPath);
+    if (user.imgPath != "" || user.imgPath != null) {
+      this.gen.removeImage(user.imgPath);
+      this.gen.removeImage(user.imgThumbPath);
     }
 
     const resSuccess = new ResponseSuccess<Customer>();

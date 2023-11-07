@@ -56,8 +56,8 @@ export class Customer extends Model
   isActive: boolean
 
   @Column
-  imagePath: string
+  imgPath: string
 
   @Column
-  thumbnailPath: string
+  imgThumbPath: string
 }
