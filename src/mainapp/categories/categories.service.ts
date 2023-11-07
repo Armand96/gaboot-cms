@@ -14,7 +14,8 @@ export class CategoriesService {
   constructor(
     @InjectModel(Category)
     private category: typeof Category,
-    private gen : GeneralService
+    private gen : GeneralService,
+    private response : ResponseSuccess<Category>
   ) { }
 
   /* RESPONSE SUCCES */
@@ -48,7 +49,6 @@ export class CategoriesService {
   }
 
   async findAll(req : Request) {
-    const resSuccess = new ResponseSuccess<Category>();
     const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
     const limit = req.query.limit == null ? 10 : Number(req.query.limit);
     /* FILTER DATA */
@@ -64,24 +64,23 @@ export class CategoriesService {
       where: filterData
     });
 
-    resSuccess.message = 'Success Get Category';
-    resSuccess.success = true;
-    resSuccess.data = categories;
+    this.response.message = 'Success Get Category';
+    this.response.success = true;
+    this.response.data = categories;
 
-    return resSuccess;
+    return this.response;
   }
 
   async findOne(id: number) {
-    const resSuccess = new ResponseSuccess<Category>();
     const categories = await this.category.findOne({
       where: { id: id },
     });
 
-    resSuccess.message = 'Success Get product';
-    resSuccess.success = true;
-    resSuccess.datum = categories;
+    this.response.message = 'Success Get product';
+    this.response.success = true;
+    this.response.datum = categories;
 
-    return resSuccess;
+    return this.response;
   }
 
   async update(id: number, 
