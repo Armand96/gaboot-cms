@@ -109,6 +109,7 @@ export class UserService {
     resSuccess.success = true;
     resSuccess.data = dataUser.rows;
     resSuccess.lastPage = lastPage;
+    resSuccess.totalData = dataUser.count;
 
     return resSuccess;
   }

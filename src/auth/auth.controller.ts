@@ -13,7 +13,9 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { UserService } from 'src/mainapp/master/user/user.service';
 import { ResponseSuccessUser } from 'src/mainapp/master/user/interfaces/response-success-user';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authSvc: AuthService, private usrSvc: UserService) { }
@@ -26,6 +28,7 @@ export class AuthController {
     return this.authSvc.login(atuhDto);
   }
 
+  @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @Get('check')
   async getProfile(@Request() req: any) {

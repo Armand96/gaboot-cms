@@ -21,8 +21,12 @@ import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
 // import * as fs from 'fs';
 
+@ApiBearerAuth('jwt')
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) { }
@@ -60,6 +64,11 @@ export class UserController {
 
   /* READ ONE */
   @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: User,
+  })
   findOne(@Param('id') id: number) {
     return this.userService.findOne(id);
   }
