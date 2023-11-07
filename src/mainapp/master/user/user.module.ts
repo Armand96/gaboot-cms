@@ -4,6 +4,7 @@ import { UserController } from './user.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './entities/user.entity';
 import { GeneralService } from 'src/services/general/general.service';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 // import { ImportService } from 'src/services/import/import.service';
 // import { CsvModule } from 'nest-csv-parser';
 // import { ExportService } from 'src/services/export/export.service';
@@ -14,6 +15,7 @@ import { GeneralService } from 'src/services/general/general.service';
   providers: [
     UserService,
     GeneralService,
+    ResponseSuccess<User>
     // ImportService,
     // ExportService,
   ],
