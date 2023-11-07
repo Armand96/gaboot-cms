@@ -6,33 +6,17 @@ class ResponseSuccess<T> {
   lastPage: number;
   totalData: number;
 
-  toJson()
-  {
-    const data_tranfer = {};
-    if (this.message?.length != 0) 
-    {
-      data_tranfer['message'] = this.message;
-    }
-    if (this.datum != null)
-    {
-      data_tranfer['data'] = this.message;
-    }
-    if (this.data?.length != 0)
-    {
-      data_tranfer['data'] = this.data;
-    }
-    if (this.lastPage != null)
-    {
-      data_tranfer['lastPage'] = this.lastPage;
-    }
-    if (this.totalData != null)
-    {
-      data_tranfer['totalData'] = this.totalData;
-    }
+  toJson() {
+    const dataTransfer = new ResponseSuccess<T>();
+    if (this.message?.length != 0) dataTransfer.message = this.message;
+    if (this.datum != null) dataTransfer.datum = this.datum;
+    if (this.data?.length != 0) dataTransfer.data = this.data;
+    if (this.lastPage != null) dataTransfer.lastPage = this.lastPage;
+    if (this.totalData != null) dataTransfer.totalData = this.totalData;
 
-    data_tranfer['success'] = this.success;
+    dataTransfer.success = this.success;
 
-    return data_tranfer;
+    return dataTransfer;
   }
 }
 export { ResponseSuccess };

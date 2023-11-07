@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { GeneralService } from 'src/services/general/general.service';
 import { Op } from 'sequelize';
-import { ResponseSuccessUser } from './interfaces/response-success-user';
 import { PathImageObj } from 'src/services/general/interfaces/path-image';
 import { Role } from '../role/entities/role.entity';
 import { RoleAccess } from 'src/mainapp/access/role_access/entities/role_access.entity';
@@ -24,6 +23,7 @@ export class UserService {
     @InjectModel(User)
     private user: typeof User,
     private gen: GeneralService,
+    private resSuccess : ResponseSuccess<User>
     // private imprt: ImportService,
     // private exprt: ExportService,
   ) { }
@@ -64,12 +64,11 @@ export class UserService {
 
     delete user.password;
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Insert User Data';
-    resSuccess.success = true;
-    resSuccess.datum = user;
+    this.resSuccess.message = 'Success Insert User Data';
+    this.resSuccess.success = true;
+    this.resSuccess.datum = user;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* FIND USER */
@@ -104,14 +103,13 @@ export class UserService {
       Number((dataUser.count / limit).toFixed(0)) +
       (dataUser.count % limit == 0 ? 0 : 1);
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Get User Data';
-    resSuccess.success = true;
-    resSuccess.data = dataUser.rows;
-    resSuccess.lastPage = lastPage;
-    resSuccess.totalData = dataUser.count;
+    this.resSuccess.message = 'Success Get User Data';
+    this.resSuccess.success = true;
+    this.resSuccess.data = dataUser.rows;
+    this.resSuccess.lastPage = lastPage;
+    this.resSuccess.totalData = dataUser.count;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* FIND SINGLE USER */
@@ -141,12 +139,11 @@ export class UserService {
       ],
     });
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Get User';
-    resSuccess.success = true;
-    resSuccess.datum = dataUser;
+    this.resSuccess.message = 'Success Get User';
+    this.resSuccess.success = true;
+    this.resSuccess.datum = dataUser;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* UPDATE USER */
@@ -191,12 +188,11 @@ export class UserService {
 
     const user = await this.user.findOne({ where: { id: id } });
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Update User Data';
-    resSuccess.success = true;
-    resSuccess.datum = user;
+    this.resSuccess.message = 'Success Update User Data';
+    this.resSuccess.success = true;
+    this.resSuccess.datum = user;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* DELETE USER */
@@ -212,12 +208,11 @@ export class UserService {
       this.gen.removeImage(user.imgThumbPath);
     }
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Delete User Data';
-    resSuccess.success = true;
-    resSuccess.data = null;
+    this.resSuccess.message = 'Success Delete User Data';
+    this.resSuccess.success = true;
+    this.resSuccess.data = null;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* GET IMAGE */
@@ -235,12 +230,11 @@ export class UserService {
       where: { id: id },
     });
 
-    const resSuccess = new ResponseSuccess<User>();
-    resSuccess.message = 'Success Get User';
-    resSuccess.success = true;
-    resSuccess.datum = dataUser;
+    this.resSuccess.message = 'Success Get User';
+    this.resSuccess.success = true;
+    this.resSuccess.datum = dataUser;
 
-    return resSuccess;
+    return this.resSuccess.toJson();
   }
 
   /* LOGIN USER */
