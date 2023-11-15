@@ -7,16 +7,15 @@ class ResponseSuccess<T> {
   totalData: number;
 
   toJson() {
-    const dataTransfer = this;
-    // if (this.message?.length != 0) dataTransfer.message = this.message;
-    // if (this.datum != null) dataTransfer.datum = this.datum;
-    // if (this.data?.length != 0) dataTransfer.data = this.data;
-    // if (this.lastPage != null) dataTransfer.lastPage = this.lastPage;
-    // if (this.totalData != null) dataTransfer.totalData = this.totalData;
+    if (this.message?.length != 0) this.message = this.message;
+    if (this.datum != null) this.datum = this.datum;
+    if (this.data?.length != 0) this.data = this.data;
+    if (this.lastPage != null) this.lastPage = this.lastPage;
+    if (this.totalData != null) this.totalData = this.totalData;
 
-    // dataTransfer.success = this.success;
+    this.success = this.success;
 
-    return dataTransfer;
+    return this;
   }
 }
 export { ResponseSuccess };
