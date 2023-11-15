@@ -22,10 +22,12 @@ export class RbacMiddleware implements NestMiddleware {
     });
 
     try {
-      console.log(req.baseUrl);
+      // console.log(req.baseUrl);
       if (req.baseUrl == '/auth/logout') {
         const index = this.users.indexOf(currentUser, 0);
         this.users.splice(index, 1);
+        console.log("RBAC ",this.users.length);
+        return next();
       }
 
       if (!currentUser) {
