@@ -28,6 +28,11 @@ export class AuthController {
     return this.authSvc.login(atuhDto);
   }
 
+  @Get('logout')
+  logout(){
+    return "OK";
+  }
+
   @ApiBearerAuth('jwt')
   @UseGuards(JwtAuthGuard)
   @Get('check')
