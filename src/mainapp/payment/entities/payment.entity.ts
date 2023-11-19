@@ -17,7 +17,7 @@ enum PaymentType
 
 @Table({
 
-  tableName: 'wishlists',
+  tableName: 'payments',
   timestamps: true,
   defaultScope: {
     attributes: {

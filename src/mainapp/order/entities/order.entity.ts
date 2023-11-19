@@ -14,7 +14,7 @@ enum OrderStatus {
 
 @Table({
 
-  tableName: 'order',
+  tableName: 'orders',
   timestamps: true,
   defaultScope: {
     attributes: {
