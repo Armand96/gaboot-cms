@@ -28,11 +28,35 @@ export class Payment extends Model {
     name: string;
 
     @Column
-    type: PaymentType;
+    transactionId: string;
+
+    @Column
+    merchantId: string;
+
+    @Column
+    paymentType: PaymentType;
 
     @Column
     description: string;
 
     @Column
-    request: string;
+    transactionTime: string;
+
+    @Column
+    transactionStatus: string;
+
+    @Column
+    fraudStatus: string;
+
+    @Column
+    bank: string;
+
+    @Column
+    vaNumber: string;
+
+    @Column
+    currency: string;
+
+    @Column
+    expiry_time: string
 }

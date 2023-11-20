@@ -6,10 +6,12 @@ import {
     Patch,
     Param,
     Delete,
+    Req,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { Request, request } from 'express';
 
 @Controller('payment')
 export class PaymentController {
@@ -21,8 +23,8 @@ export class PaymentController {
     }
 
     @Get()
-    findAll() {
-        return this.paymentService.findAll();
+    findAll(@Req() req: Request) {
+        return this.paymentService.findAll(req);
     }
 
     @Get(':id')
