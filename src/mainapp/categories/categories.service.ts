@@ -11,134 +11,135 @@ import { PathImageObj } from 'src/services/general/interfaces/path-image';
 
 @Injectable()
 export class CategoriesService {
-  constructor(
-    @InjectModel(Category)
-    private category: typeof Category,
-    private gen : GeneralService,
-    private response : ResponseSuccess<Category>
-  ) { }
+    constructor(
+        @InjectModel(Category)
+        private category: typeof Category,
+        private gen: GeneralService,
+        private response: ResponseSuccess<Category>,
+    ) {}
 
-  /* RESPONSE SUCCES */
-  async create(createCategoryDto: CreateCategoryDto, 
-    image: Express.Multer.File) 
-    {
-    let dataCreate: any = createCategoryDto;
-    let pathObj = {} as PathImageObj;
+    /* RESPONSE SUCCES */
+    async create(
+        createCategoryDto: CreateCategoryDto,
+        image: Express.Multer.File,
+    ) {
+        const dataCreate: any = createCategoryDto;
+        let pathObj = {} as PathImageObj;
 
-    if (image != null) {
-      pathObj = await this.gen.uploadImage(
-        image,
-        `${dataCreate.name}${Date.now()}`,
-        'category',
-      );
+        if (image != null) {
+            pathObj = await this.gen.uploadImage(
+                image,
+                `${dataCreate.name}${Date.now()}`,
+                'category',
+            );
+        }
+
+        if (image != null) {
+            dataCreate.imgPath = pathObj.path;
+            dataCreate.imgThumbPath = pathObj.thumbPath;
+        }
+
+        const category = await this.category.create(dataCreate);
+
+        this.response.message = 'Success Insert Category Data';
+        this.response.success = true;
+        this.response.datum = category;
+
+        return this.response.toJson();
     }
 
-    if (image != null) {
-      dataCreate.imgPath = pathObj.path;
-      dataCreate.imgThumbPath = pathObj.thumbPath;
-    }
-    
-    const category = await this.category.create(dataCreate);
+    async findAll(req: Request) {
+        const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
+        const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
-    this.response.message = 'Success Insert Category Data';
-    this.response.success = true;
-    this.response.datum = category;
-    
-    return this.response.toJson();
-  }
+        const filterData: any = {};
+        if (req.query.name != undefined && req.query.name != '')
+            filterData.name = {
+                [Op.like]: `%${req.query.name}%`,
+            };
 
-  async findAll(req : Request) {
-    const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
-    const limit = req.query.limit == null ? 10 : Number(req.query.limit);
-    
-    let filterData: any = {};
-    if (req.query.name != undefined && req.query.name != "") filterData.name = {
-      [Op.like]: `%${req.query.name}%`
-    };
-    
-    const categories = await this.category.findAll({
-      limit: limit,
-      offset: page * limit,
-      where: filterData
-    });
+        const categories = await this.category.findAll({
+            limit: limit,
+            offset: page * limit,
+            where: filterData,
+        });
 
-    if (categories.length == 0)
-    {
-      throw new NotFoundException("No Data Found");
+        if (categories.length == 0) {
+            throw new NotFoundException('No Data Found');
+        }
+
+        this.response.message = 'Success Get Category';
+        this.response.success = true;
+        this.response.data = categories;
+
+        return this.response.toJson();
     }
 
-    this.response.message = 'Success Get Category';
-    this.response.success = true;
-    this.response.data = categories;
+    async findOne(id: number) {
+        const categories = await this.category.findOne({
+            where: { id: id },
+        });
 
-    return this.response.toJson();
-  }
+        if (categories == null) {
+            throw new NotFoundException('Not Data Found');
+        }
 
-  async findOne(id: number) {
-    const categories = await this.category.findOne({
-      where: { id: id },
-    });
+        this.response.message = 'Success Get product';
+        this.response.success = true;
+        this.response.datum = categories;
 
-    if (categories == null)
-    {
-      throw new NotFoundException("Not Data Found");
+        return this.response.toJson();
     }
 
-    this.response.message = 'Success Get product';
-    this.response.success = true;
-    this.response.datum = categories;
+    async update(
+        id: number,
+        updateCategoryDto: UpdateCategoryDto,
+        image: Express.Multer.File,
+    ) {
+        const dataUpdate: any = updateCategoryDto;
 
-    return this.response.toJson();
-  }
+        let pathObj = {} as PathImageObj;
 
-  async update(id: number, 
-    updateCategoryDto: UpdateCategoryDto,
-    image: Express.Multer.File) 
-    {
-    let dataUpdate: any = updateCategoryDto;
+        if (image != null) {
+            //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
+            pathObj = await this.gen.uploadImage(
+                image,
+                `${dataUpdate.name}${Date.now()}`,
+                'product',
+            );
+        }
 
-    let pathObj = {} as PathImageObj;
+        if (image != null) {
+            dataUpdate.imgPath = pathObj.path;
+            dataUpdate.imgThumbPath = pathObj.thumbPath;
+        }
 
-    if (image != null) {
-      //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
-      pathObj = await this.gen.uploadImage(
-        image,
-        `${dataUpdate.name}${Date.now()}`,
-        'product',
-      );
+        await this.category.update(dataUpdate, { where: { id: id } });
+        const menu = await this.category.findOne({ where: { id: id } });
+
+        this.response.message = 'Success Update Category Data';
+        this.response.success = true;
+        this.response.datum = menu;
+
+        return this.response.toJson();
     }
 
-    if (image != null) {
-      dataUpdate.imgPath = pathObj.path;
-      dataUpdate.imgThumbPath = pathObj.thumbPath;
+    async remove(id: number) {
+        await this.category.destroy({
+            where: { id: id },
+        });
+
+        this.response.message = 'Success Delete Category Data';
+        this.response.success = true;
+        this.response.datum = null;
+
+        return this.response.toJson();
     }
 
-    await this.category.update(dataUpdate, { where: { id: id } });
-    const menu = await this.category.findOne({ where: { id: id } });
-
-    this.response.message = 'Success Update Category Data';
-    this.response.success = true;
-    this.response.datum = menu;
-
-    return this.response.toJson();
-  }
-
-  async remove(id: number) {
-    await this.category.destroy({
-      where: { id: id },
-    });
-
-    this.response.message = 'Success Delete Category Data';
-    this.response.success = true;
-    this.response.datum = null;
-
-    return this.response.toJson();
-  }
-
-  async getImage(id: number): Promise<Category> {
-    const category = await this.category.findOne({
-      where: { id: id },
-    });
-    return category;
-  }
+    async getImage(id: number): Promise<Category> {
+        const category = await this.category.findOne({
+            where: { id: id },
+        });
+        return category;
+    }
 }

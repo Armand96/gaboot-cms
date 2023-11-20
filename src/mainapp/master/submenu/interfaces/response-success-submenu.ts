@@ -1,5 +1,4 @@
-import { Submenu } from "../entities/submenu.entity";
-
+import { Submenu } from '../entities/submenu.entity';
 
 interface ResponseSuccessSubmenu {
     message: string;

@@ -10,7 +10,7 @@ const jwtSetting = JwtModule.register({
 
 const jwtProvider = {
     provide: APP_GUARD,
-    useClass: JwtAuthGuard
-}
+    useClass: JwtAuthGuard,
+};
 
-export { jwtSetting, jwtProvider};
+export { jwtSetting, jwtProvider };

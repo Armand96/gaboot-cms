@@ -5,9 +5,9 @@ import { RoleAccess } from './entities/role_access.entity';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  imports: [SequelizeModule.forFeature([RoleAccess])],
-  controllers: [RoleAccessController],
-  providers: [RoleAccessService],
-  exports: [RoleAccessService],
+    imports: [SequelizeModule.forFeature([RoleAccess])],
+    controllers: [RoleAccessController],
+    providers: [RoleAccessService],
+    exports: [RoleAccessService],
 })
 export class RoleAccessModule {}

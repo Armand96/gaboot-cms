@@ -6,15 +6,15 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { swagConfig, swagOption } from './config/swagger';
 
 async function bootstrap() {
-  const appOptions = {
-    cors: true,
-    logger: wsLogger,
-  };
-  const app = await NestFactory.create(AppModule, appOptions);
+    const appOptions = {
+        cors: true,
+        logger: wsLogger,
+    };
+    const app = await NestFactory.create(AppModule, appOptions);
 
-  const document = SwaggerModule.createDocument(app, swagConfig, swagOption);
-  SwaggerModule.setup('api', app, document);
+    const document = SwaggerModule.createDocument(app, swagConfig, swagOption);
+    SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+    await app.listen(3000);
 }
 bootstrap();

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+    RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { mysql } from './config/mysqldb';
@@ -21,52 +26,54 @@ import { PaymentModule } from './mainapp/payment/payment.module';
 import { OrderModule } from './mainapp/order/order.module';
 
 @Module({
-  imports: [
-    mysql,
-    UserModule,
-    RoleModule,
-    MenuModule,
-    SubmenuModule,
-    AuthModule,
-    RoleAccessModule,
-    RoleMenuModule,
-    RoleSubmenuModule,
-    CategoriesModule,
-    ProductsModule,
-    CustomersModule,
-    CartsModule,
-    WishlistsModule,
-    PaymentModule,
-    OrderModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        mysql,
+        UserModule,
+        RoleModule,
+        MenuModule,
+        SubmenuModule,
+        AuthModule,
+        RoleAccessModule,
+        RoleMenuModule,
+        RoleSubmenuModule,
+        CategoriesModule,
+        ProductsModule,
+        CustomersModule,
+        CartsModule,
+        WishlistsModule,
+        PaymentModule,
+        OrderModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        /* BYPASS JWT AND RBAC FOR IMAGE */
+        const arrayExceptionPath: RouteInfo[] = [
+            { path: '/user/image/:id', method: RequestMethod.GET },
+            { path: '/user/image/thumb/:id', method: RequestMethod.GET },
+            { path: '/item/image/:id', method: RequestMethod.GET },
+            { path: '/item/image/thumb/:id', method: RequestMethod.GET },
+            { path: '/auth/login', method: RequestMethod.POST },
+            // { path: '/graphql', method: RequestMethod.ALL },
+        ];
 
-  configure(consumer: MiddlewareConsumer) {
+        /* RBAC ROUTE */
+        const arrayRouteMiddleware: string[] = [
+            'user',
+            'role',
+            'role-access',
+            'role-menu',
+            'role-submenu',
+            'menu',
+            'item',
+            'auth/logout',
+        ];
 
-    /* BYPASS JWT AND RBAC FOR IMAGE */
-    const arrayExceptionPath: RouteInfo[] = [
-      { path: '/user/image/:id', method: RequestMethod.GET },
-      { path: '/user/image/thumb/:id', method: RequestMethod.GET },
-      { path: '/item/image/:id', method: RequestMethod.GET },
-      { path: '/item/image/thumb/:id', method: RequestMethod.GET },
-      { path: '/auth/login', method: RequestMethod.POST },
-      // { path: '/graphql', method: RequestMethod.ALL },
-    ];
-
-    /* RBAC ROUTE */
-    const arrayRouteMiddleware: string[] = [
-      'user', 'role', 'role-access', 'role-menu', 'role-submenu', 'menu', 'item', 'auth/logout',
-    ];
-
-    consumer
-      .apply(RbacMiddleware)
-      .exclude(...arrayExceptionPath)
-      .forRoutes(...arrayRouteMiddleware);
-
-
-  }
+        consumer
+            .apply(RbacMiddleware)
+            .exclude(...arrayExceptionPath)
+            .forRoutes(...arrayRouteMiddleware);
+    }
 }
-

@@ -2,17 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RoleMenuService } from './role_menu.service';
 
 describe('RoleMenuService', () => {
-  let service: RoleMenuService;
+    let service: RoleMenuService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [RoleMenuService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [RoleMenuService],
+        }).compile();
 
-    service = module.get<RoleMenuService>(RoleMenuService);
-  });
+        service = module.get<RoleMenuService>(RoleMenuService);
+    });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+    });
 });

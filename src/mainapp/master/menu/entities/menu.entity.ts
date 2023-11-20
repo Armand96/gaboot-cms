@@ -2,7 +2,6 @@ import { Column, HasMany, HasOne, Model, Table } from 'sequelize-typescript';
 import { Submenu } from '../../submenu/entities/submenu.entity';
 import { RoleAccess } from 'src/mainapp/access/role_access/entities/role_access.entity';
 
-
 @Table({
     tableName: 'master_menus',
     timestamps: true,

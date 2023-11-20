@@ -7,8 +7,8 @@ import { GeneralService } from 'src/services/general/general.service';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Category])],
-  controllers: [CategoriesController],
-  providers: [CategoriesService, GeneralService, ResponseSuccess<Category>],
+    imports: [SequelizeModule.forFeature([Category])],
+    controllers: [CategoriesController],
+    providers: [CategoriesService, GeneralService, ResponseSuccess<Category>],
 })
 export class CategoriesModule {}

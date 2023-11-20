@@ -8,6 +8,6 @@ import { Menu } from './entities/menu.entity';
     imports: [SequelizeModule.forFeature([Menu])],
     controllers: [MenuController],
     providers: [MenuService],
-    exports: [MenuService]
+    exports: [MenuService],
 })
-export class MenuModule { }
+export class MenuModule {}

@@ -1,61 +1,61 @@
 import {
-  BelongsTo,
-  Column,
-  ForeignKey,
-  Model,
-  Table,
+    BelongsTo,
+    Column,
+    ForeignKey,
+    Model,
+    Table,
 } from 'sequelize-typescript';
 import { Menu } from 'src/mainapp/master/menu/entities/menu.entity';
 import { Role } from 'src/mainapp/master/role/entities/role.entity';
 import { Submenu } from 'src/mainapp/master/submenu/entities/submenu.entity';
 
 @Table({
-  tableName: 'role_accesses',
-  timestamps: true,
-  defaultScope: {
-    attributes: {
-      exclude: ['createdAt', 'updatedAt'],
+    tableName: 'role_accesses',
+    timestamps: true,
+    defaultScope: {
+        attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+        },
     },
-  },
 })
 export class RoleAccess extends Model {
-  @ForeignKey(() => Role)
-  @Column
-  roleId: number;
+    @ForeignKey(() => Role)
+    @Column
+    roleId: number;
 
-  @ForeignKey(() => Menu)
-  @Column
-  menuId: number;
+    @ForeignKey(() => Menu)
+    @Column
+    menuId: number;
 
-  @ForeignKey(() => Submenu)
-  @Column
-  submenuId: number;
+    @ForeignKey(() => Submenu)
+    @Column
+    submenuId: number;
 
-  @Column
-  frontendUrl: string;
+    @Column
+    frontendUrl: string;
 
-  @Column
-  backendUrl: string;
+    @Column
+    backendUrl: string;
 
-  @Column
-  createz: boolean;
+    @Column
+    createz: boolean;
 
-  @Column
-  readz: boolean;
+    @Column
+    readz: boolean;
 
-  @Column
-  updatez: boolean;
+    @Column
+    updatez: boolean;
 
-  @Column
-  deletez: boolean;
+    @Column
+    deletez: boolean;
 
-  /* RELATION */
-  @BelongsTo(() => Role)
-  role: Role;
+    /* RELATION */
+    @BelongsTo(() => Role)
+    role: Role;
 
-  @BelongsTo(() => Menu)
-  menu: Menu;
+    @BelongsTo(() => Menu)
+    menu: Menu;
 
-  @BelongsTo(() => Submenu)
-  submenu: Submenu;
+    @BelongsTo(() => Submenu)
+    submenu: Submenu;
 }

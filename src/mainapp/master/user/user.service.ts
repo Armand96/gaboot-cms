@@ -18,239 +18,237 @@ import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class UserService {
+    constructor(
+        @InjectModel(User)
+        private user: typeof User,
+        private gen: GeneralService,
+        private resSuccess: ResponseSuccess<User>, // private imprt: ImportService,
+    ) // private exprt: ExportService,
+    {}
 
-  constructor(
-    @InjectModel(User)
-    private user: typeof User,
-    private gen: GeneralService,
-    private resSuccess : ResponseSuccess<User>
-    // private imprt: ImportService,
-    // private exprt: ExportService,
-  ) { }
-
-  /* HASH */
-  async getHash(password: string) {
-    const saltOrRounds = 10;
-    const hash = await bcrypt.hash(password, saltOrRounds);
-    return hash;
-  }
-
-  async checkHash(password: string, hash: string) {
-    return await bcrypt.compare(password, hash);
-  }
-
-  /* CREATE USER */
-  async create(createUserDto: CreateUserDto, image: Express.Multer.File) {
-    let pathObj = {} as PathImageObj;
-
-    if (image != null) {
-      pathObj = await this.gen.uploadImage(
-        image,
-        createUserDto.userName,
-        'user',
-      );
-      console.log('after upload');
+    /* HASH */
+    async getHash(password: string) {
+        const saltOrRounds = 10;
+        const hash = await bcrypt.hash(password, saltOrRounds);
+        return hash;
     }
 
-    createUserDto.password = await this.getHash(createUserDto.password);
-    // console.log(createUserDto);
-
-    if (image != null) {
-      createUserDto.imgPath = pathObj.path;
-      createUserDto.imgThumbPath = pathObj.thumbPath;
+    async checkHash(password: string, hash: string) {
+        return await bcrypt.compare(password, hash);
     }
 
-    const user = await this.user.create(createUserDto);
+    /* CREATE USER */
+    async create(createUserDto: CreateUserDto, image: Express.Multer.File) {
+        let pathObj = {} as PathImageObj;
 
-    delete user.password;
+        if (image != null) {
+            pathObj = await this.gen.uploadImage(
+                image,
+                createUserDto.userName,
+                'user',
+            );
+            console.log('after upload');
+        }
 
-    this.resSuccess.message = 'Success Insert User Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = user;
+        createUserDto.password = await this.getHash(createUserDto.password);
+        // console.log(createUserDto);
 
-    return this.resSuccess.toJson();
-  }
+        if (image != null) {
+            createUserDto.imgPath = pathObj.path;
+            createUserDto.imgThumbPath = pathObj.thumbPath;
+        }
 
-  /* FIND USER */
-  async findAll(req: Request) {
-    const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
-    const limit = req.query.limit == null ? 10 : Number(req.query.limit);
+        const user = await this.user.create(createUserDto);
 
-    /* FILTER DATA */
-    // console.log(req.query)
-    let filterData: any = {};
-    if (req.query.userName != undefined && req.query.userName != "") filterData.userName = {
-      [Op.like]: `%${req.query.userName}%`
-    };
+        delete user.password;
 
-    if (req.query.fullName != undefined && req.query.fullName != "") filterData.fullName = {
-      [Op.like]: `%${req.query.fullName}%`
-    };
+        this.resSuccess.message = 'Success Insert User Data';
+        this.resSuccess.success = true;
+        this.resSuccess.datum = user;
 
-    const dataUser = await this.user.findAndCountAll({
-      include: [
-        {
-          model: Role,
-          required: true,
-        },
-      ],
-      limit: limit,
-      offset: page * limit,
-      where: filterData
-    });
+        return this.resSuccess.toJson();
+    }
 
-    const lastPage =
-      Number((dataUser.count / limit).toFixed(0)) +
-      (dataUser.count % limit == 0 ? 0 : 1);
+    /* FIND USER */
+    async findAll(req: Request) {
+        const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
+        const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
-    this.resSuccess.message = 'Success Get User Data';
-    this.resSuccess.success = true;
-    this.resSuccess.data = dataUser.rows;
-    this.resSuccess.lastPage = lastPage;
-    this.resSuccess.totalData = dataUser.count;
+        /* FILTER DATA */
+        // console.log(req.query)
+        const filterData: any = {};
+        if (req.query.userName != undefined && req.query.userName != '')
+            filterData.userName = {
+                [Op.like]: `%${req.query.userName}%`,
+            };
 
-    return this.resSuccess.toJson();
-  }
+        if (req.query.fullName != undefined && req.query.fullName != '')
+            filterData.fullName = {
+                [Op.like]: `%${req.query.fullName}%`,
+            };
 
-  /* FIND SINGLE USER */
-  async findOne(id: number) {
-    const dataUser = await this.user.findOne({
-      where: { id: id },
-      include: [
-        {
-          model: Role,
-          required: true,
-          include: [
-            RoleAccess,
-            {
-              model: RoleMenu,
-              required: true,
-              include: [
-                Menu,
+        const dataUser = await this.user.findAndCountAll({
+            include: [
                 {
-                  model: RoleSubmenu,
-                  required: true,
-                  include: [Submenu],
+                    model: Role,
+                    required: true,
                 },
-              ],
-            },
-          ],
-        },
-      ],
-    });
+            ],
+            limit: limit,
+            offset: page * limit,
+            where: filterData,
+        });
 
-    this.resSuccess.message = 'Success Get User';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = dataUser;
+        const lastPage =
+            Number((dataUser.count / limit).toFixed(0)) +
+            (dataUser.count % limit == 0 ? 0 : 1);
 
-    return this.resSuccess.toJson();
-  }
+        this.resSuccess.message = 'Success Get User Data';
+        this.resSuccess.success = true;
+        this.resSuccess.data = dataUser.rows;
+        this.resSuccess.lastPage = lastPage;
+        this.resSuccess.totalData = dataUser.count;
 
-  /* UPDATE USER */
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-    image: Express.Multer.File,
-  ) {
-    
-    // let pathName = '';
-    let pathObj = {} as PathImageObj;
-
-    if (image != null) {
-      //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
-      pathObj = await this.gen.uploadImage(
-        image,
-        updateUserDto.userName,
-        'user',
-      );
+        return this.resSuccess.toJson();
     }
 
-    if (updateUserDto.password != "") {
-      console.log('ganti password');
-      updateUserDto.password = await this.getHash(updateUserDto.password);
-    } else {
-      console.log('kaga');
-      delete updateUserDto.password;
+    /* FIND SINGLE USER */
+    async findOne(id: number) {
+        const dataUser = await this.user.findOne({
+            where: { id: id },
+            include: [
+                {
+                    model: Role,
+                    required: true,
+                    include: [
+                        RoleAccess,
+                        {
+                            model: RoleMenu,
+                            required: true,
+                            include: [
+                                Menu,
+                                {
+                                    model: RoleSubmenu,
+                                    required: true,
+                                    include: [Submenu],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        });
+
+        this.resSuccess.message = 'Success Get User';
+        this.resSuccess.success = true;
+        this.resSuccess.datum = dataUser;
+
+        return this.resSuccess.toJson();
     }
 
-    console.log('UPDATE USER', updateUserDto);
-    updateUserDto.isActive = updateUserDto.isActive;
-    if (image != null) {
-      updateUserDto.imgPath = pathObj.path;
-      updateUserDto.imgThumbPath = pathObj.thumbPath;
+    /* UPDATE USER */
+    async update(
+        id: number,
+        updateUserDto: UpdateUserDto,
+        image: Express.Multer.File,
+    ) {
+        // let pathName = '';
+        let pathObj = {} as PathImageObj;
+
+        if (image != null) {
+            //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
+            pathObj = await this.gen.uploadImage(
+                image,
+                updateUserDto.userName,
+                'user',
+            );
+        }
+
+        if (updateUserDto.password != '') {
+            console.log('ganti password');
+            updateUserDto.password = await this.getHash(updateUserDto.password);
+        } else {
+            console.log('kaga');
+            delete updateUserDto.password;
+        }
+
+        console.log('UPDATE USER', updateUserDto);
+        updateUserDto.isActive = updateUserDto.isActive;
+        if (image != null) {
+            updateUserDto.imgPath = pathObj.path;
+            updateUserDto.imgThumbPath = pathObj.thumbPath;
+        }
+        // console.log(updateUserDto, updateUserDto);
+        updateUserDto.updatedAt = this.gen.dateNow();
+
+        await this.user.update(updateUserDto, {
+            where: { id: id },
+        });
+
+        const user = await this.user.findOne({ where: { id: id } });
+
+        this.resSuccess.message = 'Success Update User Data';
+        this.resSuccess.success = true;
+        this.resSuccess.datum = user;
+
+        return this.resSuccess.toJson();
     }
-    // console.log(updateUserDto, updateUserDto);
-    updateUserDto.updatedAt = this.gen.dateNow();
 
-    await this.user.update(updateUserDto, {
-      where: { id: id },
-    });
+    /* DELETE USER */
+    async remove(id: number) {
+        const user = await this.user.findOne({ where: { id: id } });
 
-    const user = await this.user.findOne({ where: { id: id } });
+        await this.user.destroy({
+            where: { id: id },
+        });
 
-    this.resSuccess.message = 'Success Update User Data';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = user;
+        if (user.imgPath != '' || user.imgPath != null) {
+            this.gen.removeImage(user.imgPath);
+            this.gen.removeImage(user.imgThumbPath);
+        }
 
-    return this.resSuccess.toJson();
-  }
+        this.resSuccess.message = 'Success Delete User Data';
+        this.resSuccess.success = true;
+        this.resSuccess.data = null;
 
-  /* DELETE USER */
-  async remove(id: number) {
-    const user = await this.user.findOne({ where: { id: id } });
-
-    await this.user.destroy({
-      where: { id: id },
-    });
-
-    if (user.imgPath != "" || user.imgPath != null) {
-      this.gen.removeImage(user.imgPath);
-      this.gen.removeImage(user.imgThumbPath);
+        return this.resSuccess.toJson();
     }
 
-    this.resSuccess.message = 'Success Delete User Data';
-    this.resSuccess.success = true;
-    this.resSuccess.data = null;
+    /* GET IMAGE */
+    async userImage(id: number): Promise<User> {
+        console.log('image');
+        const dataUser = await this.user.findOne({
+            where: { id: id },
+        });
+        return dataUser;
+    }
 
-    return this.resSuccess.toJson();
-  }
+    async userOnly(id: number) {
+        console.log('di mari');
+        const dataUser = await this.user.findOne({
+            where: { id: id },
+        });
 
-  /* GET IMAGE */
-  async userImage(id: number): Promise<User> {
-    console.log('image');
-    const dataUser = await this.user.findOne({
-      where: { id: id },
-    });
-    return dataUser;
-  }
+        this.resSuccess.message = 'Success Get User';
+        this.resSuccess.success = true;
+        this.resSuccess.datum = dataUser;
 
-  async userOnly(id: number) {
-    console.log('di mari');
-    const dataUser = await this.user.findOne({
-      where: { id: id },
-    });
+        return this.resSuccess.toJson();
+    }
 
-    this.resSuccess.message = 'Success Get User';
-    this.resSuccess.success = true;
-    this.resSuccess.datum = dataUser;
+    /* LOGIN USER */
+    async userLogin(username: string, password: string) {
+        const user = await this.user
+            .scope('withPassword')
+            .findOne({ where: { userName: username } });
+        const isValid = await this.checkHash(password, user.password);
+        console.log(isValid);
+        if (isValid) return user;
+        else return null;
+    }
 
-    return this.resSuccess.toJson();
-  }
-
-  /* LOGIN USER */
-  async userLogin(username: string, password: string) {
-    const user = await this.user
-      .scope('withPassword')
-      .findOne({ where: { userName: username } });
-    const isValid = await this.checkHash(password, user.password);
-    console.log(isValid);
-    if (isValid) return user;
-    else return null;
-  }
-
-  /* FIND BY USERNAME */
-  async findByUsername(username: string) {
-    return await this.user.findOne({ where: { userName: username } });
-  }
-
+    /* FIND BY USERNAME */
+    async findByUsername(username: string) {
+        return await this.user.findOne({ where: { userName: username } });
+    }
 }

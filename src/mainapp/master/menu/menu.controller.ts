@@ -19,7 +19,7 @@ import { Request } from 'express';
 
 @Controller('menu')
 export class MenuController {
-    constructor(private readonly menuService: MenuService) { }
+    constructor(private readonly menuService: MenuService) {}
 
     @Post()
     @UsePipes(new ValidationPipe())

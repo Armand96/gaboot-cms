@@ -10,15 +10,15 @@ import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 // import { ExportService } from 'src/services/export/export.service';
 
 @Module({
-  imports: [SequelizeModule.forFeature([User]),],
-  controllers: [UserController],
-  providers: [
-    UserService,
-    GeneralService,
-    ResponseSuccess<User>
-    // ImportService,
-    // ExportService,
-  ],
-  exports: [UserService],
+    imports: [SequelizeModule.forFeature([User])],
+    controllers: [UserController],
+    providers: [
+        UserService,
+        GeneralService,
+        ResponseSuccess<User>,
+        // ImportService,
+        // ExportService,
+    ],
+    exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

@@ -19,9 +19,9 @@ import { RoleSubmenuModule } from 'src/mainapp/access/role_submenu/role_submenu.
         RoleMenuModule,
         RoleSubmenuModule,
         MenuModule,
-        SubmenuModule
+        SubmenuModule,
     ],
     controllers: [RoleController],
     providers: [RoleService, GeneralService, IsRoleAlreadyExistConstraint],
 })
-export class RoleModule { }
+export class RoleModule {}

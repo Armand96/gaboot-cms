@@ -8,8 +8,8 @@ import { ProductImage } from './entities/product.image.entity';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Product, ProductImage])],
-  controllers: [ProductsController],
-  providers: [ProductsService, GeneralService, ResponseSuccess<Product>],
+    imports: [SequelizeModule.forFeature([Product, ProductImage])],
+    controllers: [ProductsController],
+    providers: [ProductsService, GeneralService],
 })
 export class ProductsModule {}

@@ -5,9 +5,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { RoleSubmenu } from './entities/role_submenu.entity';
 
 @Module({
-  imports: [SequelizeModule.forFeature([RoleSubmenu])],
-  controllers: [RoleSubmenuController],
-  providers: [RoleSubmenuService],
-  exports: [RoleSubmenuService],
+    imports: [SequelizeModule.forFeature([RoleSubmenu])],
+    controllers: [RoleSubmenuController],
+    providers: [RoleSubmenuService],
+    exports: [RoleSubmenuService],
 })
 export class RoleSubmenuModule {}

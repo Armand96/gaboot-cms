@@ -9,89 +9,90 @@ import { Op } from 'sequelize';
 
 @Injectable()
 export class CartsService {
-  constructor(
-    @InjectModel(Cart)
-    private cart: typeof Cart
-  ) { }
+    constructor(
+        @InjectModel(Cart)
+        private cart: typeof Cart,
+    ) {}
 
-  async create(createCartDto: CreateCartDto) {
-    const resSuccess = new ResponseSuccess<Cart>();
+    async create(createCartDto: CreateCartDto) {
+        const resSuccess = new ResponseSuccess<Cart>();
 
-    let dataCreate: any = createCartDto;
-    
-    const cart = await this.cart.create(dataCreate);
+        const dataCreate: any = createCartDto;
 
-    resSuccess.message = 'Success Insert Cart Data';
-    resSuccess.success = true;
-    resSuccess.datum = cart;
-    
-    return resSuccess;
-  }
+        const cart = await this.cart.create(dataCreate);
 
-  async findAll(req: Request) {
-    const resSuccess = new ResponseSuccess<Cart>();
+        resSuccess.message = 'Success Insert Cart Data';
+        resSuccess.success = true;
+        resSuccess.datum = cart;
 
-    const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
-    const limit = req.query.limit == null ? 10 : Number(req.query.limit);
-    /* FILTER DATA */
-    // console.log(req.query)
-    let filterData: any = {};
-    if (req.query.name != undefined && req.query.name != "") filterData.name = {
-      [Op.like]: `%${req.query.name}%`
-    };
-    
-    const carts = await this.cart.findAll({
-      limit: limit,
-      offset: page * limit,
-      where: filterData
-    });
+        return resSuccess;
+    }
 
-    resSuccess.message = 'Success Get Carts';
-    resSuccess.success = true;
-    resSuccess.data = carts;
+    async findAll(req: Request) {
+        const resSuccess = new ResponseSuccess<Cart>();
 
-    return resSuccess;
-  }
+        const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
+        const limit = req.query.limit == null ? 10 : Number(req.query.limit);
+        /* FILTER DATA */
+        // console.log(req.query)
+        const filterData: any = {};
+        if (req.query.name != undefined && req.query.name != '')
+            filterData.name = {
+                [Op.like]: `%${req.query.name}%`,
+            };
 
-  async findOne(id: number) {
-    const resSuccess = new ResponseSuccess<Cart>();
-    
-    const cart = await this.cart.findOne({
-      where: { id: id },
-    });
+        const carts = await this.cart.findAll({
+            limit: limit,
+            offset: page * limit,
+            where: filterData,
+        });
 
-    resSuccess.message = 'Success Get Cart';
-    resSuccess.success = true;
-    resSuccess.datum = cart;
+        resSuccess.message = 'Success Get Carts';
+        resSuccess.success = true;
+        resSuccess.data = carts;
 
-    return resSuccess;
-  }
+        return resSuccess;
+    }
 
-  async update(id: number, updateCartDto: UpdateCartDto) {
-    const resSuccess = new ResponseSuccess<Cart>()
-    let dataUpdate: any = updateCartDto;
+    async findOne(id: number) {
+        const resSuccess = new ResponseSuccess<Cart>();
 
-    await this.cart.update(dataUpdate, { where: { id: id } });
-    const menu = await this.cart.findOne({ where: { id: id } });
+        const cart = await this.cart.findOne({
+            where: { id: id },
+        });
 
-    resSuccess.message = 'Success Update Cart Data';
-    resSuccess.success = true;
-    resSuccess.datum = menu;
+        resSuccess.message = 'Success Get Cart';
+        resSuccess.success = true;
+        resSuccess.datum = cart;
 
-    return resSuccess;
-  }
+        return resSuccess;
+    }
 
-  async remove(id: number) {
-    const resSuccess = new ResponseSuccess<Cart>()
-    
-    await this.cart.destroy({
-      where: { id: id },
-    });
+    async update(id: number, updateCartDto: UpdateCartDto) {
+        const resSuccess = new ResponseSuccess<Cart>();
+        const dataUpdate: any = updateCartDto;
 
-    resSuccess.message = 'Success Delete Cart Data';
-    resSuccess.success = true;
-    resSuccess.datum = null;
+        await this.cart.update(dataUpdate, { where: { id: id } });
+        const menu = await this.cart.findOne({ where: { id: id } });
 
-    return resSuccess;
-  }
+        resSuccess.message = 'Success Update Cart Data';
+        resSuccess.success = true;
+        resSuccess.datum = menu;
+
+        return resSuccess;
+    }
+
+    async remove(id: number) {
+        const resSuccess = new ResponseSuccess<Cart>();
+
+        await this.cart.destroy({
+            where: { id: id },
+        });
+
+        resSuccess.message = 'Success Delete Cart Data';
+        resSuccess.success = true;
+        resSuccess.datum = null;
+
+        return resSuccess;
+    }
 }

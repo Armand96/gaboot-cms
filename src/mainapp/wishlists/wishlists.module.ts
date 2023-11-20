@@ -6,8 +6,8 @@ import { Wishlist } from './entities/wishlist.entity';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Wishlist])],
-  controllers: [WishlistsController],
-  providers: [WishlistsService, ResponseSuccess<Wishlist>],
+    imports: [SequelizeModule.forFeature([Wishlist])],
+    controllers: [WishlistsController],
+    providers: [WishlistsService, ResponseSuccess<Wishlist>],
 })
 export class WishlistsModule {}

@@ -3,7 +3,6 @@ import { User } from '../../user/entities/user.entity';
 import { RoleAccess } from 'src/mainapp/access/role_access/entities/role_access.entity';
 import { RoleMenu } from 'src/mainapp/access/role_menu/entities/role_menu.entity';
 
-
 @Table({
     tableName: 'master_roles',
     timestamps: true,

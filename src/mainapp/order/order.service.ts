@@ -9,71 +9,72 @@ import { Op } from 'sequelize';
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel(Order) private orderModel: typeof Order, private response : ResponseSuccess<Order>)
-  {}
+    constructor(
+        @InjectModel(Order) private orderModel: typeof Order,
+        private response: ResponseSuccess<Order>,
+    ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
-    return `This is unused`
-  }
-
-  async findAll(req: Request) {
-    const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
-    const limit = req.query.limit == null ? 10 : Number(req.query.limit);
-    
-    let filterData: any = {};
-    if (req.query.name != undefined && req.query.name != "") filterData.name = {
-      [Op.like]: `%${req.query.name}%`
-    };
-    
-    const orders = await this.orderModel.findAll({
-      limit: limit,
-      offset: page * limit,
-      where: filterData
-    });
-
-    if (orders.length == 0)
-    {
-      throw new NotFoundException("No Data Found");
+    async create(createOrderDto: CreateOrderDto) {
+        return `This is unused`;
     }
 
-    this.response.message = 'Success Get Orders';
-    this.response.success = true;
-    this.response.data = orders;
+    async findAll(req: Request) {
+        const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
+        const limit = req.query.limit == null ? 10 : Number(req.query.limit);
 
-    return this.response.toJson();
-  }
+        const filterData: any = {};
+        if (req.query.name != undefined && req.query.name != '')
+            filterData.name = {
+                [Op.like]: `%${req.query.name}%`,
+            };
 
-  async findOne(id: number) {
-    const order = await this.orderModel.findOne({
-      where: { id: id },
-    });
+        const orders = await this.orderModel.findAll({
+            limit: limit,
+            offset: page * limit,
+            where: filterData,
+        });
 
-    if (order == null)
-    {
-      throw new NotFoundException("Not Data Found");
+        if (orders.length == 0) {
+            throw new NotFoundException('No Data Found');
+        }
+
+        this.response.message = 'Success Get Orders';
+        this.response.success = true;
+        this.response.data = orders;
+
+        return this.response.toJson();
     }
 
-    this.response.message = 'Success Get Order';
-    this.response.success = true;
-    this.response.datum = order;
+    async findOne(id: number) {
+        const order = await this.orderModel.findOne({
+            where: { id: id },
+        });
 
-    return this.response.toJson();
-  }
+        if (order == null) {
+            throw new NotFoundException('Not Data Found');
+        }
 
-  async update(id: number, updateOrderDto: UpdateOrderDto) {
-    let dataUpdate: any = updateOrderDto;
+        this.response.message = 'Success Get Order';
+        this.response.success = true;
+        this.response.datum = order;
 
-    await this.orderModel.update(dataUpdate, { where: { id: id } });
-    const menu = await this.orderModel.findOne({ where: { id: id } });
+        return this.response.toJson();
+    }
 
-    this.response.message = 'Success Update Category Data';
-    this.response.success = true;
-    this.response.datum = menu;
+    async update(id: number, updateOrderDto: UpdateOrderDto) {
+        const dataUpdate: any = updateOrderDto;
 
-    return this.response.toJson();
-  }
+        await this.orderModel.update(dataUpdate, { where: { id: id } });
+        const menu = await this.orderModel.findOne({ where: { id: id } });
 
-  async remove(id: number) {
-    return `This action removes a #${id} order`;
-  }
+        this.response.message = 'Success Update Category Data';
+        this.response.success = true;
+        this.response.datum = menu;
+
+        return this.response.toJson();
+    }
+
+    async remove(id: number) {
+        return `This action removes a #${id} order`;
+    }
 }

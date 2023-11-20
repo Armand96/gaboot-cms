@@ -16,7 +16,7 @@ describe('GeneralService', () => {
     /* TEST DATE FUNCTION DATE NOW */
     describe('Get Current Date', () => {
         it('Should Get A Date In Form Of String', () => {
-            let currDate = service.dateNow();
+            const currDate = service.dateNow();
             console.info(currDate);
             expect.stringContaining(currDate);
         });
@@ -25,10 +25,10 @@ describe('GeneralService', () => {
     /* TEST CATEGORIZE PATH */
     describe('Get Path Object', () => {
         it('Should Get An Object with path', () => {
-            let pathObj = service.categorizePath('user');
-            let expectedObject: PathImageObj = {
-                path: "storage/users/pictures",
-                thumbPath: "storage/users/pictures/thumb",
+            const pathObj = service.categorizePath('user');
+            const expectedObject: PathImageObj = {
+                path: 'storage/users/pictures',
+                thumbPath: 'storage/users/pictures/thumb',
             };
             expect(pathObj).toStrictEqual(expectedObject);
             // expect(pathObj).toBe(Object);
@@ -38,10 +38,10 @@ describe('GeneralService', () => {
     /* TEST CATEGORIZE PATH */
     describe('Get ', () => {
         it('Should Get An Object with path', () => {
-            let pathObj = service.categorizePath('user');
-            let expectedObject: PathImageObj = {
-                path: "storage/users/pictures",
-                thumbPath: "storage/users/pictures/thumb",
+            const pathObj = service.categorizePath('user');
+            const expectedObject: PathImageObj = {
+                path: 'storage/users/pictures',
+                thumbPath: 'storage/users/pictures/thumb',
             };
             expect(pathObj).toStrictEqual(expectedObject);
             // expect(pathObj).toBe(Object);

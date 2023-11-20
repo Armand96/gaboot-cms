@@ -6,15 +6,14 @@ import { Submenu } from './entities/submenu.entity';
 import { RoleSubmenuModule } from 'src/mainapp/access/role_submenu/role_submenu.module';
 import { RoleAccessModule } from 'src/mainapp/access/role_access/role_access.module';
 
-
 @Module({
-  imports: [
-    SequelizeModule.forFeature([Submenu]),
-    RoleAccessModule,
-    RoleSubmenuModule
-  ],
-  controllers: [SubmenuController],
-  providers: [SubmenuService],
-  exports: [SubmenuService]
+    imports: [
+        SequelizeModule.forFeature([Submenu]),
+        RoleAccessModule,
+        RoleSubmenuModule,
+    ],
+    controllers: [SubmenuController],
+    providers: [SubmenuService],
+    exports: [SubmenuService],
 })
-export class SubmenuModule { }
+export class SubmenuModule {}

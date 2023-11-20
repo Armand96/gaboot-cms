@@ -5,7 +5,10 @@ import { AuthDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
-    constructor(private userSvc: UserService, private jwtSvc: JwtService) { }
+    constructor(
+        private userSvc: UserService,
+        private jwtSvc: JwtService,
+    ) {}
 
     async validateUser(id: number, pass: string): Promise<any> {
         console.log('validate user');

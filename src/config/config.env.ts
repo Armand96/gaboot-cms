@@ -16,7 +16,7 @@ const confEnv = {
     REDIS_PORT: process.env.REDIS_PORT,
     SERVER_PORT: process.env.SERVER_PORT,
     TTL: process.env.RATE_LIMITER_TIMEOUT,
-    MAX_REQ: process.env.RATE_LIMITER_MAX_REQ
+    MAX_REQ: process.env.RATE_LIMITER_MAX_REQ,
 };
 
 export { confEnv };
