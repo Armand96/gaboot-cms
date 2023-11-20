@@ -7,15 +7,25 @@ class ResponseSuccess<T> {
   totalData: number;
 
   toJson() {
-    if (this.message?.length != 0) this.message = this.message;
-    if (this.datum != null) this.datum = this.datum;
-    if (this.data?.length != 0) this.data = this.data;
-    if (this.lastPage != null) this.lastPage = this.lastPage;
-    if (this.totalData != null) this.totalData = this.totalData;
+    let ress: ResponseSuccess<T> = new ResponseSuccess<T>();
+    if (this.message?.length != 0) ress.message = this.message;
+    if (this.datum != null) ress.datum = this.datum;
+    if (this.data?.length != 0) ress.data = this.data;
+    if (this.lastPage != null) ress.lastPage = this.lastPage;
+    if (this.totalData != null) ress.totalData = this.totalData;
+    ress.success = this.success;
 
-    this.success = this.success;
+    this.clear();
 
-    return this;
+    return ress;
+  }
+
+  private clear() {
+    delete this.message;
+    delete this.datum;
+    delete this.data;
+    delete this.lastPage;
+    delete this.totalData;
   }
 }
 export { ResponseSuccess };
