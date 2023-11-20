@@ -35,6 +35,12 @@ export class Cart extends Model {
     @Column
     quantity: number;
 
+    @Column
+    subtotal: number;
+
+    @Column
+    isCheckout: boolean;
+
     @BelongsTo(() => Product)
     product: Product;
 
