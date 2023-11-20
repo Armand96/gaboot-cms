@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { Op } from 'sequelize';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class PaymentService {
@@ -69,4 +70,10 @@ export class PaymentService {
     async remove(id: number) {
         return `This action removes a #${id} payment`;
     }
+    
+    @Interval(1000)
+    async handleCronAssetCleaning()
+    {
+		console.log('Running Scheldule Test');
+	}
 }

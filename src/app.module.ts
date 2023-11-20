@@ -24,9 +24,11 @@ import { CartsModule } from './mainapp/carts/carts.module';
 import { WishlistsModule } from './mainapp/wishlists/wishlists.module';
 import { PaymentModule } from './mainapp/payment/payment.module';
 import { OrderModule } from './mainapp/order/order.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         mysql,
         UserModule,
         RoleModule,
