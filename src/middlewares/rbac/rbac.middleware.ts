@@ -1,4 +1,6 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
+    Inject,
     Injectable,
     NestMiddleware,
     UnauthorizedException,
@@ -8,31 +10,55 @@ import { verify } from 'jsonwebtoken';
 import { confEnv } from 'src/config/config.env';
 import { User } from 'src/mainapp/master/user/entities/user.entity';
 import { UserService } from 'src/mainapp/master/user/user.service';
+import { Cache } from 'cache-manager';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 
 @Injectable()
 export class RbacMiddleware implements NestMiddleware {
-    constructor(private usrSvc: UserService) {}
+    constructor(
+        private usrSvc: UserService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
+    ) { }
+
     users: User[] = [];
+    respUser: ResponseSuccess<User> = new ResponseSuccess<User>();
 
     async use(req: Request, res: any, next: () => void) {
+        this.users = await this.cacheManager.get('users');
+        if(this.users == undefined) this.users = [];
+
         const data = this.jwt(req);
         let currentUser = this.users.find((usr) => {
             return usr.id == Number(data.sub);
         });
 
         try {
-            // console.log(req.baseUrl);
+            // console.log("BASE URL",req.baseUrl);
+            // console.log("current user", currentUser);
             if (req.baseUrl == '/auth/logout') {
                 const index = this.users.indexOf(currentUser, 0);
                 this.users.splice(index, 1);
+                await this.cacheManager.set('users', this.users);
                 console.log('RBAC ', this.users.length);
                 return next();
             }
 
-            if (!currentUser) {
+            if (currentUser == undefined) {
                 currentUser = (await this.usrSvc.findOne(Number(data.sub)))
                     .datum;
+                console.log('USERS', this.users);
                 this.users.push(currentUser);
+                this.cacheManager.set('users', this.users);
+            }
+
+            if(req.baseUrl == '/auth/check') {
+                if(currentUser) {
+                    this.respUser.message = "Success Get User";
+                    this.respUser.datum = currentUser;
+                    res.writeHead(200, { 'content-type': 'application/json' })
+                    res.write(JSON.stringify(this.respUser))
+                    res.end()
+                }
             }
 
             req.user = currentUser;
@@ -47,10 +73,11 @@ export class RbacMiddleware implements NestMiddleware {
                 if (element.backendUrl == req.baseUrl) return next();
             }
         } catch (error) {
-            const index = this.users.indexOf(currentUser, 0);
-            if (index > -1) {
-                this.users.splice(index, 1);
-            }
+            throw error;
+            // const index = this.users.indexOf(currentUser, 0);
+            // if (index > -1) {
+            //     this.users.splice(index, 1);
+            // }
             throw new UnauthorizedException('Please log in');
         }
         throw new UnauthorizedException(

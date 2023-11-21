@@ -7,6 +7,7 @@ import {
     Body,
     UsePipes,
     ValidationPipe,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
@@ -42,28 +43,6 @@ export class AuthController {
     async getProfile(@Request() req: any) {
         let currentUser: ResponseSuccessUser = {} as ResponseSuccessUser;
 
-        if (this.users.length != 0) {
-            currentUser = this.users.find((obj) => {
-                if (obj.datum == null) return {} as ResponseSuccessUser;
-
-                if (obj.datum.id == req.user.userId) {
-                    return obj;
-                }
-            });
-        }
-
-        // console.log(currentUser, req.user);
-
-        if (
-            JSON.stringify(currentUser) ==
-            JSON.stringify({} as ResponseSuccessUser)
-        ) {
-            const userResponse = await this.usrSvc.findOne(req.user.userId);
-            // console.log(userResponse);
-            this.users.push(userResponse);
-            currentUser = userResponse;
-        }
-
-        return currentUser;
+        console.log("REQ USER", req.user);
     }
 }

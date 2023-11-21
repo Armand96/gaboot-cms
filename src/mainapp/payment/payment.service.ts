@@ -71,9 +71,9 @@ export class PaymentService {
         return `This action removes a #${id} payment`;
     }
     
-    @Interval(1000)
-    async handleCronAssetCleaning()
-    {
-		console.log('Running Scheldule Test');
-	}
+    // @Interval(1000)
+    // async handleCronAssetCleaning()
+    // {
+	// 	console.log('Running Scheldule Test');
+	// }
 }

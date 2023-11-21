@@ -70,10 +70,10 @@ export class RoleAccessService {
         dataUpdate.submenuId = updateRoleAccessDto.submenuId;
         dataUpdate.frontendUrl = updateRoleAccessDto.frontendUrl;
         dataUpdate.backendUrl = updateRoleAccessDto.backendUrl;
-        dataUpdate.create = updateRoleAccessDto.createz;
-        dataUpdate.read = updateRoleAccessDto.readz;
-        dataUpdate.updates = updateRoleAccessDto.updatez;
-        dataUpdate.delete = updateRoleAccessDto.deletez;
+        dataUpdate.createz = updateRoleAccessDto.createz;
+        dataUpdate.readz = updateRoleAccessDto.readz;
+        dataUpdate.updatez = updateRoleAccessDto.updatez;
+        dataUpdate.deletez = updateRoleAccessDto.deletez;
 
         await this.rolac.update(dataUpdate, { where: { id: id } });
         const rolac = await this.rolac.findOne({ where: { id: id } });
@@ -107,10 +107,10 @@ export class RoleAccessService {
         dataCreate.submenuId = datas.submenuId;
         dataCreate.frontendUrl = datas.frontendUrl;
         dataCreate.backendUrl = datas.backendUrl;
-        dataCreate.create = datas.createz;
-        dataCreate.read = datas.readz;
-        dataCreate.updates = datas.updatez;
-        dataCreate.delete = datas.deletez;
+        dataCreate.createz = datas.createz;
+        dataCreate.readz = datas.readz;
+        dataCreate.updatez = datas.updatez;
+        dataCreate.deletez = datas.deletez;
         return dataCreate;
     }
 

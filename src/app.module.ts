@@ -25,10 +25,14 @@ import { WishlistsModule } from './mainapp/wishlists/wishlists.module';
 import { PaymentModule } from './mainapp/payment/payment.module';
 import { OrderModule } from './mainapp/order/order.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
     imports: [
         ScheduleModule.forRoot(),
+        CacheModule.register({
+            isGlobal: true
+        }),
         mysql,
         UserModule,
         RoleModule,
@@ -71,6 +75,7 @@ export class AppModule implements NestModule {
             'menu',
             'item',
             'auth/logout',
+            'auth/check'
         ];
 
         consumer

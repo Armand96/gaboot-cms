@@ -24,7 +24,7 @@ export class UserService {
         private gen: GeneralService,
         private resSuccess: ResponseSuccess<User>, // private imprt: ImportService,
     ) // private exprt: ExportService,
-    {}
+    { }
 
     /* HASH */
     async getHash(password: string) {
@@ -114,6 +114,7 @@ export class UserService {
 
     /* FIND SINGLE USER */
     async findOne(id: number) {
+        console.log('manggil di mari');
         const dataUser = await this.user.findOne({
             where: { id: id },
             include: [
@@ -131,6 +132,8 @@ export class UserService {
                                     model: RoleSubmenu,
                                     required: true,
                                     include: [Submenu],
+                                    separate: true,
+                                    order: [['submenuId', 'asc']]
                                 },
                             ],
                         },
@@ -240,7 +243,32 @@ export class UserService {
     async userLogin(username: string, password: string) {
         const user = await this.user
             .scope('withPassword')
-            .findOne({ where: { userName: username } });
+            .findOne({
+                where: { userName: username },
+                include: [
+                    {
+                        model: Role,
+                        required: true,
+                        include: [
+                            RoleAccess,
+                            {
+                                model: RoleMenu,
+                                required: true,
+                                include: [
+                                    Menu,
+                                    {
+                                        model: RoleSubmenu,
+                                        required: true,
+                                        include: [Submenu],
+                                        separate: true,
+                                        order: [['submenuId', 'asc']]
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            });
         const isValid = await this.checkHash(password, user.password);
         console.log(isValid);
         if (isValid) return user;

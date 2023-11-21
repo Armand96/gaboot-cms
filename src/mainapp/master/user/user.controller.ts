@@ -91,6 +91,7 @@ export class UserController {
         )
         file: Express.Multer.File,
     ) {
+        console.log('di mari');
         return this.userService.update(id, updateUserDto, file);
     }
 
