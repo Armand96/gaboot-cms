@@ -35,8 +35,10 @@ export class OrderService {
         });
 
         if (orders.length == 0) {
-            this.response.message = 'Order data empty';
-            this.response.success = true;
+            this.response.message = 'No Data Found';
+            this.response.success = false;
+
+            return this.response.toJson();
         }
 
         this.response.message = 'Success Get Orders';

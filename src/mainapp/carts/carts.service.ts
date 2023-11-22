@@ -49,8 +49,8 @@ export class CartsService {
 
         if (carts.length == 0)
         {
-            this.response.message = 'Cart data empty';
-            this.response.success = true;
+            this.response.message = 'No Data Found';
+            this.response.success = false;
 
             return this.response.toJson();
         }

@@ -67,7 +67,7 @@ export class CategoriesService {
         if (categories.length == 0) {
             this.response.message = "No Data Found";
             this.response.success = false;
-            this.response.data = categories;
+
             return this.response.toJson();
         }
 

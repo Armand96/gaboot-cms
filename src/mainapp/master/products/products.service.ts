@@ -71,7 +71,7 @@ export class ProductsService {
         if (products?.length == 0) {
             this.response.message = "No Data Found";
             this.response.success = false;
-            this.response.data = products;
+
             return this.response.toJson();
         }
 
