@@ -68,11 +68,10 @@ export class ProductsService {
             where: filterData,
         });
 
-        if (products?.length == 0) 
-        {
-            this.response.message = 'Product data empty';
-            this.response.success = true;
-
+        if (products?.length == 0) {
+            this.response.message = "No Data Found";
+            this.response.success = false;
+            this.response.data = products;
             return this.response.toJson();
         }
 

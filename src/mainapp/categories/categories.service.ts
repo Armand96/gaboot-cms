@@ -65,9 +65,9 @@ export class CategoriesService {
         });
 
         if (categories.length == 0) {
-            this.response.message = 'Category data empty';
-            this.response.success = true;
-
+            this.response.message = "No Data Found";
+            this.response.success = false;
+            this.response.data = categories;
             return this.response.toJson();
         }
 
