@@ -65,7 +65,10 @@ export class CategoriesService {
         });
 
         if (categories.length == 0) {
-            throw new NotFoundException('No Data Found');
+            this.response.message = "No Data Found";
+            this.response.success = false;
+            this.response.data = categories;
+            return this.response.toJson();
         }
 
         this.response.message = 'Success Get Category';
