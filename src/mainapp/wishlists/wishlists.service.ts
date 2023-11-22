@@ -35,7 +35,10 @@ export class WishlistsService {
         });
 
         if (wishlists.length == 0) {
-            throw new NotFoundException('No Data Found');
+            this.response.message = 'Wishlist data empty';
+            this.response.success = true;
+
+            return this.response.toJson();
         }
 
         this.response.message = 'Success Get Wishlists';

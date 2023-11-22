@@ -68,7 +68,13 @@ export class ProductsService {
             where: filterData,
         });
 
-        if (products?.length == 0) throw new NotFoundException('No Data Found');
+        if (products?.length == 0) 
+        {
+            this.response.message = 'Product data empty';
+            this.response.success = true;
+
+            return this.response.toJson();
+        }
 
         this.response.message = 'Success Get Products';
         this.response.success = true;

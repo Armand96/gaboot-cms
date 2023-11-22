@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { InjectModel } from '@nestjs/sequelize';
@@ -14,23 +14,23 @@ export class CartsService {
         private cart: typeof Cart,
     ) {}
 
+    private response = new ResponseSuccess<Cart>();
+
     async create(createCartDto: CreateCartDto) {
-        const resSuccess = new ResponseSuccess<Cart>();
+        
 
         const dataCreate: any = createCartDto;
 
         const cart = await this.cart.create(dataCreate);
 
-        resSuccess.message = 'Success Insert Cart Data';
-        resSuccess.success = true;
-        resSuccess.datum = cart;
+        this.response.message = 'Success Insert Cart Data';
+        this.response.success = true;
+        this.response.datum = cart;
 
-        return resSuccess;
+        return this.response.toJson();
     }
 
     async findAll(req: Request) {
-        const resSuccess = new ResponseSuccess<Cart>();
-
         const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
         const limit = req.query.limit == null ? 10 : Number(req.query.limit);
         /* FILTER DATA */
@@ -47,52 +47,61 @@ export class CartsService {
             where: filterData,
         });
 
-        resSuccess.message = 'Success Get Carts';
-        resSuccess.success = true;
-        resSuccess.data = carts;
+        if (carts.length == 0)
+        {
+            this.response.message = 'Cart data empty';
+            this.response.success = true;
 
-        return resSuccess;
+            return this.response.toJson();
+        }
+
+        this.response.message = 'Success Get Carts';
+        this.response.success = true;
+        this.response.data = carts;
+
+        return this.response.toJson();
     }
 
     async findOne(id: number) {
-        const resSuccess = new ResponseSuccess<Cart>();
-
         const cart = await this.cart.findOne({
             where: { id: id },
         });
 
-        resSuccess.message = 'Success Get Cart';
-        resSuccess.success = true;
-        resSuccess.datum = cart;
+        if (!cart)
+            throw new NotFoundException('No data found');
 
-        return resSuccess;
+        this.response.message = 'Success Get Cart';
+        this.response.success = true;
+        this.response.datum = cart;
+
+        return this.response.toJson();
     }
 
     async update(id: number, updateCartDto: UpdateCartDto) {
-        const resSuccess = new ResponseSuccess<Cart>();
+        
         const dataUpdate: any = updateCartDto;
 
         await this.cart.update(dataUpdate, { where: { id: id } });
         const menu = await this.cart.findOne({ where: { id: id } });
 
-        resSuccess.message = 'Success Update Cart Data';
-        resSuccess.success = true;
-        resSuccess.datum = menu;
+        this.response.message = 'Success Update Cart Data';
+        this.response.success = true;
+        this.response.datum = menu;
 
-        return resSuccess;
+        return this.response.toJson();
     }
 
     async remove(id: number) {
-        const resSuccess = new ResponseSuccess<Cart>();
+        
 
         await this.cart.destroy({
             where: { id: id },
         });
 
-        resSuccess.message = 'Success Delete Cart Data';
-        resSuccess.success = true;
-        resSuccess.datum = null;
+        this.response.message = 'Success Delete Cart Data';
+        this.response.success = true;
+        this.response.datum = null;
 
-        return resSuccess;
+        return this.response.toJson();
     }
 }

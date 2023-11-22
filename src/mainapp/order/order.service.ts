@@ -35,7 +35,8 @@ export class OrderService {
         });
 
         if (orders.length == 0) {
-            throw new NotFoundException('No Data Found');
+            this.response.message = 'Order data empty';
+            this.response.success = true;
         }
 
         this.response.message = 'Success Get Orders';
