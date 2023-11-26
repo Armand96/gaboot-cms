@@ -13,9 +13,9 @@ import { Wishlist } from 'src/mainapp/wishlists/entities/wishlist.entity';
     tableName: 'master_products',
     timestamps: true,
     defaultScope: {
-        attributes: {
-            exclude: ['createdAt', 'updatedAt'],
-        },
+        // attributes: {
+        //     exclude: ['createdAt', 'updatedAt'],
+        // },
     },
 })
 export class Product extends Model {

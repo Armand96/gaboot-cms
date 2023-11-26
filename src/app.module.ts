@@ -75,7 +75,9 @@ export class AppModule implements NestModule {
             'menu',
             'item',
             'auth/logout',
-            'auth/check'
+            'auth/check',
+            'products',
+            'categories'
         ];
 
         consumer

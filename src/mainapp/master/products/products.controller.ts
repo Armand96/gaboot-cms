@@ -23,33 +23,28 @@ import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
+import { CategoriesService } from 'src/mainapp/categories/categories.service';
 
 @Controller('products')
 export class ProductsController {
-    constructor(private readonly productsService: ProductsService) {}
+    constructor(
+        private readonly productsService: ProductsService,
+        private readonly categoryService: CategoriesService
+    ) {}
+
+    /* GET CATEGORY FOR CREATE */
+    @Get('/categories')
+    async getCategories(@Req() req: Request) {
+        console.log('di mari');
+        return this.categoryService.findAll(req);
+    }
 
     @Post()
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-        }),
-    )
+    @UsePipes(new ValidationPipe())
     create(
         @Body() createProductDto: CreateProductDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
     ) {
-        return this.productsService.create(createProductDto, file);
+        return this.productsService.create(createProductDto);
     }
 
     @Get()

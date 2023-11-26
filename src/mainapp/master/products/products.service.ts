@@ -9,6 +9,7 @@ import { PathImageObj } from 'src/services/general/interfaces/path-image';
 import { GeneralService } from 'src/services/general/general.service';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { ProductImage } from './entities/product.image.entity';
+import { Category } from 'src/mainapp/categories/entities/category.entity';
 
 @Injectable()
 export class ProductsService {
@@ -24,23 +25,8 @@ export class ProductsService {
 
     async create(
         createProductDto: CreateProductDto,
-        image: Express.Multer.File,
     ) {
         let pathObj = {} as PathImageObj;
-
-        if (image != null) {
-            pathObj = await this.gen.uploadImage(
-                image,
-                `${createProductDto.name}${Date.now()}`,
-                'product',
-            );
-            console.log('after upload');
-        }
-
-        if (image != null) {
-            createProductDto.imagePath = pathObj.path;
-            createProductDto.thumbnailPath = pathObj.thumbPath;
-        }
 
         const dataCreate: any = createProductDto;
         const product = await this.product.create(dataCreate);
@@ -66,6 +52,7 @@ export class ProductsService {
             limit: limit,
             offset: page * limit,
             where: filterData,
+            include: Category
         });
 
         if (products?.length == 0) {

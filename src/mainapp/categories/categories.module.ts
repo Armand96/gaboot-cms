@@ -10,5 +10,6 @@ import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
     imports: [SequelizeModule.forFeature([Category])],
     controllers: [CategoriesController],
     providers: [CategoriesService, GeneralService, ResponseSuccess<Category>],
+    exports: [CategoriesService]
 })
 export class CategoriesModule {}
