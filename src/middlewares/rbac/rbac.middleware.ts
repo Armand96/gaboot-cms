@@ -39,14 +39,14 @@ export class RbacMiddleware implements NestMiddleware {
                 const index = this.users.indexOf(currentUser, 0);
                 this.users.splice(index, 1);
                 await this.cacheManager.set('users', this.users);
-                console.log('RBAC ', this.users.length);
+                // console.log('RBAC ', this.users.length);
                 return next();
             }
 
             if (currentUser == undefined) {
                 currentUser = (await this.usrSvc.findOne(Number(data.sub)))
                     .datum;
-                console.log('USERS', this.users);
+                // console.log('USERS', this.users);
                 this.users.push(currentUser);
                 this.cacheManager.set('users', this.users);
             }

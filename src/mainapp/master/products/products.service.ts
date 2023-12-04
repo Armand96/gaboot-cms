@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -10,6 +10,8 @@ import { GeneralService } from 'src/services/general/general.service';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { ProductImage } from './entities/product.image.entity';
 import { Category } from 'src/mainapp/categories/entities/category.entity';
+import * as fs from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class ProductsService {
@@ -22,12 +24,11 @@ export class ProductsService {
     ) {}
 
     private response: ResponseSuccess<Product> = new ResponseSuccess<Product>();
+    private resProdImage: ResponseSuccess<ProductImage> = new ResponseSuccess<ProductImage>();
 
     async create(
         createProductDto: CreateProductDto,
     ) {
-        let pathObj = {} as PathImageObj;
-
         const dataCreate: any = createProductDto;
         const product = await this.product.create(dataCreate);
 
@@ -124,6 +125,79 @@ export class ProductsService {
         this.response.message = 'Success Delete Product Data';
         this.response.success = true;
         this.response.datum = null;
+
+        return this.response.toJson();
+    }
+
+    /* ====================================== PRODUCT IMAGES ====================================== */
+    async getProductImages(productId: number) {
+        const productImages = await this.productImg.findAll({where:{productId:productId}});
+
+        this.resProdImage.message = 'Success Get Product Images';
+        this.resProdImage.success = true;
+        this.resProdImage.data = productImages;
+
+        return this.resProdImage.toJson();
+    }
+
+    async uploadImages(id: number, images: Express.Multer.File[]){
+        const product = await this.product.findOne({
+            where: { id: id },
+        });
+
+        const newImages: any = images;
+        const dateNow = new Date();
+
+        // console.log("PRINT IMAGES!!!", newImages);
+
+        let productImages: any[] = [];
+
+        try {
+            if(!product) throw new NotFoundException();
+
+            for (let index = 0; index < newImages.img.length; index++) {
+                const image = newImages.img[index];
+                
+                let pathObj = {} as PathImageObj;
+    
+                pathObj = await this.gen.uploadImage(
+                    image,
+                    `${product.name}_${Date.now()}`,
+                    'product',
+                );
+    
+                const productImage:any = {
+                    productId: id,
+                    imagePath: pathObj.path,
+                    thumbnailPath: pathObj.thumbPath,
+                    createdAt: dateNow,
+                }
+
+                // console.log("DATA IMAGES", productImage);
+                productImages.push(productImage);
+            }
+
+            const data = await this.productImg.bulkCreate(productImages);
+            // console.log("HASIL UPLOAD: ",data);
+
+            this.response.message = 'Success Upload Images';
+            this.response.success = true;
+
+            return this.response.toJson();
+        } catch (error) {
+            console.log(error);
+            throw new InternalServerErrorException('yahahah servernya error');
+        }
+    }
+
+    async removeImages(idImage: number) {
+        const productImage = await this.productImg.findOne({where:{id:idImage}});
+        await this.productImg.destroy({where: {id:idImage}});
+        this.gen.removeImage(productImage.imagePath);
+        this.gen.removeImage(productImage.thumbnailPath);
+
+        this.response.message = 'Success Remove Image';
+        this.response.success = true;
 
         return this.response.toJson();
     }

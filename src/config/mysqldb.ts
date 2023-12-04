@@ -9,6 +9,7 @@ const mysql = SequelizeModule.forRoot({
     password: confEnv.MYSQLPASSWORD,
     database: confEnv.MYSQLNAME,
     autoLoadModels: true,
+    synchronize: false
 });
 
 export { mysql };

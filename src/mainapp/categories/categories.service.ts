@@ -128,9 +128,15 @@ export class CategoriesService {
     }
 
     async remove(id: number) {
+        const category = await this.category.findOne({where:{id:id}});
         await this.category.destroy({
             where: { id: id },
         });
+
+        if (category.imgPath != '' || category.imgPath != null) {
+            this.gen.removeImage(category.imgPath);
+            this.gen.removeImage(category.imgThumbPath);
+        }
 
         this.response.message = 'Success Delete Category Data';
         this.response.success = true;

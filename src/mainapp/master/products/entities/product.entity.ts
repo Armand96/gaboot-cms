@@ -40,6 +40,9 @@ export class Product extends Model {
     @Column
     weightUnit: string;
 
+    @Column
+    isActive: boolean;
+
     @ForeignKey(() => Category)
     @Column
     categoryId: number;

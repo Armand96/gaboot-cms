@@ -15,12 +15,13 @@ import {
     ParseFilePipe,
     UploadedFile,
     Res,
+    UploadedFiles,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Request, Response } from 'express';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { CategoriesService } from 'src/mainapp/categories/categories.service';
@@ -80,6 +81,31 @@ export class ProductsController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.productsService.remove(+id);
+    }
+
+    /* ====================================================== */
+    @Get('productImages/:id')
+    async getProductImages(@Param('id') id:number){
+        return this.productsService.getProductImages(id);
+    }
+
+    @Post('productImages/:id')
+    @UseInterceptors(FileFieldsInterceptor([{name:'img'}]))
+    async uploadMultipleImages(
+        @Param('id') id:number,
+        @UploadedFiles(
+            new ParseFilePipe({
+                fileIsRequired: true,
+            }),
+        )
+        files: Express.Multer.File[],
+    ){
+        return this.productsService.uploadImages(id, files);
+    }
+
+    @Delete('productImages/:id')
+    async removeImage(@Param('id') id:number){
+        return this.productsService.removeImages(id);
     }
 
     @Get('image/:id')
