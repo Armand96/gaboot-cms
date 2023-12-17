@@ -87,7 +87,7 @@ export class CategoriesService {
             throw new NotFoundException('Not Data Found');
         }
 
-        this.response.message = 'Success Get product';
+        this.response.message = 'Success Get Category';
         this.response.success = true;
         this.response.datum = categories;
 

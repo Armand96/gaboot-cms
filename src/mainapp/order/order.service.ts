@@ -6,13 +6,17 @@ import { InjectModel } from '@nestjs/sequelize';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { Request } from 'express';
 import { Op } from 'sequelize';
+import { OrderDetail } from './entities/order-detail.entity';
 
 @Injectable()
 export class OrderService {
     constructor(
         @InjectModel(Order) private orderModel: typeof Order,
-        private response: ResponseSuccess<Order>,
+        @InjectModel(OrderDetail) private orderDetailModel: typeof OrderDetail,
     ) {}
+
+    private response: ResponseSuccess<Order>;
+    private responseDetail: ResponseSuccess<OrderDetail>;
 
     async create(createOrderDto: CreateOrderDto) {
         return `This is unused`;
@@ -54,7 +58,7 @@ export class OrderService {
         });
 
         if (order == null) {
-            throw new NotFoundException('Not Data Found');
+            throw new NotFoundException('Data Not Found');
         }
 
         this.response.message = 'Success Get Order';
@@ -79,5 +83,52 @@ export class OrderService {
 
     async remove(id: number) {
         return `This action removes a #${id} order`;
+    }
+
+    /* ====================== ORDER DETAILS ====================== */
+    async findAllDetail(req: Request) {
+        const page = req.query.page == null ? 0 : Number(req.query.page) - 1;
+        const limit = req.query.limit == null ? 10 : Number(req.query.limit);
+
+        const filterData: any = {};
+        if (req.query.name != undefined && req.query.name != '')
+            filterData.name = {
+                [Op.like]: `%${req.query.name}%`,
+            };
+
+        const ordDetails = await this.orderDetailModel.findAll({
+            limit: limit,
+            offset: page * limit,
+            where: filterData,
+        });
+
+        if (ordDetails.length == 0) {
+            this.responseDetail.message = "No Data Found";
+            this.responseDetail.success = false;
+
+            return this.responseDetail.toJson();
+        }
+
+        this.responseDetail.message = 'Success Get Order Detail';
+        this.responseDetail.success = true;
+        this.responseDetail.data = ordDetails;
+
+        return this.responseDetail.toJson();
+    }
+
+    async findOneDetail(id: number) {
+        const ordDetails = await this.orderDetailModel.findOne({
+            where: { id: id },
+        });
+
+        if (ordDetails == null) {
+            throw new NotFoundException('Data Not Found');
+        }
+
+        this.responseDetail.message = 'Success Get Order Detail';
+        this.responseDetail.success = true;
+        this.responseDetail.datum = ordDetails;
+
+        return this.responseDetail.toJson();
     }
 }

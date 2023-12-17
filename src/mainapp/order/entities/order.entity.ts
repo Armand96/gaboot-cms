@@ -26,10 +26,19 @@ export class Order extends Model {
     name: string;
 
     @Column
-    cartId: number; //parsing product id and price from cart id, every transaction automatically inserted into carts
+    customerId: number; //Orders owner
 
     @Column
-    customerId: number; //Orders owner
+    totalPrice: number;
+
+    @Column
+    priceCut: number;
+
+    @Column
+    grandTotal: number;
+
+    @Column
+    totalItem: number;
 
     @Column
     status: OrderStatus;
