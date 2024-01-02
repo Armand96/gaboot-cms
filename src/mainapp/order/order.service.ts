@@ -7,16 +7,19 @@ import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { Request } from 'express';
 import { Op } from 'sequelize';
 import { OrderDetail } from './entities/order-detail.entity';
+import { Product } from '../master/products/entities/product.entity';
+import { ProductImage } from '../master/products/entities/product.image.entity';
 
 @Injectable()
 export class OrderService {
     constructor(
         @InjectModel(Order) private orderModel: typeof Order,
         @InjectModel(OrderDetail) private orderDetailModel: typeof OrderDetail,
+        private response: ResponseSuccess<Order>,
+        private responseDetail: ResponseSuccess<OrderDetail>
     ) {}
 
-    private response: ResponseSuccess<Order>;
-    private responseDetail: ResponseSuccess<OrderDetail>;
+    
 
     async create(createOrderDto: CreateOrderDto) {
         return `This is unused`;
@@ -55,11 +58,19 @@ export class OrderService {
     async findOne(id: number) {
         const order = await this.orderModel.findOne({
             where: { id: id },
+            include: [
+                {
+                    model: OrderDetail,
+                    required: false
+                }
+            ]
         });
 
         if (order == null) {
             throw new NotFoundException('Data Not Found');
         }
+
+        console.log(this.response);
 
         this.response.message = 'Success Get Order';
         this.response.success = true;
@@ -119,6 +130,13 @@ export class OrderService {
     async findOneDetail(id: number) {
         const ordDetails = await this.orderDetailModel.findOne({
             where: { id: id },
+            include: [
+                {
+                    model: Product,
+                    required: true,
+                    include: [ProductImage]
+                }
+            ]
         });
 
         if (ordDetails == null) {

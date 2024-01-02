@@ -9,6 +9,6 @@ import { OrderDetail } from './entities/order-detail.entity';
 @Module({
     imports: [SequelizeModule.forFeature([Order, OrderDetail])],
     controllers: [OrderController],
-    providers: [OrderService],
+    providers: [OrderService, ResponseSuccess],
 })
 export class OrderModule {}

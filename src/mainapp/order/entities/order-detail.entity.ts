@@ -31,7 +31,7 @@ export class OrderDetail extends Model {
     price: number;
     
     @Column
-    priceCut: number;
+    discount: number;
     
     @Column
     quantity: number;

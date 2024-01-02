@@ -8,6 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { Category } from 'src/mainapp/categories/entities/category.entity';
 import { Wishlist } from 'src/mainapp/wishlists/entities/wishlist.entity';
+import { ProductImage } from './product.image.entity';
 
 @Table({
     tableName: 'master_products',
@@ -52,4 +53,7 @@ export class Product extends Model {
 
     @HasMany(() => Wishlist)
     wishlists: Wishlist[];
+
+    @HasMany(() => ProductImage)
+    images: ProductImage[];
 }

@@ -2,9 +2,11 @@ import {
     BelongsTo,
     Column,
     ForeignKey,
+    HasMany,
     Model,
     Table,
 } from 'sequelize-typescript';
+import { OrderDetail } from './order-detail.entity';
 
 enum OrderStatus {
     OPEN = 'OPEN',
@@ -32,7 +34,7 @@ export class Order extends Model {
     totalPrice: number;
 
     @Column
-    priceCut: number;
+    discount: number;
 
     @Column
     grandTotal: number;
@@ -45,4 +47,7 @@ export class Order extends Model {
 
     @Column
     expired: string; //if order not paid before 24 hours order status must be cancelled
+
+    @HasMany(() => OrderDetail)
+    orderDetail: OrderDetail[]
 }
