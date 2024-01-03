@@ -7,6 +7,7 @@ import {
     Table,
 } from 'sequelize-typescript';
 import { OrderDetail } from './order-detail.entity';
+import { Customer } from 'src/mainapp/master/customers/entities/customer.entity';
 
 enum OrderStatus {
     OPEN = 'OPEN',
@@ -28,6 +29,7 @@ export class Order extends Model {
     name: string;
 
     @Column
+    @ForeignKey(() => Customer)
     customerId: number; //Orders owner
 
     @Column
@@ -49,5 +51,8 @@ export class Order extends Model {
     expired: string; //if order not paid before 24 hours order status must be cancelled
 
     @HasMany(() => OrderDetail)
-    orderDetail: OrderDetail[]
+    orderDetail: OrderDetail[];
+
+    @BelongsTo(() => Customer)
+    customer: Customer;
 }

@@ -9,6 +9,7 @@ import { Op } from 'sequelize';
 import { OrderDetail } from './entities/order-detail.entity';
 import { Product } from '../master/products/entities/product.entity';
 import { ProductImage } from '../master/products/entities/product.image.entity';
+import { Customer } from '../master/customers/entities/customer.entity';
 
 @Injectable()
 export class OrderService {
@@ -39,6 +40,9 @@ export class OrderService {
             limit: limit,
             offset: page * limit,
             where: filterData,
+            include: [
+                Customer
+            ]
         });
 
         if (orders.length == 0) {
