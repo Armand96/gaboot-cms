@@ -6,19 +6,13 @@ import {
     Patch,
     Param,
     Delete,
-    UsePipes,
-    ValidationPipe,
-    FileTypeValidator,
-    MaxFileSizeValidator,
-    ParseFilePipe,
     Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Req, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
+import { Req } from '@nestjs/common/decorators';
 import { Response, Request } from 'express';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -38,17 +32,15 @@ export class UserController {
         whitelist: true,
         transform: true,
     })
-    create(
-        @Body() createUserDto: CreateUserDto,
-        @UploadFile(1000000, 'image') file: Express.Multer.File
-    ) 
+    create(@Body() createUserDto: CreateUserDto, @UploadFile() file: Express.Multer.File) 
     {
         return this.userService.create(createUserDto, file);
     }
 
     /* READ ALL */
     @Get()
-    findAll(@Req() req: Request) {
+    findAll(@Req() req: Request) 
+    {
         return this.userService.findAll(req);
     }
 
@@ -59,21 +51,16 @@ export class UserController {
         description: 'The found record',
         type: User,
     })
-    findOne(@Param('id') id: number) {
+    findOne(@Param('id') id: number) 
+    {
         return this.userService.findOne(id);
     }
 
     /* UPDATE ONE */
     @Patch(':id')
     @UploadInterceptor('img')
-    update(
-        @Param('id') id: number,
-        @Body() updateUserDto: UpdateUserDto,
-        @UploadFile(1000000, 'image')
-        file: Express.Multer.File,
-    ) {
-        console.log(file);
-        
+    update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto, @UploadFile() file: Express.Multer.File) 
+    {
         return this.userService.update(id, updateUserDto, file);
     }
 
@@ -110,7 +97,8 @@ export class UserController {
 
     /* GET IMAGE */
     @Get('image/thumb/:id')
-    async getImageThumb(@Param('id') id: number, @Res() res: Response) {
+    async getImageThumb(@Param('id') id: number, @Res() res: Response) 
+    {
         const user = await this.userService.userImage(id);
         if (user.imgThumbPath == null || user.imgThumbPath == '') {
             return res.status(404).json({

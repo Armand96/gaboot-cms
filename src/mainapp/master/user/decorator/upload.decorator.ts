@@ -10,7 +10,7 @@ export function UploadInterceptor(fieldName: string, options?: ValidationPipeOpt
     );
 }
 
-export function UploadFile(maxSize: number, fileType: string) {
+export function UploadFile(maxSize: number = 1000000, fileType: string = 'image') {
     return UploadedFile(new ParseFilePipe({
         validators: [
             new MaxFileSizeValidator({ maxSize: maxSize }),
