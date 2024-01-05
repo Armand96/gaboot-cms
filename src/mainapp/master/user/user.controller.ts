@@ -23,6 +23,7 @@ import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { UploadFile, UploadInterceptor } from './decorator/upload.decorator';
 // import * as fs from 'fs';
 
 @ApiBearerAuth('jwt')
@@ -33,26 +34,15 @@ export class UserController {
 
     /* CREATE */
     @Post()
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-        }),
-    )
+    @UploadInterceptor('img', {
+        whitelist: true,
+        transform: true,
+    })
     create(
         @Body() createUserDto: CreateUserDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
-    ) {
+        @UploadFile(1000000, 'image') file: Express.Multer.File
+    ) 
+    {
         return this.userService.create(createUserDto, file);
     }
 
@@ -75,23 +65,15 @@ export class UserController {
 
     /* UPDATE ONE */
     @Patch(':id')
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(new ValidationPipe())
+    @UploadInterceptor('img')
     update(
         @Param('id') id: number,
         @Body() updateUserDto: UpdateUserDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
+        @UploadFile(1000000, 'image')
         file: Express.Multer.File,
     ) {
-        console.log('di mari');
+        console.log(file);
+        
         return this.userService.update(id, updateUserDto, file);
     }
 
