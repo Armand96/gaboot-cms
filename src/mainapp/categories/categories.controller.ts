@@ -23,31 +23,20 @@ import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { existsSync, createReadStream } from 'fs';
 import { join } from 'path';
+import { UploadFile, UploadInterceptor } from 'src/services/general/decorator/upload.decorator';
 
 @Controller('categories')
 export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
 
     @Post()
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-        }),
-    )
+    @UploadInterceptor('img', {
+        whitelist: true,
+        transform: true,
+    })
     create(
         @Body() createCategoryDto: CreateCategoryDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
+        @UploadFile() file: Express.Multer.File
     ) {
         return this.categoriesService.create(createCategoryDto, file);
     }
@@ -63,22 +52,13 @@ export class CategoriesController {
     }
 
     @Patch(':id')
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(new ValidationPipe())
+    @UploadInterceptor('img')
     update(
         @Param('id') id: string,
         @Body() updateCategoryDto: UpdateCategoryDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
-    ) {
+        @UploadFile() file: Express.Multer.File
+    ) 
+    {
         return this.categoriesService.update(+id, updateCategoryDto, file);
     }
 

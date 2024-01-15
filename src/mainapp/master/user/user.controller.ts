@@ -17,7 +17,7 @@ import { createReadStream, existsSync } from 'fs';
 import { join } from 'path';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { UploadFile, UploadInterceptor } from './decorator/upload.decorator';
+import { UploadFile, UploadInterceptor } from '../../../services/general/decorator/upload.decorator';
 // import * as fs from 'fs';
 
 @ApiBearerAuth('jwt')
@@ -66,7 +66,8 @@ export class UserController {
 
     /* DELETE ONE */
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string) 
+    {
         return this.userService.remove(+id);
     }
 

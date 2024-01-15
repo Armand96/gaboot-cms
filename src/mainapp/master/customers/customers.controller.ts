@@ -20,67 +20,44 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { UploadFile, UploadInterceptor } from 'src/services/general/decorator/upload.decorator';
 
 @Controller('customers')
 export class CustomersController {
     constructor(private readonly customersService: CustomersService) {}
 
     @Post()
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-        }),
-    )
-    create(
-        @Body() createCustomerDto: CreateCustomerDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
-    ) {
+    @UploadInterceptor('img', {
+        whitelist: true,
+        transform: true,
+    })
+    create(@Body() createCustomerDto: CreateCustomerDto, @UploadFile() file: Express.Multer.File) 
+    {
         return this.customersService.create(createCustomerDto, file);
     }
 
     @Get()
-    findAll(@Req() req: Request) {
+    findAll(@Req() req: Request) 
+    {
         return this.customersService.findAll(req);
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: string) 
+    {
         return this.customersService.findOne(+id);
     }
 
     @Patch(':id')
-    @UseInterceptors(FileInterceptor('img'))
-    @UsePipes(new ValidationPipe())
-    update(
-        @Param('id') id: string,
-        @Body() updateCustomerDto: UpdateCustomerDto,
-        @UploadedFile(
-            new ParseFilePipe({
-                validators: [
-                    new MaxFileSizeValidator({ maxSize: 1000000 }),
-                    new FileTypeValidator({ fileType: 'image' }),
-                ],
-                fileIsRequired: false,
-            }),
-        )
-        file: Express.Multer.File,
-    ) {
+    @UploadInterceptor('img')
+    update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto, @UploadFile() file: Express.Multer.File) 
+    {
         return this.customersService.update(+id, updateCustomerDto, file);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string) 
+    {
         return this.customersService.remove(+id);
     }
 }
