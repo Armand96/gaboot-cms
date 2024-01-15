@@ -74,7 +74,7 @@ export class PaymentService {
         return `This action removes a #${id} payment`;
     }
 
-    async payment_callback(midtrans: any)
+    async paymentCallback(midtrans: any)
     {
         const payment = await this.payments.update(midtrans.transaction_status, {
             where: { transaction_id: midtrans.transaction_id }

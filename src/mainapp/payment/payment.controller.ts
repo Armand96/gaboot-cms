@@ -44,4 +44,10 @@ export class PaymentController {
     remove(@Param('id') id: string) {
         return this.paymentService.remove(+id);
     }
+
+    @Post('/callback')
+    paymentCallback(@Body() body: any)
+    {
+        return this.paymentService.paymentCallback(body)
+    }
 }
