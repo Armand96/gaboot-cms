@@ -11,7 +11,7 @@ import { Interval } from '@nestjs/schedule';
 @Injectable()
 export class PaymentService {
     constructor(
-        @InjectModel(Payment) private wishlistModel: typeof Payment
+        @InjectModel(Payment) private payments: typeof Payment
     ) {}
 
     private response = new ResponseSuccess<Payment>();
@@ -30,20 +30,20 @@ export class PaymentService {
                 [Op.like]: `%${req.query.name}%`,
             };
 
-        const wishlists = await this.wishlistModel.findAll({
+        const wishlists = await this.payments.findAll({
             limit: limit,
             offset: page * limit,
             where: filterData,
         });
 
         if (wishlists.length == 0) {
-            this.response.message = 'Wishlist data empty';
+            this.response.message = 'Payments data empty';
             this.response.success = true;
 
             return this.response.toJson();
         }
 
-        this.response.message = 'Success Get Wishlists';
+        this.response.message = 'Success Get Payments';
         this.response.success = true;
         this.response.data = wishlists;
 
@@ -51,7 +51,7 @@ export class PaymentService {
     }
 
     async findOne(id: number) {
-        const wishlist = await this.wishlistModel.findOne({
+        const wishlist = await this.payments.findOne({
             where: { id: id },
         });
 
@@ -59,7 +59,7 @@ export class PaymentService {
             throw new NotFoundException('Not Data Found');
         }
 
-        this.response.message = 'Success Get Wishlist';
+        this.response.message = 'Success Get Payment';
         this.response.success = true;
         this.response.datum = wishlist;
 
@@ -72,6 +72,18 @@ export class PaymentService {
 
     async remove(id: number) {
         return `This action removes a #${id} payment`;
+    }
+
+    async payment_callback(midtrans: any)
+    {
+        const payment = await this.payments.update(midtrans.transaction_status, {
+            where: { transaction_id: midtrans.transaction_id }
+        });
+
+        this.response.message = 'Callback proceed successfully';
+        this.response.success = true;
+
+        return this.response.toJson();
     }
     
     // @Interval(1000)
