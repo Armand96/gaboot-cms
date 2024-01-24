@@ -25,8 +25,11 @@ enum PaymentType {
 })
 export class Payment extends Model {
     @Column
+    orderId: number;
+    
+    @Column
     name: string;
-
+    
     @Column
     transactionId: string;
 

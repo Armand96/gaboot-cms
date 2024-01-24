@@ -8,12 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { OrderDetail } from './order-detail.entity';
 import { Customer } from 'src/mainapp/master/customers/entities/customer.entity';
-
-enum OrderStatus {
-    OPEN = 'OPEN',
-    SUCCESS = 'SUCCESS',
-    CANCELLED = 'CANCELLED',
-}
+import { OrderStatus } from './order-status';
 
 @Table({
     tableName: 'orders',

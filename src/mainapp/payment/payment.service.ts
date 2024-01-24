@@ -7,12 +7,15 @@ import { Request } from 'express';
 import { Op } from 'sequelize';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { Interval } from '@nestjs/schedule';
+import { Order } from '../order/entities/order.entity';
+import { OrderStatus } from '../order/entities/order-status';
 
 @Injectable()
 export class PaymentService {
     constructor(
-        @InjectModel(Payment) private payments: typeof Payment
-    ) {}
+        @InjectModel(Payment) private payments: typeof Payment,
+        @InjectModel(Order) private order: typeof Order
+    ) { }
 
     private response = new ResponseSuccess<Payment>();
 
@@ -74,21 +77,36 @@ export class PaymentService {
         return `This action removes a #${id} payment`;
     }
 
-    async paymentCallback(midtrans: any)
-    {
-        const payment = await this.payments.update(midtrans.transaction_status, {
-            where: { transaction_id: midtrans.transaction_id }
-        });
+    async paymentCallback(midtrans: any) {
+        if(midtrans.transaction_status == "settlement") {
 
-        this.response.message = 'Callback proceed successfully';
+            const updateData = { transactionStatus: midtrans.transaction_status };
+            const updateOrder = { status: OrderStatus.SUCCESS };
+    
+            await this.payments.update(updateData, {
+                where: { transaction_id: midtrans.transaction_id }
+            });
+    
+            await this.order.update(updateOrder, {
+                where: { id: midtrans.order_id }
+            });
+            
+            this.response.message = 'Callback proceed successfully';
+            this.response.success = true;
+    
+            return this.response.toJson();
+        }
+        
+        this.response.message = "Callback proceed successfully, but does not need to be updated";
         this.response.success = true;
 
         return this.response.toJson();
+
     }
-    
+
     // @Interval(1000)
     // async handleCronAssetCleaning()
     // {
-	// 	console.log('Running Scheldule Test');
-	// }
+    // 	console.log('Running Scheldule Test');
+    // }
 }
