@@ -9,6 +9,7 @@ import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { Interval } from '@nestjs/schedule';
 import { Order } from '../order/entities/order.entity';
 import { OrderStatus } from '../order/entities/order-status';
+import { CreateOrderDto } from '../order/dto/create-order.dto';
 
 @Injectable()
 export class PaymentService {
@@ -77,7 +78,22 @@ export class PaymentService {
         return `This action removes a #${id} payment`;
     }
 
-    async paymentCallback(midtrans: any) {
+    async paymentCallback(midtrans: any) 
+    {
+        if (midtrans.status_code == "201")
+        {
+            const updateOrder: CreateOrderDto = { status: OrderStatus.PENDING_PAYMENT, expired: midtrans.expiry_time };
+
+            await this.order.update(updateOrder, {
+                where: { id: midtrans.order_id }
+            });
+            
+            this.response.message = 'Callback proceed successfully';
+            this.response.success = true;
+    
+            return this.response.toJson();
+        }
+
         if(midtrans.transaction_status == "settlement") {
 
             const updateData = { transactionStatus: midtrans.transaction_status };
@@ -95,6 +111,19 @@ export class PaymentService {
             this.response.success = true;
     
             return this.response.toJson();
+        }
+        else if (midtrans.transaction_status == "expired")
+        {
+            const updateData = { transactionStatus: midtrans.transaction_status };
+            const updateOrder = { status: OrderStatus.EXPIRED };
+    
+            await this.payments.update(updateData, {
+                where: { transaction_id: midtrans.transaction_id }
+            });
+    
+            await this.order.update(updateOrder, {
+                where: { id: midtrans.order_id }
+            });
         }
         
         this.response.message = "Callback proceed successfully, but does not need to be updated";
