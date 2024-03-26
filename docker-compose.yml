@@ -1,28 +1,51 @@
 version: "3.5"
 services:
-  mysql:
-    image: mysql:8.1.0
-    restart: always
-    container_name: my-mysql-container
+  gaboot-db:
+    image: mariadb:latest
+    restart: unless-stopped
+    container_name: gaboot-db-container
     environment:
-      #MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_ROOT_PASSWORD: gaboot
       MYSQL_DATABASE: gaboot
       MYSQL_USER: docker
       MYSQL_PASSWORD: gaboot
     ports:
-      - "3306:3306"
-  
-  nestjs-cms-api:
-    build: .
-    container_name: nestjs-cms-container
+      - "3316:3306"
+    volumes:
+      - .mariadb:/var/lib/mysql
+    networks:
+      - gabootNet
+  gaboot-cms-server:
+    build:
+      context: .
+      dockerfile: DockerfileCMS
+    container_name: gaboot-cms-container
     init: true
-    environment:
-      MYSQL_HOST: "mysql"
     ports:
-      - 3000:3000
+      - 3080:3000
     depends_on:
-      - mysql
+      - gaboot-db
+    networks:
+      - gabootNet
+    links:
+      - gaboot-db
+  gaboot-server:
+    build: 
+      context: .
+      dockerfile: DockerfileServer
+    container_name: gaboot-server-container
+    init: true
+    ports:
+        - 4080:8080
+    depends_on:
+        - gaboot-db
+    volumes:
+        - ./out/build/Linux-x64/uploads:/usr/local/bin/gaboot/uploads
+        - ./out/build/Linux-x64/Drogon Log:/usr/local/bin/gaboot/Drogon Log
+        - ./out/build/Linux-x64/Service:/var/log/
+networks:
+  gabootNet:
+    driver: bridge
 
   # cpp-dragon-api:
   #   build: bin/
