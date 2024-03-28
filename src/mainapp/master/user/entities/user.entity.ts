@@ -76,6 +76,7 @@ export class User extends Model<IUser, IUser> {
     @Column
     roleId: number;
 
+    @ApiProperty({ example: Role.rawAttributes, description: "Role Model" })
     @BelongsTo(() => Role)
     role: Role;
 }
