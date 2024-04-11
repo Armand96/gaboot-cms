@@ -4,5 +4,5 @@ export class UpdateRoleDto {
     @IsNotEmpty()
     @IsString()
     @MaxLength(50)
-    roleName: string;
+    role_name: string;
 }

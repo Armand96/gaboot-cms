@@ -62,7 +62,7 @@ export class CartsService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const cart = await this.cart.findOne({
             where: { id: id },
         });
@@ -77,7 +77,7 @@ export class CartsService {
         return this.response.toJson();
     }
 
-    async update(id: number, updateCartDto: UpdateCartDto) {
+    async update(id: string, updateCartDto: UpdateCartDto) {
         
         const dataUpdate: any = updateCartDto;
 
@@ -91,7 +91,7 @@ export class CartsService {
         return this.response.toJson();
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         
 
         await this.cart.destroy({

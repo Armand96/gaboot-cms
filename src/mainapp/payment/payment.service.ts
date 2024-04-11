@@ -54,7 +54,7 @@ export class PaymentService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const wishlist = await this.payments.findOne({
             where: { id: id },
         });
@@ -70,11 +70,11 @@ export class PaymentService {
         return this.response.toJson();
     }
 
-    async update(id: number, updatePaymentDto: UpdatePaymentDto) {
+    async update(id: string, updatePaymentDto: UpdatePaymentDto) {
         return `This action updates a #${id} payment`;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         return `This action removes a #${id} payment`;
     }
 

@@ -53,7 +53,7 @@ export class RoleAccessService {
         return this.resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const dataRolac = await this.rolac.findOne({ where: { id: id } });
         this.resSuccess.message = 'Success Get Role Access';
         this.resSuccess.success = true;
@@ -63,17 +63,17 @@ export class RoleAccessService {
         return this.resSuccess;
     }
 
-    async update(id: number, updateRoleAccessDto: UpdateRoleAccessDto) {
+    async update(id: string, updateRoleAccessDto: UpdateRoleAccessDto) {
         const dataUpdate: any = {};
-        dataUpdate.roleId = updateRoleAccessDto.roleId;
-        dataUpdate.menuId = updateRoleAccessDto.menuId;
-        dataUpdate.submenuId = updateRoleAccessDto.submenuId;
-        dataUpdate.frontendUrl = updateRoleAccessDto.frontendUrl;
-        dataUpdate.backendUrl = updateRoleAccessDto.backendUrl;
-        dataUpdate.createz = updateRoleAccessDto.createz;
-        dataUpdate.readz = updateRoleAccessDto.readz;
-        dataUpdate.updatez = updateRoleAccessDto.updatez;
-        dataUpdate.deletez = updateRoleAccessDto.deletez;
+        dataUpdate.role_id = updateRoleAccessDto.role_id;
+        dataUpdate.menu_id = updateRoleAccessDto.menu_id;
+        dataUpdate.submenu_id = updateRoleAccessDto.submenu_id;
+        dataUpdate.frontend_url = updateRoleAccessDto.frontend_url;
+        dataUpdate.backend_url = updateRoleAccessDto.backend_url;
+        dataUpdate.create_access = updateRoleAccessDto.create_access;
+        dataUpdate.read_access = updateRoleAccessDto.read_access;
+        dataUpdate.update_access = updateRoleAccessDto.update_access;
+        dataUpdate.delete_access = updateRoleAccessDto.delete_access;
 
         await this.rolac.update(dataUpdate, { where: { id: id } });
         const rolac = await this.rolac.findOne({ where: { id: id } });
@@ -86,7 +86,7 @@ export class RoleAccessService {
         return this.resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         await this.rolac.destroy({
             where: { id: id },
         });
@@ -102,15 +102,15 @@ export class RoleAccessService {
     /* NON CRUD GENERATOR */
     assignData(datas: CreateRoleAccessDto) {
         const dataCreate: any = {};
-        dataCreate.roleId = datas.roleId;
-        dataCreate.menuId = datas.menuId;
-        dataCreate.submenuId = datas.submenuId;
-        dataCreate.frontendUrl = datas.frontendUrl;
-        dataCreate.backendUrl = datas.backendUrl;
-        dataCreate.createz = datas.createz;
-        dataCreate.readz = datas.readz;
-        dataCreate.updatez = datas.updatez;
-        dataCreate.deletez = datas.deletez;
+        dataCreate.role_id = datas.role_id;
+        dataCreate.menu_id = datas.menu_id;
+        dataCreate.submenu_id = datas.submenu_id;
+        dataCreate.frontend_url = datas.frontend_url;
+        dataCreate.backend_url = datas.backend_url;
+        dataCreate.create_access = datas.create_access;
+        dataCreate.read_access = datas.read_access;
+        dataCreate.update_access = datas.update_access;
+        dataCreate.delete_access = datas.delete_access;
         return dataCreate;
     }
 
@@ -131,17 +131,17 @@ export class RoleAccessService {
         return this.resSuccess;
     }
 
-    async bulkDelete(roleId: number) {
+    async bulkDelete(roleId: string) {
         await this.rolac.destroy({
             where: { roleId: roleId },
         });
     }
 
-    async deleteBySubmenuId(submenuId: number) {
-        await this.rolac.destroy({ where: { submenuId: submenuId } });
+    async deleteBysubmenu_id(submenu_id: string) {
+        await this.rolac.destroy({ where: { submenu_id: submenu_id } });
     }
 
-    async deleteByMenuId(menuId: number) {
-        await this.rolac.destroy({ where: { menuId: menuId } });
+    async deleteByMenuId(menuId: string) {
+        await this.rolac.destroy({ where: { menu_id: menuId } });
     }
 }

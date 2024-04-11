@@ -10,6 +10,7 @@ import { Product } from './product.entity';
 @Table({
     tableName: 'product_images',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -18,14 +19,14 @@ import { Product } from './product.entity';
 })
 export class ProductImage extends Model {
     @Column
-    imagePath: string;
+    image_path: string;
 
     @Column
-    thumbnailPath: string;
+    thumbnail_path: string;
 
     @ForeignKey(() => Product)
     @Column
-    productId: number;
+    product_id: string;
 
     @BelongsTo(() => Product)
     product: Product;

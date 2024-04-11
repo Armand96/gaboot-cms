@@ -3,6 +3,7 @@ import { Column, Model, Table, Unique } from 'sequelize-typescript';
 @Table({
     tableName: 'master_customers',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['password', 'createdAt', 'updatedAt'],
@@ -32,10 +33,10 @@ export class Customer extends Model {
     email: string;
 
     @Column
-    phoneNumber: string;
+    phone_number: string;
 
     @Column
-    addressDetail: string;
+    address_detail: string;
 
     @Column
     latitude: number;
@@ -50,11 +51,11 @@ export class Customer extends Model {
     token: string;
 
     @Column
-    isActive: boolean;
+    is_active: boolean;
 
     @Column
-    imgPath: string;
+    image_path: string;
 
     @Column
-    imgThumbPath: string;
+    thumbnail_path: string;
 }

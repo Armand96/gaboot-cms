@@ -7,6 +7,7 @@ import { ApiProperty } from '@nestjs/swagger';
 @Table({
     tableName: 'master_roles',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -14,9 +15,9 @@ import { ApiProperty } from '@nestjs/swagger';
     },
 })
 export class Role extends Model {
-    @ApiProperty({example: "Admin", description: "Role Name"})
+    @ApiProperty({ example: "Admin", description: "Role Name" })
     @Column
-    roleName: string;
+    role_name: string;
 
     /* RELATION */
     @HasMany(() => User)

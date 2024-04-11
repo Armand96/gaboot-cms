@@ -13,5 +13,5 @@ export class CreateRoleDetailDto extends CreateRoleDto {
     @IsNotEmpty()
     @Type(() => CreateRoleMenuDto)
     @ValidateNested()
-    roleMenus: CreateRoleMenuDto[];
+    role_menus: CreateRoleMenuDto[];
 }

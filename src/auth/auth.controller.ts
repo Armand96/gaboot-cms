@@ -29,6 +29,7 @@ export class AuthController {
     @Post('login')
     @UsePipes(new ValidationPipe())
     async login(@Body() atuhDto: AuthDto) {
+        console.log("========= LOGIN =========");
         return this.authSvc.login(atuhDto);
     }
 

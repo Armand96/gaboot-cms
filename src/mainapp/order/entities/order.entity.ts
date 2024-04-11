@@ -13,6 +13,7 @@ import { OrderStatus } from './order-status';
 @Table({
     tableName: 'orders',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -25,19 +26,19 @@ export class Order extends Model {
 
     @Column
     @ForeignKey(() => Customer)
-    customerId: number; //Orders owner
+    customer_id: string; //Orders owner
 
     @Column
-    totalPrice: number;
+    total_price: number;
 
     @Column
     discount: number;
 
     @Column
-    grandTotal: number;
+    grand_total: number;
 
     @Column
-    totalItem: number;
+    total_item: number;
 
     @Column
     status: OrderStatus;
@@ -46,7 +47,7 @@ export class Order extends Model {
     expired: string; //if order not paid before 24 hours order status must be cancelled
 
     @HasMany(() => OrderDetail)
-    orderDetail: OrderDetail[];
+    order_detail: OrderDetail[];
 
     @BelongsTo(() => Customer)
     customer: Customer;

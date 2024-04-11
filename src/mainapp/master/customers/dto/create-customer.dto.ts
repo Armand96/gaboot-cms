@@ -3,13 +3,13 @@ export class CreateCustomerDto {
     lastname: string;
     username: string;
     email: string;
-    phoneNumber: string;
-    addressDetail: string;
+    phone_number: string;
+    address_detail: string;
     latitude: string;
     longitude: string;
     password: string;
     token: string;
-    isActive: boolean;
-    imgPath: string;
-    imgThumbPath: string;
+    is_active: boolean;
+    image_path: string;
+    thumbnail_path: string;
 }

@@ -12,6 +12,7 @@ import { Submenu } from 'src/mainapp/master/submenu/entities/submenu.entity';
 @Table({
     tableName: 'role_submenus',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -21,14 +22,15 @@ import { Submenu } from 'src/mainapp/master/submenu/entities/submenu.entity';
 export class RoleSubmenu extends Model {
     @ForeignKey(() => Role)
     @Column
-    roleId: number;
+    role_id: string;
 
     @ForeignKey(() => RoleMenu)
-    roleMenuId: number;
+    @Column
+    rolemenu_id: string;
 
     @ForeignKey(() => Submenu)
     @Column
-    submenuId: number;
+    submenu_id: string;
 
     /* RELATION */
     @BelongsTo(() => Role)
@@ -38,5 +40,5 @@ export class RoleSubmenu extends Model {
     submenu: Submenu;
 
     @BelongsTo(() => RoleMenu)
-    roleMenu: RoleMenu;
+    role_menu: RoleMenu;
 }

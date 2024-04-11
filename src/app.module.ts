@@ -6,7 +6,8 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { mysql } from './config/mysqldb';
+// import { mysql } from './config/mysqldb';
+import { postgresql } from './config/psqldb';
 import { UserModule } from './mainapp/master/user/user.module';
 import { RoleModule } from './mainapp/master/role/role.module';
 import { MenuModule } from './mainapp/master/menu/menu.module';
@@ -33,7 +34,7 @@ import { CacheModule } from '@nestjs/cache-manager';
         CacheModule.register({
             isGlobal: true
         }),
-        mysql,
+        postgresql,
         UserModule,
         RoleModule,
         MenuModule,

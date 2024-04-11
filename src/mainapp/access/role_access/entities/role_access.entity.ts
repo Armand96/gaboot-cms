@@ -12,6 +12,7 @@ import { Submenu } from 'src/mainapp/master/submenu/entities/submenu.entity';
 @Table({
     tableName: 'role_accesses',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -21,33 +22,33 @@ import { Submenu } from 'src/mainapp/master/submenu/entities/submenu.entity';
 export class RoleAccess extends Model {
     @ForeignKey(() => Role)
     @Column
-    roleId: number;
+    role_id: string;
 
     @ForeignKey(() => Menu)
     @Column
-    menuId: number;
+    menu_id: string;
 
     @ForeignKey(() => Submenu)
     @Column
-    submenuId: number;
+    submenu_id: string;
 
     @Column
-    frontendUrl: string;
+    frontend_url: string;
 
     @Column
-    backendUrl: string;
+    backend_url: string;
 
     @Column
-    createz: boolean;
+    create_access: boolean;
 
     @Column
-    readz: boolean;
+    read_access: boolean;
 
     @Column
-    updatez: boolean;
+    update_access: boolean;
 
     @Column
-    deletez: boolean;
+    delete_access: boolean;
 
     /* RELATION */
     @BelongsTo(() => Role)

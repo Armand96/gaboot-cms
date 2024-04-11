@@ -51,7 +51,7 @@ export class UserController {
         description: 'The found record',
         type: User,
     })
-    findOne(@Param('id') id: number) 
+    findOne(@Param('id') id: string) 
     {
         return this.userService.findOne(id);
     }
@@ -59,7 +59,7 @@ export class UserController {
     /* UPDATE ONE */
     @Patch(':id')
     @UploadInterceptor('img')
-    update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto, @UploadFile() file: Express.Multer.File) 
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UploadFile() file: Express.Multer.File) 
     {
         return this.userService.update(id, updateUserDto, file);
     }
@@ -68,14 +68,14 @@ export class UserController {
     @Delete(':id')
     remove(@Param('id') id: string) 
     {
-        return this.userService.remove(+id);
+        return this.userService.remove(id);
     }
 
     /* GET IMAGE */
     @Get('image/:id')
-    async getImage(@Param('id') id: number, @Res() res: Response) {
+    async getImage(@Param('id') id: string, @Res() res: Response) {
         const user = await this.userService.userImage(id);
-        if (user.imgPath == null || user.imgPath == '') {
+        if (user.image_path == null || user.image_path == '') {
             return res.status(404).json({
                 statusCode: 404,
                 error: 'Not Found',
@@ -83,9 +83,9 @@ export class UserController {
             });
         }
 
-        const exist = existsSync(join(process.cwd(), user.imgPath));
+        const exist = existsSync(join(process.cwd(), user.image_path));
         if (exist) {
-            const file = createReadStream(join(process.cwd(), user.imgPath));
+            const file = createReadStream(join(process.cwd(), user.image_path));
             file.pipe(res);
         } else {
             return res.status(404).json({
@@ -98,10 +98,10 @@ export class UserController {
 
     /* GET IMAGE */
     @Get('image/thumb/:id')
-    async getImageThumb(@Param('id') id: number, @Res() res: Response) 
+    async getImageThumb(@Param('id') id: string, @Res() res: Response) 
     {
         const user = await this.userService.userImage(id);
-        if (user.imgThumbPath == null || user.imgThumbPath == '') {
+        if (user.thumbnail_path == null || user.thumbnail_path == '') {
             return res.status(404).json({
                 statusCode: 404,
                 error: 'Not Found',
@@ -109,10 +109,10 @@ export class UserController {
             });
         }
 
-        const exist = existsSync(join(process.cwd(), user.imgThumbPath));
+        const exist = existsSync(join(process.cwd(), user.thumbnail_path));
         if (exist) {
             const file = createReadStream(
-                join(process.cwd(), user.imgThumbPath),
+                join(process.cwd(), user.thumbnail_path),
             );
             file.pipe(res);
         } else {

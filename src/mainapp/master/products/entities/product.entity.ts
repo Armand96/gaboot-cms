@@ -13,6 +13,7 @@ import { ProductImage } from './product.image.entity';
 @Table({
     tableName: 'master_products',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         // attributes: {
         //     exclude: ['createdAt', 'updatedAt'],
@@ -39,14 +40,14 @@ export class Product extends Model {
     weight: number;
 
     @Column
-    weightUnit: string;
+    weight_unit: string;
 
     @Column
-    isActive: boolean;
+    is_active: boolean;
 
     @ForeignKey(() => Category)
     @Column
-    categoryId: number;
+    category_id: string;
 
     @BelongsTo(() => Category)
     category: Category;

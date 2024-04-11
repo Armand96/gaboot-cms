@@ -48,7 +48,7 @@ export class CategoriesController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.categoriesService.findOne(+id);
+        return this.categoriesService.findOne(id);
     }
 
     @Patch(':id')
@@ -59,18 +59,18 @@ export class CategoriesController {
         @UploadFile() file: Express.Multer.File
     ) 
     {
-        return this.categoriesService.update(+id, updateCategoryDto, file);
+        return this.categoriesService.update(id, updateCategoryDto, file);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.categoriesService.remove(+id);
+        return this.categoriesService.remove(id);
     }
 
     @Get('image/:id')
-    async getImage(@Param('id') id: number, @Res() res: Response) {
+    async getImage(@Param('id') id: string, @Res() res: Response) {
         const user = await this.categoriesService.getImage(id);
-        if (user.imgPath == null || user.imgPath == '') {
+        if (user.image_path == null || user.image_path == '') {
             return res.status(404).json({
                 statusCode: 404,
                 error: 'Not Found',
@@ -78,9 +78,9 @@ export class CategoriesController {
             });
         }
 
-        const exist = existsSync(join(process.cwd(), user.imgPath));
+        const exist = existsSync(join(process.cwd(), user.image_path));
         if (exist) {
-            const file = createReadStream(join(process.cwd(), user.imgPath));
+            const file = createReadStream(join(process.cwd(), user.image_path));
             file.pipe(res);
         } else {
             return res.status(404).json({

@@ -2,26 +2,26 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateRoleSubmenuDto {
     @IsNotEmpty()
-    isChecked: boolean;
+    is_checked: boolean;
 
     @IsNotEmpty()
-    roleId: number;
+    role_id: string;
 
     @IsNotEmpty()
-    roleMenuId: number;
+    rolemenu_id: string;
 
     @IsNotEmpty()
-    submenuId: number;
+    submenu_id: string;
 
     @IsNotEmpty()
-    createz: boolean;
+    create_access: boolean;
 
     @IsNotEmpty()
-    readz: boolean;
+    read_access: boolean;
 
     @IsNotEmpty()
-    updatez: boolean;
+    update_access: boolean;
 
     @IsNotEmpty()
-    deletez: boolean;
+    delete_access: boolean;
 }

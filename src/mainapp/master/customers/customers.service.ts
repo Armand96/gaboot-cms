@@ -40,8 +40,8 @@ export class CustomersService {
         // console.log(createCustomerDto);
 
         if (image != null) {
-            createCustomerDto.imgPath = pathObj.path;
-            createCustomerDto.imgThumbPath = pathObj.thumbPath;
+            createCustomerDto.image_path = pathObj.path;
+            createCustomerDto.thumbnail_path = pathObj.thumbPath;
         }
 
         const dataCreation: any = createCustomerDto;
@@ -94,7 +94,7 @@ export class CustomersService {
         return resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const customer = await this.customer.findOne({
             where: { id: id },
         });
@@ -108,7 +108,7 @@ export class CustomersService {
     }
 
     async update(
-        id: number,
+        id: string,
         updateCustomerDto: UpdateCustomerDto,
         image: Express.Multer.File,
     ) {
@@ -138,13 +138,13 @@ export class CustomersService {
         )
             updateCustomerDto.password = updateCustomerDto.password;
 
-        updateCustomerDto.isActive = updateCustomerDto.isActive;
+        updateCustomerDto.is_active = updateCustomerDto.is_active;
         if (image != null) {
-            updateCustomerDto.imgPath = pathObj.path;
-            updateCustomerDto.imgThumbPath = pathObj.thumbPath;
+            updateCustomerDto.image_path = pathObj.path;
+            updateCustomerDto.thumbnail_path = pathObj.thumbPath;
         }
         // console.log(updateCustomerDto, updateCustomerDto);
-        updateCustomerDto.updatedAt = this.gen.dateNow();
+        updateCustomerDto.updated_at = this.gen.dateNow();
 
         await this.customer.update(updateCustomerDto, {
             where: { id: id },
@@ -160,16 +160,16 @@ export class CustomersService {
         return resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const user = await this.customer.findOne({ where: { id: id } });
 
         await this.customer.destroy({
             where: { id: id },
         });
 
-        if (user.imgPath != '' || user.imgPath != null) {
-            this.gen.removeImage(user.imgPath);
-            this.gen.removeImage(user.imgThumbPath);
+        if (user.image_path != '' || user.image_path != null) {
+            this.gen.removeImage(user.image_path);
+            this.gen.removeImage(user.thumbnail_path);
         }
 
         const resSuccess = new ResponseSuccess<Customer>();

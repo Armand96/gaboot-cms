@@ -3,26 +3,26 @@ import { CreateRoleSubmenuDto } from '../../role_submenu/dto/create-role_submenu
 
 export class CreateRoleMenuDto {
     @IsNotEmpty()
-    isChecked: boolean;
+    is_checked: boolean;
 
     @IsOptional()
-    roleId: number;
+    role_id: string;
 
     @IsNotEmpty()
-    menuId: number;
+    menu_id: string;
 
     @IsOptional()
-    roleSubmenus: CreateRoleSubmenuDto[];
+    role_submenus: CreateRoleSubmenuDto[];
 
     @IsNotEmpty()
-    createz: boolean;
+    create_access: boolean;
 
     @IsNotEmpty()
-    readz: boolean;
+    read_access: boolean;
 
     @IsNotEmpty()
-    updatez: boolean;
+    update_access: boolean;
 
     @IsNotEmpty()
-    deletez: boolean;
+    delete_access: boolean;
 }

@@ -13,15 +13,17 @@ import { ApiProperty } from '@nestjs/swagger';
 @Table({
     tableName: 'master_users',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
-            exclude: ['password', 'createdAt', 'updatedAt'],
+            exclude: ['password', 'created_at', 'updated_at'],
         },
     },
     scopes: {
         withPassword: {
             attributes: {
                 include: ['password'],
+                exclude: ['created_at', 'updated_at'],
             },
         },
     },
@@ -30,7 +32,7 @@ export class User extends Model<IUser, IUser> {
     @ApiProperty({ example: 'admoon', description: 'Nama pengguna' })
     @Unique
     @Column
-    userName: string;
+    username: string;
 
     @ApiProperty({
         example: 'admoon@admoon.com',
@@ -42,11 +44,11 @@ export class User extends Model<IUser, IUser> {
 
     @ApiProperty({ example: 'haji', description: 'Nama Depan' })
     @Column
-    firstName: string;
+    firstname: string;
 
     @ApiProperty({ example: 'Bolot', description: 'Nama Belakang' })
     @Column
-    lastName: string;
+    lastname: string;
 
     @ApiProperty({ example: 'password', description: 'Ya password lah' })
     @Column
@@ -58,23 +60,23 @@ export class User extends Model<IUser, IUser> {
 
     @ApiProperty({ example: true, description: 'User Aktif atau Tidak' })
     @Column({ defaultValue: true })
-    isActive: boolean;
+    is_active: boolean;
 
     @ApiProperty({ example: '/storage/bla/bla', description: 'Path Foto' })
     @Column
-    imgPath: string;
+    image_path: string;
 
     @ApiProperty({
         example: '/storage/bla/bla',
         description: 'Path Foto Thumb',
     })
     @Column
-    imgThumbPath: string;
+    thumbnail_path: string;
 
     @ApiProperty({ example: 1, description: 'Role pengguna' })
     @ForeignKey(() => Role)
     @Column
-    roleId: number;
+    role_id: string;
 
     @ApiProperty({ example: Role.rawAttributes, description: "Role Model" })
     @BelongsTo(() => Role)

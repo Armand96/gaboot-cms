@@ -10,8 +10,8 @@ import { GeneralService } from 'src/services/general/general.service';
 import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { ProductImage } from './entities/product.image.entity';
 import { Category } from 'src/mainapp/categories/entities/category.entity';
-import * as fs from 'fs';
-import { join } from 'path';
+// import * as fs from 'fs';
+// import { join } from 'path';
 
 @Injectable()
 export class ProductsService {
@@ -70,7 +70,7 @@ export class ProductsService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const product = await this.product.findOne({
             where: { id: id },
         });
@@ -85,7 +85,7 @@ export class ProductsService {
     }
 
     async update(
-        id: number,
+        id: string,
         updateProductDto: UpdateProductDto,
         image: Express.Multer.File,
     ) {
@@ -103,8 +103,8 @@ export class ProductsService {
         }
 
         if (image != null) {
-            updateProductDto.imagePath = pathObj.path;
-            updateProductDto.thumbnailPath = pathObj.thumbPath;
+            updateProductDto.image_path = pathObj.path;
+            updateProductDto.thumbnail_path = pathObj.thumbPath;
         }
 
         await this.product.update(dataUpdate, { where: { id: id } });
@@ -117,7 +117,7 @@ export class ProductsService {
         return this.response.toJson();
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         await this.product.destroy({
             where: { id: id },
         });
@@ -130,8 +130,8 @@ export class ProductsService {
     }
 
     /* ====================================== PRODUCT IMAGES ====================================== */
-    async getProductImages(productId: number) {
-        const productImages = await this.productImg.findAll({where:{productId:productId}});
+    async getProductImages(productId: string) {
+        const productImages = await this.productImg.findAll({where:{product_id:productId}});
 
         this.resProdImage.message = 'Success Get Product Images';
         this.resProdImage.success = true;
@@ -140,7 +140,7 @@ export class ProductsService {
         return this.resProdImage.toJson();
     }
 
-    async uploadImages(id: number, images: Express.Multer.File[]){
+    async uploadImages(id: string, images: Express.Multer.File[]){
         const product = await this.product.findOne({
             where: { id: id },
         });
@@ -167,9 +167,9 @@ export class ProductsService {
                 );
     
                 const productImage:any = {
-                    productId: id,
-                    imagePath: pathObj.path,
-                    thumbnailPath: pathObj.thumbPath,
+                    product_id: id,
+                    image_path: pathObj.path,
+                    thumbnail_path: pathObj.thumbPath,
                     createdAt: dateNow,
                 }
 
@@ -190,11 +190,11 @@ export class ProductsService {
         }
     }
 
-    async removeImages(idImage: number) {
+    async removeImages(idImage: string) {
         const productImage = await this.productImg.findOne({where:{id:idImage}});
         await this.productImg.destroy({where: {id:idImage}});
-        this.gen.removeImage(productImage.imagePath);
-        this.gen.removeImage(productImage.thumbnailPath);
+        this.gen.removeImage(productImage.image_path);
+        this.gen.removeImage(productImage.thumbnail_path);
 
         this.response.message = 'Success Remove Image';
         this.response.success = true;
@@ -202,7 +202,7 @@ export class ProductsService {
         return this.response.toJson();
     }
 
-    async productImage(id: number): Promise<ProductImage> {
+    async productImage(id: string): Promise<ProductImage> {
         const productImage = await this.productImg.findOne({
             where: { id: id },
         });

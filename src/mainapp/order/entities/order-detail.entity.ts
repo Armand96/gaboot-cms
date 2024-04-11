@@ -12,6 +12,7 @@ import { Order } from 'src/mainapp/order/entities/order.entity';
 @Table({
     tableName: 'order_details',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         // attributes: {
         //     exclude: ['createdAt', 'updatedAt'],
@@ -21,26 +22,26 @@ import { Order } from 'src/mainapp/order/entities/order.entity';
 export class OrderDetail extends Model {
     @Column
     @ForeignKey(() => Order)
-    orderId: number;
-    
+    order_id: string;
+
     @Column
     @ForeignKey(() => Product)
-    productId: number;
-    
+    product_id: string;
+
     @Column
     price: number;
-    
+
     @Column
     discount: number;
-    
+
     @Column
     quantity: number;
-    
+
     @Column
     total: number;
 
     @BelongsTo(() => Order)
-    orderHeader: Order;
+    order_header: Order;
 
     @BelongsTo(() => Product)
     product: Product;

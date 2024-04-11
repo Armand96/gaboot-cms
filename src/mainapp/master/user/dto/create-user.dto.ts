@@ -12,7 +12,7 @@ export class CreateUserDto {
     @IsNotEmpty()
     @ApiProperty()
     // @IsUserAlreadyExist({ message: 'username has been taken', always: true })
-    userName: string;
+    username: string;
 
     @IsNotEmpty()
     @ApiProperty()
@@ -21,11 +21,11 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @ApiProperty()
-    firstName: string;
+    firstname: string;
 
     @IsNotEmpty()
     @ApiProperty()
-    lastName: string;
+    lastname: string;
 
     @IsNotEmpty()
     @ApiProperty()
@@ -33,17 +33,17 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @ApiProperty()
-    isActive: boolean;
+    is_active: boolean;
 
     @IsNotEmpty()
     @ApiProperty()
-    roleId: number;
+    role_id: string;
 
     @Optional()
     @ApiProperty()
-    imgPath: string;
+    image_path: string;
 
     @Optional()
     @ApiProperty()
-    imgThumbPath: string;
+    thumbnail_path: string;
 }

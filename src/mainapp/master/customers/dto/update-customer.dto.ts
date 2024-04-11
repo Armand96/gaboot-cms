@@ -4,5 +4,5 @@ import { Optional } from '@nestjs/common';
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
     @Optional()
-    updatedAt: string;
+    updated_at: string;
 }

@@ -6,5 +6,5 @@ export class CreateRoleDto {
     @IsString()
     @MaxLength(50)
     // @isRoleAlreadyExists({ message: 'role name already exists', always: true })
-    roleName: string;
+    role_name: string;
 }
