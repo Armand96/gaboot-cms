@@ -1,51 +1,52 @@
 version: "3.5"
 services:
-  gaboot-db:
-    image: mariadb:latest
-    restart: unless-stopped
-    container_name: gaboot-db-container
-    environment:
-      MYSQL_ROOT_PASSWORD: gaboot
-      MYSQL_DATABASE: gaboot
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: gaboot
-    ports:
-      - "3316:3306"
-    volumes:
-      - .mariadb:/var/lib/mysql
-    networks:
-      - gabootNet
+  # gaboot-db:
+  #   image: mariadb:latest
+  #   restart: unless-stopped
+  #   container_name: gaboot-db-container
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: gaboot
+  #     MYSQL_DATABASE: gaboot
+  #     MYSQL_USER: docker
+  #     MYSQL_PASSWORD: gaboot
+  #   ports:
+  #     - "3316:3306"
+  #   volumes:
+  #     - .mariadb:/var/lib/mysql
+  #   networks:
+  #     - gabootNet
   gaboot-cms-server:
     build:
       context: .
-      dockerfile: DockerfileCMS
+      dockerfile: Dockerfile
     container_name: gaboot-cms-container
     init: true
+    restart: unless-stopped
     ports:
-      - 3080:3000
+      - 5001:3000
     depends_on:
-      - gaboot-db
+      - gaboot-database
     networks:
-      - gabootNet
+      - gaboot
     links:
-      - gaboot-db
-  gaboot-server:
-    build: 
-      context: .
-      dockerfile: DockerfileServer
-    container_name: gaboot-server-container
-    init: true
-    ports:
-        - 4080:8080
-    depends_on:
-        - gaboot-db
-    volumes:
-        - ./out/build/Linux-x64/uploads:/usr/local/bin/gaboot/uploads
-        - ./out/build/Linux-x64/Drogon Log:/usr/local/bin/gaboot/Drogon Log
-        - ./out/build/Linux-x64/Service:/var/log/
-networks:
-  gabootNet:
-    driver: bridge
+      - gaboot-database
+  # gaboot-server:
+  #   build: 
+  #     context: .
+  #     dockerfile: DockerfileServer
+  #   container_name: gaboot-server-container
+  #   init: true
+  #   ports:
+  #       - 4080:8080
+  #   depends_on:
+  #       - gaboot-db
+  #   volumes:
+  #       - ./out/build/Linux-x64/uploads:/usr/local/bin/gaboot/uploads
+  #       - ./out/build/Linux-x64/Drogon Log:/usr/local/bin/gaboot/Drogon Log
+  #       - ./out/build/Linux-x64/Service:/var/log/
+# networks:
+#   gabootNet:
+#     driver: bridge
 
   # cpp-dragon-api:
   #   build: bin/
