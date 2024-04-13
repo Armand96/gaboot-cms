@@ -24,8 +24,6 @@ services:
     restart: unless-stopped
     ports:
       - 5001:3000
-    networks:
-      - gaboot
   # gaboot-server:
   #   build: 
   #     context: .
