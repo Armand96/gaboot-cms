@@ -59,7 +59,7 @@ export class MenuService {
         return resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const resSuccess = new ResponseSuccess<Menu>();
         const dataMenu = await this.menu.findOne({
             where: { id: id },
@@ -73,15 +73,15 @@ export class MenuService {
         return resSuccess;
     }
 
-    async update(id: number, updateMenuDto: UpdateMenuDto) {
+    async update(id: string, updateMenuDto: UpdateMenuDto) {
         const resSuccess = new ResponseSuccess<Menu>();
         const dataUpdate: any = {};
-        dataUpdate.menuName = updateMenuDto.menuName;
-        dataUpdate.menuIcon = updateMenuDto.menuIcon;
-        dataUpdate.backendUrl = updateMenuDto.backendUrl;
-        dataUpdate.frontendUrl = updateMenuDto.frontendUrl;
-        dataUpdate.menuHaveChild = updateMenuDto.menuHaveChild;
-        dataUpdate.menuIsActive = updateMenuDto.menuIsActive;
+        dataUpdate.menu_name = updateMenuDto.menu_name;
+        dataUpdate.menu_icon = updateMenuDto.menu_icon;
+        dataUpdate.backend_url = updateMenuDto.backend_url;
+        dataUpdate.frontend_url = updateMenuDto.frontend_url;
+        dataUpdate.menu_have_child = updateMenuDto.menu_have_child;
+        dataUpdate.menu_is_active = updateMenuDto.menu_is_active;
 
         await this.menu.update(dataUpdate, { where: { id: id } });
         const menu = await this.menu.findOne({ where: { id: id } });
@@ -93,7 +93,7 @@ export class MenuService {
         return resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const resSuccess = new ResponseSuccess<Menu>();
         await this.menu.destroy({
             where: { id: id },

@@ -32,17 +32,17 @@ export class OrderController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.orderService.findOne(+id);
+        return this.orderService.findOne(id);
     }
 
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-        return this.orderService.update(+id, updateOrderDto);
+        return this.orderService.update(id, updateOrderDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.orderService.remove(+id);
+        return this.orderService.remove(id);
     }
 
     /* ================================ ORDER DETAILS ================================ */
@@ -53,12 +53,12 @@ export class OrderController {
 
     @Get('detail/:id')
     findOneDetail(@Param('id') id: string) {
-        return this.orderService.findOneDetail(+id);
+        return this.orderService.findOneDetail(id);
     }
 
     @Patch('detail/:id')
     updateDetail(@Param('id') id: string, @Body() updateOrderDetailDto: UpdateOrderDetailDto) {
-        return this.orderService.update(+id, updateOrderDetailDto);
+        return this.orderService.update(id, updateOrderDetailDto);
     }
 
 }

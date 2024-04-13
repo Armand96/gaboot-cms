@@ -44,7 +44,7 @@ export class UserService {
         if (image != null) {
             pathObj = await this.gen.uploadImage(
                 image,
-                createUserDto.userName,
+                createUserDto.username,
                 'user',
             );
             console.log('after upload');
@@ -54,8 +54,8 @@ export class UserService {
         // console.log(createUserDto);
 
         if (image != null) {
-            createUserDto.imgPath = pathObj.path;
-            createUserDto.imgThumbPath = pathObj.thumbPath;
+            createUserDto.image_path = pathObj.path;
+            createUserDto.thumbnail_path = pathObj.thumbPath;
         }
 
         const user = await this.user.create(createUserDto);
@@ -77,14 +77,14 @@ export class UserService {
         /* FILTER DATA */
         // console.log(req.query)
         const filterData: any = {};
-        if (req.query.userName != undefined && req.query.userName != '')
-            filterData.userName = {
-                [Op.like]: `%${req.query.userName}%`,
+        if (req.query.username != undefined && req.query.username != '')
+            filterData.username = {
+                [Op.like]: `%${req.query.username}%`,
             };
 
-        if (req.query.fullName != undefined && req.query.fullName != '')
-            filterData.fullName = {
-                [Op.like]: `%${req.query.fullName}%`,
+        if (req.query.full_name != undefined && req.query.full_name != '')
+            filterData.full_name = {
+                [Op.like]: `%${req.query.full_name}%`,
             };
 
         const dataUser = await this.user.findAndCountAll({
@@ -113,7 +113,7 @@ export class UserService {
     }
 
     /* FIND SINGLE USER */
-    async findOne(id: number) {
+    async findOne(id: string) {
         console.log('manggil di mari');
         const dataUser = await this.user.findOne({
             where: { id: id },
@@ -133,7 +133,7 @@ export class UserService {
                                     required: true,
                                     include: [Submenu],
                                     separate: true,
-                                    order: [['submenuId', 'asc']]
+                                    order: [['submenu_id', 'asc']]
                                 },
                             ],
                         },
@@ -151,7 +151,7 @@ export class UserService {
 
     /* UPDATE USER */
     async update(
-        id: number,
+        id: string,
         updateUserDto: UpdateUserDto,
         image: Express.Multer.File,
     ) {
@@ -159,10 +159,10 @@ export class UserService {
         let pathObj = {} as PathImageObj;
 
         if (image != null) {
-            //   pathName = `${this.pathImage + '/' + updateUserDto.userName}`;
+            //   pathName = `${this.pathImage + '/' + updateUserDto.username}`;
             pathObj = await this.gen.uploadImage(
                 image,
-                updateUserDto.userName,
+                updateUserDto.username,
                 'user',
             );
         }
@@ -176,13 +176,13 @@ export class UserService {
         }
 
         console.log('UPDATE USER', updateUserDto);
-        updateUserDto.isActive = updateUserDto.isActive;
+        updateUserDto.is_active = updateUserDto.is_active;
         if (image != null) {
-            updateUserDto.imgPath = pathObj.path;
-            updateUserDto.imgThumbPath = pathObj.thumbPath;
+            updateUserDto.image_path = pathObj.path;
+            updateUserDto.thumbnail_path = pathObj.thumbPath;
         }
         // console.log(updateUserDto, updateUserDto);
-        updateUserDto.updatedAt = this.gen.dateNow();
+        updateUserDto.updated_at = this.gen.dateNow();
 
         await this.user.update(updateUserDto, {
             where: { id: id },
@@ -198,16 +198,16 @@ export class UserService {
     }
 
     /* DELETE USER */
-    async remove(id: number) {
+    async remove(id: string) {
         const user = await this.user.findOne({ where: { id: id } });
 
         await this.user.destroy({
             where: { id: id },
         });
 
-        if (user.imgPath != '' || user.imgPath != null) {
-            this.gen.removeImage(user.imgPath);
-            this.gen.removeImage(user.imgThumbPath);
+        if (user.image_path != '' || user.image_path != null) {
+            this.gen.removeImage(user.image_path);
+            this.gen.removeImage(user.thumbnail_path);
         }
 
         this.resSuccess.message = 'Success Delete User Data';
@@ -218,7 +218,7 @@ export class UserService {
     }
 
     /* GET IMAGE */
-    async userImage(id: number): Promise<User> {
+    async userImage(id: string): Promise<User> {
         console.log('image');
         const dataUser = await this.user.findOne({
             where: { id: id },
@@ -226,7 +226,7 @@ export class UserService {
         return dataUser;
     }
 
-    async userOnly(id: number) {
+    async userOnly(id: string) {
         console.log('di mari');
         const dataUser = await this.user.findOne({
             where: { id: id },
@@ -244,7 +244,7 @@ export class UserService {
         const user = await this.user
             .scope('withPassword')
             .findOne({
-                where: { userName: username },
+                where: { username: username },
                 include: [
                     {
                         model: Role,
@@ -261,7 +261,7 @@ export class UserService {
                                         required: true,
                                         include: [Submenu],
                                         separate: true,
-                                        order: [['submenuId', 'asc']]
+                                        order: [['submenu_id', 'asc']]
                                     },
                                 ],
                             },
@@ -277,6 +277,6 @@ export class UserService {
 
     /* FIND BY USERNAME */
     async findByUsername(username: string) {
-        return await this.user.findOne({ where: { userName: username } });
+        return await this.user.findOne({ where: { username: username } });
     }
 }

@@ -28,25 +28,25 @@ export class SubmenuController {
     }
 
     @Get('menu/:id')
-    findByMenu(@Param('id') id: number) {
+    findByMenu(@Param('id') id: string) {
         return this.submenuService.findByMenuId(id);
     }
 
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.submenuService.findOne(+id);
+    findOne(@Param('id') id: string) {
+        return this.submenuService.findOne(id);
     }
 
     @Patch(':id')
     update(
-        @Param('id') id: number,
+        @Param('id') id: string,
         @Body() updateSubmenuDto: UpdateSubmenuDto,
     ) {
-        return this.submenuService.update(+id, updateSubmenuDto);
+        return this.submenuService.update(id, updateSubmenuDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: number) {
-        return this.submenuService.remove(+id);
+    remove(@Param('id') id: string) {
+        return this.submenuService.remove(id);
     }
 }

@@ -6,10 +6,10 @@ export class CreateProductDto {
     stock: number;
     dimension: string;
     weight: number;
-    weightUnit: string;
-    categoryId: number;
+    weight_unit: string;
+    category_id: string;
     @Optional()
-    imagePath: string;
+    image_path: string;
     @Optional()
-    thumbnailPath: string;
+    thumbnail_path: string;
 }

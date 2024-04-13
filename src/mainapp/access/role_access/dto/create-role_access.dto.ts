@@ -2,29 +2,29 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateRoleAccessDto {
     @IsOptional()
-    roleId: number;
+    role_id: string;
 
     @IsOptional()
-    menuId: number;
+    menu_id: string;
 
     @IsOptional()
-    submenuId: number;
+    submenu_id: string;
 
     @IsOptional()
-    frontendUrl: string;
+    frontend_url: string;
 
     @IsOptional()
-    backendUrl: string;
+    backend_url: string;
 
     @IsNotEmpty()
-    createz: boolean;
+    create_access: boolean;
 
     @IsNotEmpty()
-    readz: boolean;
+    read_access: boolean;
 
     @IsNotEmpty()
-    updatez: boolean;
+    update_access: boolean;
 
     @IsNotEmpty()
-    deletez: boolean;
+    delete_access: boolean;
 }

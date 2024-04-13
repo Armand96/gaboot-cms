@@ -29,7 +29,7 @@ export class RbacMiddleware implements NestMiddleware {
 
         const data = this.jwt(req);
         let currentUser = this.users.find((usr) => {
-            return usr.id == Number(data.sub);
+            return usr.id == (data.sub);
         });
 
         try {
@@ -44,7 +44,7 @@ export class RbacMiddleware implements NestMiddleware {
             }
 
             if (currentUser == undefined) {
-                currentUser = (await this.usrSvc.findOne(Number(data.sub)))
+                currentUser = (await this.usrSvc.findOne((data.sub).toString()))
                     .datum;
                 // console.log('USERS', this.users);
                 this.users.push(currentUser);
@@ -70,7 +70,7 @@ export class RbacMiddleware implements NestMiddleware {
                 index++
             ) {
                 const element = currentUser.role.access[index];
-                if (element.backendUrl == req.baseUrl) return next();
+                if (element.backend_url == req.baseUrl) return next();
             }
         } catch (error) {
             throw error;

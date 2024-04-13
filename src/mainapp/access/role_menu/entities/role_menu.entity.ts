@@ -14,6 +14,7 @@ import { Menu } from 'src/mainapp/master/menu/entities/menu.entity';
 @Table({
     tableName: 'role_menus',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -23,11 +24,11 @@ import { Menu } from 'src/mainapp/master/menu/entities/menu.entity';
 export class RoleMenu extends Model {
     @ForeignKey(() => Role)
     @Column
-    roleId: number;
+    role_id: string;
 
     @ForeignKey(() => Menu)
     @Column
-    menuId: number;
+    menu_id: string;
 
     /* RELATION */
     @BelongsTo(() => Role)

@@ -29,7 +29,7 @@ export class PaymentController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.paymentService.findOne(+id);
+        return this.paymentService.findOne(id);
     }
 
     @Patch(':id')
@@ -37,12 +37,12 @@ export class PaymentController {
         @Param('id') id: string,
         @Body() updatePaymentDto: UpdatePaymentDto,
     ) {
-        return this.paymentService.update(+id, updatePaymentDto);
+        return this.paymentService.update(id, updatePaymentDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.paymentService.remove(+id);
+        return this.paymentService.remove(id);
     }
 
     @Post('/callback')

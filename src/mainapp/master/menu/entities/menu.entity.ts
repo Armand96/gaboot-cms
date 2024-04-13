@@ -5,6 +5,7 @@ import { RoleAccess } from 'src/mainapp/access/role_access/entities/role_access.
 @Table({
     tableName: 'master_menus',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -13,22 +14,22 @@ import { RoleAccess } from 'src/mainapp/access/role_access/entities/role_access.
 })
 export class Menu extends Model {
     @Column
-    menuName: string;
+    menu_name: string;
 
     @Column
-    menuIcon: string;
+    menu_icon: string;
 
     @Column
-    backendUrl: string;
+    backend_url: string;
 
     @Column
-    frontendUrl: string;
+    frontend_url: string;
 
     @Column
-    menuHaveChild: boolean;
+    menu_have_child: boolean;
 
     @Column
-    menuIsActive: boolean;
+    menu_is_active: boolean;
 
     @HasMany(() => Submenu)
     submenus: Submenu[];

@@ -7,7 +7,7 @@ export class CreateCategoryDto {
     @IsNotEmpty()
     readonly description: string;
     @Optional()
-    readonly imgPath: string;
+    readonly image_path: string;
     @Optional()
-    readonly imgThumbPath: string;
+    readonly thumbnail_path: string;
 }

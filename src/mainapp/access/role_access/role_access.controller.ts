@@ -29,7 +29,7 @@ export class RoleAccessController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.roleAccessService.findOne(+id);
+        return this.roleAccessService.findOne(id);
     }
 
     @Patch(':id')
@@ -37,11 +37,11 @@ export class RoleAccessController {
         @Param('id') id: string,
         @Body() updateRoleAccessDto: UpdateRoleAccessDto,
     ) {
-        return this.roleAccessService.update(+id, updateRoleAccessDto);
+        return this.roleAccessService.update(id, updateRoleAccessDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.roleAccessService.remove(+id);
+        return this.roleAccessService.remove(id);
     }
 }

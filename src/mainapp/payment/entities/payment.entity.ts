@@ -17,6 +17,7 @@ enum PaymentType {
 @Table({
     tableName: 'payments',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -25,37 +26,37 @@ enum PaymentType {
 })
 export class Payment extends Model {
     @Column
-    orderId: number;
-    
+    order_id: string;
+
     @Column
     name: string;
-    
-    @Column
-    transactionId: string;
 
     @Column
-    merchantId: string;
+    transaction_id: string;
 
     @Column
-    paymentType: PaymentType;
+    merchant_id: string;
+
+    @Column
+    payment_type: PaymentType;
 
     @Column
     description: string;
 
     @Column
-    transactionTime: string;
+    transaction_time: string;
 
     @Column
-    transactionStatus: string;
+    transaction_status: string;
 
     @Column
-    fraudStatus: string;
+    fraud_status: string;
 
     @Column
     bank: string;
 
     @Column
-    vaNumber: string;
+    va_number: string;
 
     @Column
     currency: string;

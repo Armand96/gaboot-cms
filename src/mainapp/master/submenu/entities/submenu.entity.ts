@@ -12,6 +12,7 @@ import { Menu } from '../../menu/entities/menu.entity';
 @Table({
     tableName: 'master_submenus',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -21,26 +22,26 @@ import { Menu } from '../../menu/entities/menu.entity';
 export class Submenu extends Model {
     @ForeignKey(() => Menu)
     @Column
-    menuId: number;
+    menu_id: string;
 
     @BelongsTo(() => Menu)
-    Menu: Menu;
+    menu: Menu;
 
     @HasOne(() => RoleAccess)
     access: RoleAccess;
 
     @Column
-    submenuName: string;
+    submenu_name: string;
 
     @Column
-    submenuIcon: string;
+    submenu_icon: string;
 
     @Column
-    frontendUrl: string;
+    frontend_url: string;
 
     @Column
-    backendUrl: string;
+    backend_url: string;
 
     @Column
-    submenuIsActive: boolean;
+    submenu_is_active: boolean;
 }

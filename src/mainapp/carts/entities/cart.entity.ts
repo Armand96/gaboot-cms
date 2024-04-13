@@ -14,6 +14,7 @@ import { Product } from 'src/mainapp/master/products/entities/product.entity';
 @Table({
     tableName: 'carts',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -23,11 +24,11 @@ import { Product } from 'src/mainapp/master/products/entities/product.entity';
 export class Cart extends Model {
     @ForeignKey(() => Customer)
     @Column
-    customerId: number;
+    customer_id: string;
 
     @ForeignKey(() => Product)
     @Column
-    productId: number;
+    product_id: string;
 
     @Column
     price: number;
@@ -39,7 +40,7 @@ export class Cart extends Model {
     subtotal: number;
 
     @Column
-    isCheckout: boolean;
+    is_checkout: boolean;
 
     @BelongsTo(() => Product)
     product: Product;

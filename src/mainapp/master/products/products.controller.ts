@@ -54,7 +54,7 @@ export class ProductsController {
     @Get(':id')
     findOne(@Param('id') id: string) 
     {
-        return this.productsService.findOne(+id);
+        return this.productsService.findOne(id);
     }
 
     @Patch(':id')
@@ -62,38 +62,38 @@ export class ProductsController {
     @UsePipes(new ValidationPipe())
     update( @Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @UploadFile() file: Express.Multer.File) 
     {
-        return this.productsService.update(+id, updateProductDto, file);
+        return this.productsService.update(id, updateProductDto, file);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.productsService.remove(+id);
+        return this.productsService.remove(id);
     }
 
     /* ====================================================== */
     @Get('productImages/:id')
-    async getProductImages(@Param('id') id:number){
+    async getProductImages(@Param('id') id: string){
         return this.productsService.getProductImages(id);
     }
 
     @Post('productImages/:id')
     @UseInterceptors(FileFieldsInterceptor([{name:'img'}]))
-    async uploadMultipleImages(@Param('id') id:number, @UploadedFiles( new ParseFilePipe({ fileIsRequired: true })) files: Express.Multer.File[] )
+    async uploadMultipleImages(@Param('id') id: string, @UploadedFiles( new ParseFilePipe({ fileIsRequired: true })) files: Express.Multer.File[] )
     {
         return this.productsService.uploadImages(id, files);
     }
 
     @Delete('productImages/:id')
-    async removeImage(@Param('id') id:number)
+    async removeImage(@Param('id') id: string)
     {
         return this.productsService.removeImages(id);
     }
 
     @Get('image/:id')
-    async getImage(@Param('id') id: number, @Res() res: Response) 
+    async getImage(@Param('id') id: string, @Res() res: Response) 
     {
         const product = await this.productsService.productImage(id);
-        if (product.imagePath == null || product.imagePath == '') 
+        if (product.image_path == null || product.image_path == '') 
         {
             return res.status(404).json({
                 statusCode: 404,
@@ -102,11 +102,11 @@ export class ProductsController {
             });
         }
 
-        const exist = existsSync(join(process.cwd(), product.imagePath));
+        const exist = existsSync(join(process.cwd(), product.image_path));
         if (exist) 
         {
             const file = createReadStream(
-                join(process.cwd(), product.imagePath),
+                join(process.cwd(), product.image_path),
             );
             file.pipe(res);
         } 
@@ -122,9 +122,9 @@ export class ProductsController {
 
     /* GET IMAGE */
     @Get('image/thumb/:id')
-    async getImageThumb(@Param('id') id: number, @Res() res: Response) {
+    async getImageThumb(@Param('id') id: string, @Res() res: Response) {
         const user = await this.productsService.productImage(id);
-        if (user.imagePath == null || user.thumbnailPath == '') 
+        if (user.image_path == null || user.thumbnail_path == '') 
         {
             return res.status(404).json({
                 statusCode: 404,
@@ -133,11 +133,11 @@ export class ProductsController {
             });
         }
 
-        const exist = existsSync(join(process.cwd(), user.thumbnailPath));
+        const exist = existsSync(join(process.cwd(), user.thumbnail_path));
         if (exist) 
         {
             const file = createReadStream(
-                join(process.cwd(), user.thumbnailPath),
+                join(process.cwd(), user.thumbnail_path),
             );
             file.pipe(res);
         } 

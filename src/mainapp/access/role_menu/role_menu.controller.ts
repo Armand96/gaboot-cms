@@ -29,7 +29,7 @@ export class RoleMenuController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.roleMenuService.findOne(+id);
+        return this.roleMenuService.findOne(id);
     }
 
     @Patch(':id')
@@ -37,11 +37,11 @@ export class RoleMenuController {
         @Param('id') id: string,
         @Body() updateRoleMenuDto: UpdateRoleMenuDto,
     ) {
-        return this.roleMenuService.update(+id, updateRoleMenuDto);
+        return this.roleMenuService.update(id, updateRoleMenuDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.roleMenuService.remove(+id);
+        return this.roleMenuService.remove(id);
     }
 }

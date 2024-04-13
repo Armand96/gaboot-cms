@@ -4,6 +4,7 @@ import { Product } from 'src/mainapp/master/products/entities/product.entity';
 @Table({
     tableName: 'categories',
     timestamps: true,
+    createdAt: 'created_at', updatedAt: 'updated_at',
     defaultScope: {
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
@@ -19,10 +20,10 @@ export class Category extends Model {
     description: string;
 
     @Column
-    imgPath: string;
+    image_path: string;
 
     @Column
-    imgThumbPath: string;
+    thumbnail_path: string;
 
     @HasMany(() => Product)
     products: Product[];

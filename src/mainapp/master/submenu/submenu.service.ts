@@ -63,10 +63,10 @@ export class SubmenuService {
         return resSuccess;
     }
 
-    async findByMenuId(menuId: number) {
+    async findByMenuId(menuId: string) {
         const resSuccess = new ResponseSuccess<Submenu>();
         const dataSubmenu = await this.submenu.findAll({
-            where: { menuId: menuId },
+            where: { menu_id: menuId },
         });
         resSuccess.message = 'Success Get Submenus';
         resSuccess.success = true;
@@ -74,7 +74,7 @@ export class SubmenuService {
         return resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const resSuccess = new ResponseSuccess<Submenu>();
         const dataSubmenu = await this.submenu.findOne({ where: { id: id } });
         resSuccess.message = 'Success Get Submenu';
@@ -85,7 +85,7 @@ export class SubmenuService {
         return resSuccess;
     }
 
-    async update(id: number, updateSubmenuDto: UpdateSubmenuDto) {
+    async update(id: string, updateSubmenuDto: UpdateSubmenuDto) {
         const resSuccess = new ResponseSuccess<Submenu>();
         const dataUpdate: any = updateSubmenuDto;
 
@@ -100,7 +100,7 @@ export class SubmenuService {
         return resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const resSuccess = new ResponseSuccess<Submenu>();
 
         await this.seq.transaction(async (trx) => {
@@ -108,7 +108,7 @@ export class SubmenuService {
                 where: { id: id },
             });
 
-            await this.roleSubmSvc.deleteBySubmenuId(id);
+            await this.roleSubmSvc.deleteBysubmenu_id(id);
         });
 
         resSuccess.message = 'Success Delete Submenu Data';

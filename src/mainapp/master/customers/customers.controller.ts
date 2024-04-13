@@ -45,19 +45,19 @@ export class CustomersController {
     @Get(':id')
     findOne(@Param('id') id: string) 
     {
-        return this.customersService.findOne(+id);
+        return this.customersService.findOne(id);
     }
 
     @Patch(':id')
     @UploadInterceptor('img')
     update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto, @UploadFile() file: Express.Multer.File) 
     {
-        return this.customersService.update(+id, updateCustomerDto, file);
+        return this.customersService.update(id, updateCustomerDto, file);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) 
     {
-        return this.customersService.remove(+id);
+        return this.customersService.remove(id);
     }
 }

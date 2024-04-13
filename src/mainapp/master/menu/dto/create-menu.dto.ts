@@ -2,20 +2,20 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateMenuDto {
     @IsNotEmpty()
-    menuName: string;
+    menu_name: string;
 
     @IsNotEmpty()
-    menuIcon: string;
+    menu_icon: string;
 
     @IsOptional()
-    frontendUrl: string;
+    frontend_url: string;
 
     @IsOptional()
-    backendUrl: string;
+    backend_url: string;
 
     @IsNotEmpty()
-    menuHaveChild: boolean;
+    menu_have_child: boolean;
 
     @IsNotEmpty()
-    menuIsActive: boolean;
+    menu_is_active: boolean;
 }

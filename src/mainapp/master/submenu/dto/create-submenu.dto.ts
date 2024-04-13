@@ -2,20 +2,20 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateSubmenuDto {
     @IsNotEmpty()
-    menuId: number;
+    menu_id: string;
 
     @IsNotEmpty()
-    submenuName: string;
+    submenu_name: string;
 
     @IsNotEmpty()
-    submenuIcon: string;
+    submenu_icon: string;
 
     @IsNotEmpty()
-    frontendUrl: string;
+    frontend_url: string;
 
     @IsNotEmpty()
-    backendUrl: string;
+    backend_url: string;
 
     @IsNotEmpty()
-    submenuIsActive: boolean;
+    submenu_is_active: boolean;
 }

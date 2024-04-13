@@ -35,8 +35,8 @@ export class CategoriesService {
         }
 
         if (image != null) {
-            dataCreate.imgPath = pathObj.path;
-            dataCreate.imgThumbPath = pathObj.thumbPath;
+            dataCreate.image_path = pathObj.path;
+            dataCreate.thumbnail_path = pathObj.thumbPath;
         }
 
         const category = await this.category.create(dataCreate);
@@ -78,7 +78,7 @@ export class CategoriesService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const categories = await this.category.findOne({
             where: { id: id },
         });
@@ -95,7 +95,7 @@ export class CategoriesService {
     }
 
     async update(
-        id: number,
+        id: string,
         updateCategoryDto: UpdateCategoryDto,
         image: Express.Multer.File,
     ) {
@@ -113,8 +113,8 @@ export class CategoriesService {
         }
 
         if (image != null) {
-            dataUpdate.imgPath = pathObj.path;
-            dataUpdate.imgThumbPath = pathObj.thumbPath;
+            dataUpdate.image_path = pathObj.path;
+            dataUpdate.thumbnail_path = pathObj.thumbPath;
         }
 
         await this.category.update(dataUpdate, { where: { id: id } });
@@ -127,15 +127,15 @@ export class CategoriesService {
         return this.response.toJson();
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const category = await this.category.findOne({where:{id:id}});
         await this.category.destroy({
             where: { id: id },
         });
 
-        if (category.imgPath != '' || category.imgPath != null) {
-            this.gen.removeImage(category.imgPath);
-            this.gen.removeImage(category.imgThumbPath);
+        if (category.image_path != '' || category.image_path != null) {
+            this.gen.removeImage(category.image_path);
+            this.gen.removeImage(category.thumbnail_path);
         }
 
         this.response.message = 'Success Delete Category Data';
@@ -145,7 +145,7 @@ export class CategoriesService {
         return this.response.toJson();
     }
 
-    async getImage(id: number): Promise<Category> {
+    async getImage(id: string): Promise<Category> {
         const category = await this.category.findOne({
             where: { id: id },
         });

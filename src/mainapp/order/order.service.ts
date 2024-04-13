@@ -59,7 +59,7 @@ export class OrderService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const order = await this.orderModel.findOne({
             where: { id: id },
             include: [
@@ -83,7 +83,7 @@ export class OrderService {
         return this.response.toJson();
     }
 
-    async update(id: number, updateOrderDto: UpdateOrderDto) {
+    async update(id: string, updateOrderDto: UpdateOrderDto) {
         const dataUpdate: any = updateOrderDto;
 
         await this.orderModel.update(dataUpdate, { where: { id: id } });
@@ -96,7 +96,7 @@ export class OrderService {
         return this.response.toJson();
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         return `This action removes a #${id} order`;
     }
 
@@ -131,7 +131,7 @@ export class OrderService {
         return this.responseDetail.toJson();
     }
 
-    async findOneDetail(id: number) {
+    async findOneDetail(id: string) {
         const ordDetails = await this.orderDetailModel.findOne({
             where: { id: id },
             include: [

@@ -48,7 +48,7 @@ export class WishlistsService {
         return this.response.toJson();
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const wishlist = await this.wishlistModel.findOne({
             where: { id: id },
         });
@@ -67,11 +67,11 @@ export class WishlistsService {
         return this.response.toJson();
     }
 
-    async update(id: number, updateWishlistDto: UpdateWishlistDto) {
+    async update(id: string, updateWishlistDto: UpdateWishlistDto) {
         return `This action updates a #${id} wishlist`;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         return `This action removes a #${id} wishlist`;
     }
 }

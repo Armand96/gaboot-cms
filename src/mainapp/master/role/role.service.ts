@@ -64,9 +64,9 @@ export class RoleService {
         /* FILTER DATA */
         // console.log(req.query)
         const filterData: any = {};
-        if (req.query.roleName != undefined && req.query.roleName != '')
-            filterData.roleName = {
-                [Op.like]: `%${req.query.roleName}%`,
+        if (req.query.role_name != undefined && req.query.role_name != '')
+            filterData.role_name = {
+                [Op.like]: `%${req.query.role_name}%`,
             };
 
         const includes =
@@ -98,7 +98,7 @@ export class RoleService {
         return resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const resSuccess = new ResponseSuccess<Role>();
         const dataRole = await this.role.findOne({
             where: { id: id },
@@ -112,7 +112,7 @@ export class RoleService {
                             include: [
                                 {
                                     model: RoleAccess,
-                                    where: { submenuId: null },
+                                    where: { submenu_id: null },
                                 },
                             ],
                         },
@@ -136,10 +136,10 @@ export class RoleService {
         return resSuccess;
     }
 
-    async update(id: number, updateRoleDto: UpdateRoleDto) {
+    async update(id: string, updateRoleDto: UpdateRoleDto) {
         const resSuccess = new ResponseSuccess<Role>();
         const dataUpdate: any = {};
-        dataUpdate.roleName = updateRoleDto.roleName;
+        dataUpdate.role_name = updateRoleDto.role_name;
 
         await this.role.update(dataUpdate, {
             where: { id: id },
@@ -153,7 +153,7 @@ export class RoleService {
         return resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         const resSuccess = new ResponseSuccess<Role>();
         await this.role.destroy({
             where: { id: id },
@@ -170,8 +170,8 @@ export class RoleService {
     }
 
     /* ========================== NON CRUD ========================== */
-    async findByRoleName(roleName: string) {
-        return await this.role.findOne({ where: { roleName: roleName } });
+    async findByRoleName(role_name: string) {
+        return await this.role.findOne({ where: { role_name: role_name } });
     }
 
     throwingError(error: Error) {
@@ -192,16 +192,16 @@ export class RoleService {
         let resSuccess = new ResponseSuccess<Role>();
         const dataArrayRoleAccess: CreateRoleAccessDto[] = [];
         const dataRoleSubmenu: CreateRoleSubmenuDto[] = [];
-        const dataArrayMenu = createRoleDto.roleMenus;
+        const dataArrayMenu = createRoleDto.role_menus;
 
         const roleDto: CreateRoleDto = {
-            roleName: createRoleDto.roleName,
+            role_name: createRoleDto.role_name,
         };
 
         try {
             await this.seq.transaction(async () => {
                 const data: ResponseSuccessRole = await this.create(roleDto);
-                const id: number = data.datum.id;
+                const id: string = data.datum.id;
 
                 /* INSERT TO ROLE MENUS AND SUBMENUS */
                 for (let index = 0; index < dataArrayMenu.length; index++) {
@@ -209,55 +209,55 @@ export class RoleService {
                     let tempDataRoleAccess = {} as CreateRoleAccessDto;
 
                     /* CHECK ENABLED OR DISABLED */
-                    if (element.isChecked) {
+                    if (element.is_checked) {
                         const menuHaveChild = await this.menuSvc.findOne(
-                            element.menuId,
+                            element.menu_id,
                         );
-                        if (!menuHaveChild.datum.menuHaveChild) {
+                        if (!menuHaveChild.datum.menu_have_child) {
                             tempDataRoleAccess = {
-                                roleId: id,
-                                menuId: element.menuId,
-                                submenuId: null,
-                                frontendUrl: menuHaveChild.datum.frontendUrl,
-                                backendUrl: menuHaveChild.datum.backendUrl,
-                                createz: element.createz,
-                                readz: element.readz,
-                                updatez: element.updatez,
-                                deletez: element.deletez,
+                                role_id: id,
+                                menu_id: element.menu_id,
+                                submenu_id: null,
+                                frontend_url: menuHaveChild.datum.frontend_url,
+                                backend_url: menuHaveChild.datum.backend_url,
+                                create_access: element.create_access,
+                                read_access: element.read_access,
+                                update_access: element.update_access,
+                                delete_access: element.delete_access,
                             };
 
                             dataArrayRoleAccess.push(tempDataRoleAccess);
                         }
 
-                        element.roleId = id;
+                        element.role_id = id;
                         const resp = await this.roleMenu.create(element);
 
                         for (
                             let index = 0;
-                            index < element.roleSubmenus.length;
+                            index < element.role_submenus.length;
                             index++
                         ) {
-                            const elm2 = element.roleSubmenus[index];
+                            const elm2 = element.role_submenus[index];
 
                             /* CHECK ENABLED OR DISABLED */
-                            if (elm2.isChecked) {
-                                (elm2.roleId = id),
-                                    (elm2.roleMenuId = resp.data.id);
+                            if (elm2.is_checked) {
+                                (elm2.role_id = id),
+                                    (elm2.rolemenu_id = resp.data.id);
                                 const dataSubmenu =
                                     await this.submenuSvc.findOne(
-                                        elm2.submenuId,
+                                        elm2.submenu_id,
                                     );
 
                                 tempDataRoleAccess = {
-                                    roleId: id,
-                                    menuId: element.menuId,
-                                    submenuId: elm2.submenuId,
-                                    frontendUrl: dataSubmenu.datum.frontendUrl,
-                                    backendUrl: dataSubmenu.datum.backendUrl,
-                                    createz: elm2.createz,
-                                    readz: elm2.readz,
-                                    updatez: elm2.updatez,
-                                    deletez: elm2.deletez,
+                                    role_id: id,
+                                    menu_id: element.menu_id,
+                                    submenu_id: elm2.submenu_id,
+                                    frontend_url: dataSubmenu.datum.frontend_url,
+                                    backend_url: dataSubmenu.datum.backend_url,
+                                    create_access: elm2.create_access,
+                                    read_access: elm2.read_access,
+                                    update_access: elm2.update_access,
+                                    delete_access: elm2.delete_access,
                                 } as CreateRoleAccessDto;
                                 dataArrayRoleAccess.push(tempDataRoleAccess);
                                 dataRoleSubmenu.push(elm2);
@@ -286,14 +286,14 @@ export class RoleService {
 
     /* UPDATE */
     /* ===================================================================== */
-    async updateRole(roleId: number, updateRoleDto: UpdateRoleDetailDto) {
+    async updateRole(roleId: string, updateRoleDto: UpdateRoleDetailDto) {
         let resSuccess = new ResponseSuccess<Role>();
         const dataArrayRoleAccess: CreateRoleAccessDto[] = [];
         const dataRoleSubmenu: CreateRoleSubmenuDto[] = [];
-        const dataArrayMenu = updateRoleDto.roleMenus;
+        const dataArrayMenu = updateRoleDto.role_menus;
 
         const roleDto: UpdateRoleDto = {
-            roleName: updateRoleDto.roleName,
+            role_name: updateRoleDto.role_name,
         };
 
         try {
@@ -312,26 +312,26 @@ export class RoleService {
                 /* INSERT TO ROLE MENUS AND SUBMENUS */
                 for (let index = 0; index < dataArrayMenu.length; index++) {
                     const element = dataArrayMenu[index];
-                    element.roleId = roleId;
+                    element.role_id = roleId;
 
                     /* CHECK ENABLED OR DISABLED */
-                    if (element.isChecked) {
+                    if (element.is_checked) {
                         let tempDataRoleAccess = {} as CreateRoleAccessDto;
 
                         const menuHaveChild = await this.menuSvc.findOne(
-                            element.menuId,
+                            element.menu_id,
                         );
-                        if (!menuHaveChild.datum.menuHaveChild) {
+                        if (!menuHaveChild.datum.menu_have_child) {
                             tempDataRoleAccess = {
-                                roleId: roleId,
-                                menuId: element.menuId,
-                                submenuId: null,
-                                frontendUrl: menuHaveChild.datum.frontendUrl,
-                                backendUrl: menuHaveChild.datum.backendUrl,
-                                createz: element.createz,
-                                readz: element.readz,
-                                updatez: element.updatez,
-                                deletez: element.deletez,
+                                role_id: roleId,
+                                menu_id: element.menu_id,
+                                submenu_id: null,
+                                frontend_url: menuHaveChild.datum.frontend_url,
+                                backend_url: menuHaveChild.datum.backend_url,
+                                create_access: element.create_access,
+                                read_access: element.read_access,
+                                update_access: element.update_access,
+                                delete_access: element.delete_access,
                             };
 
                             dataArrayRoleAccess.push(tempDataRoleAccess);
@@ -341,29 +341,29 @@ export class RoleService {
 
                         for (
                             let index = 0;
-                            index < element.roleSubmenus.length;
+                            index < element.role_submenus.length;
                             index++
                         ) {
-                            const elm2 = element.roleSubmenus[index];
+                            const elm2 = element.role_submenus[index];
 
-                            if (elm2.isChecked) {
-                                (elm2.roleId = roleId),
-                                    (elm2.roleMenuId = resp.data.id);
+                            if (elm2.is_checked) {
+                                (elm2.role_id = roleId),
+                                    (elm2.rolemenu_id = resp.data.id);
                                 const dataSubmenu =
                                     await this.submenuSvc.findOne(
-                                        elm2.submenuId,
+                                        elm2.submenu_id,
                                     );
 
                                 tempDataRoleAccess = {
-                                    roleId: roleId,
-                                    menuId: element.menuId,
-                                    submenuId: elm2.submenuId,
-                                    frontendUrl: dataSubmenu.datum.frontendUrl,
-                                    backendUrl: dataSubmenu.datum.backendUrl,
-                                    createz: elm2.createz,
-                                    readz: elm2.readz,
-                                    updatez: elm2.updatez,
-                                    deletez: elm2.deletez,
+                                    role_id: roleId,
+                                    menu_id: element.menu_id,
+                                    submenu_id: elm2.submenu_id,
+                                    frontend_url: dataSubmenu.datum.frontend_url,
+                                    backend_url: dataSubmenu.datum.backend_url,
+                                    create_access: elm2.create_access,
+                                    read_access: elm2.read_access,
+                                    update_access: elm2.update_access,
+                                    delete_access: elm2.delete_access,
                                 };
 
                                 dataArrayRoleAccess.push(tempDataRoleAccess);

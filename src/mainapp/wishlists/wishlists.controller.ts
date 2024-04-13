@@ -12,7 +12,9 @@ import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { Request } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('wishlist')
 @Controller('wishlists')
 export class WishlistsController {
     constructor(private readonly wishlistsService: WishlistsService) {}
@@ -29,7 +31,7 @@ export class WishlistsController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.wishlistsService.findOne(+id);
+        return this.wishlistsService.findOne(id);
     }
 
     @Patch(':id')
@@ -37,11 +39,11 @@ export class WishlistsController {
         @Param('id') id: string,
         @Body() updateWishlistDto: UpdateWishlistDto,
     ) {
-        return this.wishlistsService.update(+id, updateWishlistDto);
+        return this.wishlistsService.update(id, updateWishlistDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.wishlistsService.remove(+id);
+        return this.wishlistsService.remove(id);
     }
 }

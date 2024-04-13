@@ -21,8 +21,8 @@ export class RoleMenuService {
 
     async create(createRoleMenuDto: CreateRoleMenuDto) {
         const dataCreate: any = {};
-        dataCreate.roleId = createRoleMenuDto.roleId;
-        dataCreate.menuId = createRoleMenuDto.menuId;
+        dataCreate.role_id = createRoleMenuDto.role_id;
+        dataCreate.menu_id = createRoleMenuDto.menu_id;
 
         const roleMenu = await this.roleMenu.create(dataCreate);
 
@@ -54,7 +54,7 @@ export class RoleMenuService {
         return this.resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const dataRoleMenu = await this.roleMenu.findOne({ where: { id: id } });
         this.resSuccess.message = 'Success Get Role Menu';
         this.resSuccess.success = true;
@@ -64,10 +64,10 @@ export class RoleMenuService {
         return this.resSuccess;
     }
 
-    async update(id: number, updateRoleMenuDto: UpdateRoleMenuDto) {
+    async update(id: string, updateRoleMenuDto: UpdateRoleMenuDto) {
         const dataUpdate: any = {};
-        dataUpdate.roleId = updateRoleMenuDto.roleId;
-        dataUpdate.menuId = updateRoleMenuDto.menuId;
+        dataUpdate.role_id = updateRoleMenuDto.role_id;
+        dataUpdate.menu_id = updateRoleMenuDto.menu_id;
 
         await this.roleMenu.update(dataUpdate, { where: { id: id } });
         const roleMenu = await this.roleMenu.findOne({ where: { id: id } });
@@ -80,7 +80,7 @@ export class RoleMenuService {
         return this.resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         await this.roleMenu.destroy({
             where: { id: id },
         });
@@ -96,8 +96,8 @@ export class RoleMenuService {
     /* NON CRUD */
     assignData(datas: CreateRoleMenuDto) {
         const dataCreate: any = {};
-        dataCreate.roleId = datas.roleId;
-        dataCreate.menuId = datas.menuId;
+        dataCreate.role_id = datas.role_id;
+        dataCreate.menu_id = datas.menu_id;
         return dataCreate;
     }
 
@@ -118,7 +118,7 @@ export class RoleMenuService {
         return this.resSuccess;
     }
 
-    async bulkDelete(roleId: number) {
+    async bulkDelete(roleId: string) {
         await this.roleMenu.destroy({
             where: { roleId: roleId },
         });

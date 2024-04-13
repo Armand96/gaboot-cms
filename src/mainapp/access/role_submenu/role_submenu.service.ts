@@ -21,9 +21,9 @@ export class RoleSubmenuService {
 
     async create(createRoleSubmenuDto: CreateRoleSubmenuDto) {
         const dataCreate: any = {};
-        dataCreate.roleId = createRoleSubmenuDto.roleId;
-        dataCreate.submenuId = createRoleSubmenuDto.submenuId;
-        dataCreate.roleMenuId = createRoleSubmenuDto.roleMenuId;
+        dataCreate.role_id = createRoleSubmenuDto.role_id;
+        dataCreate.submenu_id = createRoleSubmenuDto.submenu_id;
+        dataCreate.rolemenu_id = createRoleSubmenuDto.rolemenu_id;
 
         const roleSubmenu = await this.roleSubmenu.create(dataCreate);
 
@@ -55,7 +55,7 @@ export class RoleSubmenuService {
         return this.resSuccess;
     }
 
-    async findOne(id: number) {
+    async findOne(id: string) {
         const dataRoleMenu = await this.roleSubmenu.findOne({
             where: { id: id },
         });
@@ -67,11 +67,11 @@ export class RoleSubmenuService {
         return this.resSuccess;
     }
 
-    async update(id: number, updateRoleSubmenuDto: UpdateRoleSubmenuDto) {
+    async update(id: string, updateRoleSubmenuDto: UpdateRoleSubmenuDto) {
         const dataUpdate: any = {};
-        dataUpdate.roleId = updateRoleSubmenuDto.roleId;
-        dataUpdate.submenuId = updateRoleSubmenuDto.submenuId;
-        dataUpdate.roleMenuId = updateRoleSubmenuDto.roleMenuId;
+        dataUpdate.role_id = updateRoleSubmenuDto.role_id;
+        dataUpdate.submenu_id = updateRoleSubmenuDto.submenu_id;
+        dataUpdate.rolemenu_id = updateRoleSubmenuDto.rolemenu_id;
 
         await this.roleSubmenu.update(dataUpdate, { where: { id: id } });
         const roleSubmenu = await this.roleSubmenu.findOne({
@@ -86,7 +86,7 @@ export class RoleSubmenuService {
         return this.resSuccess;
     }
 
-    async remove(id: number) {
+    async remove(id: string) {
         await this.roleSubmenu.destroy({
             where: { id: id },
         });
@@ -102,9 +102,9 @@ export class RoleSubmenuService {
     /* NON CRUD */
     assignData(datas: CreateRoleSubmenuDto) {
         const dataCreate: any = {};
-        dataCreate.roleId = datas.roleId;
-        dataCreate.roleMenuId = datas.roleMenuId;
-        dataCreate.submenuId = datas.submenuId;
+        dataCreate.role_id = datas.role_id;
+        dataCreate.rolemenu_id = datas.rolemenu_id;
+        dataCreate.submenu_id = datas.submenu_id;
         return dataCreate;
     }
 
@@ -125,17 +125,17 @@ export class RoleSubmenuService {
         return this.resSuccess;
     }
 
-    async bulkDelete(roleId: number) {
+    async bulkDelete(roleId: string) {
         await this.roleSubmenu.destroy({
             where: { roleId: roleId },
         });
     }
 
-    async deleteBySubmenuId(submenuId: number) {
-        await this.roleSubmenu.destroy({ where: { submenuId: submenuId } });
+    async deleteBysubmenu_id(submenu_id: string) {
+        await this.roleSubmenu.destroy({ where: { submenu_id: submenu_id } });
     }
 
-    async deleteByMenuId(menuId: number) {
-        await this.roleSubmenu.destroy({ where: { menuId: menuId } });
+    async deleteByMenuId(menuId: string) {
+        await this.roleSubmenu.destroy({ where: { menu_id: menuId } });
     }
 }

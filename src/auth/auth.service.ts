@@ -13,7 +13,7 @@ export class AuthService {
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
 
-    async validateUser(id: number, pass: string): Promise<any> {
+    async validateUser(id: string, pass: string): Promise<any> {
         console.log('validate user');
         const user = await this.userSvc.userOnly(id);
         if (user.datum && user.datum.password === pass) {
@@ -36,7 +36,7 @@ export class AuthService {
             );
         }
 
-        const payload = { username: user.userName, sub: user.id };
+        const payload = { username: user.username, sub: user.id };
 
         let currentData:any = await this.cacheManager.get('users');
         if(currentData == undefined) currentData = [];
