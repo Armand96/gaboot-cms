@@ -24,6 +24,8 @@ services:
     restart: unless-stopped
     ports:
       - 5001:3000
+    volumes:
+      - ./storage:/usr/src/app/dist/storage
   # gaboot-server:
   #   build: 
   #     context: .
