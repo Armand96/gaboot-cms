@@ -25,7 +25,7 @@ services:
     ports:
       - 5001:3000
     volumes:
-      - ./storage:/usr/src/app/dist/storage
+      - ./storage:/usr/src/app/storage
   # gaboot-server:
   #   build: 
   #     context: .
