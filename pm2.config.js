@@ -4,7 +4,7 @@ module.exports = {
         name: "main",
         script: "dist/main.js",
         watch: true,
-        ignore_watch: ["node_modules"],
+        ignore_watch: ["node_modules", "logs", "storage"],
         instances: 1,
         exec_mode: "cluster",
         env: {
