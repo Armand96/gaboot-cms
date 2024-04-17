@@ -39,7 +39,7 @@ export class GeneralService {
     ) {
         const pathObj = this.categorizePath(category);
 
-        fileName = fileName.replace(' ', '_');
+        fileName = fileName.replaceAll(' ', '_');
 
         if (!fs.existsSync(pathObj.path)) {
             fs.mkdirSync(pathObj.path, { recursive: true });
