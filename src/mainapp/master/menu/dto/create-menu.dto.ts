@@ -13,9 +13,9 @@ export class CreateMenuDto {
     @IsOptional()
     backend_url: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     menu_have_child: boolean;
 
-    @IsNotEmpty()
+    @IsOptional()
     menu_is_active: boolean;
 }

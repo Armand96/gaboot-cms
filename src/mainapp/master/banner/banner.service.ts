@@ -20,7 +20,7 @@ export class BannerService {
     ) { }
 
     async create(createBannerDto: CreateBannerDto, image: Express.Multer.File,) {
-        const dataCreate: any = CreateBannerDto;
+        const dataCreate: any = createBannerDto;
         let pathObj = {} as PathImageObj;
 
         if (image != null) {
