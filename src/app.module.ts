@@ -27,6 +27,7 @@ import { PaymentModule } from './mainapp/payment/payment.module';
 import { OrderModule } from './mainapp/order/order.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CacheModule } from '@nestjs/cache-manager';
+import { BannerModule } from './mainapp/master/banner/banner.module';
 
 @Module({
     imports: [
@@ -50,6 +51,7 @@ import { CacheModule } from '@nestjs/cache-manager';
         WishlistsModule,
         PaymentModule,
         OrderModule,
+        BannerModule,
     ],
     controllers: [AppController],
     providers: [AppService],

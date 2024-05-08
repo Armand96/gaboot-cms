@@ -1,36 +1,33 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
+import { CreateBannerDto } from './dto/create-banner.dto';
+import { UpdateBannerDto } from './dto/update-banner.dto';
+import { Banner } from './entities/banner.entity';
 import { InjectModel } from '@nestjs/sequelize';
-import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
 import { Request } from 'express';
-import { Op } from 'sequelize';
 import { GeneralService } from 'src/services/general/general.service';
 import { PathImageObj } from 'src/services/general/interfaces/path-image';
+import { ResponseSuccess } from 'src/services/general/interfaces/response.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
-export class CategoriesService {
-    constructor(
-        @InjectModel(Category)
-        private category: typeof Category,
-        private gen: GeneralService,
-        private response: ResponseSuccess<Category>,
-    ) {}
+export class BannerService {
 
-    /* RESPONSE SUCCES */
-    async create(
-        createCategoryDto: CreateCategoryDto,
-        image: Express.Multer.File,
-    ) {
-        const dataCreate: any = createCategoryDto;
+    constructor(
+        @InjectModel(Banner)
+        private banner: typeof Banner,
+        private gen: GeneralService,
+        private response: ResponseSuccess<Banner>,
+    ) { }
+
+    async create(createBannerDto: CreateBannerDto, image: Express.Multer.File,) {
+        const dataCreate: any = createBannerDto;
         let pathObj = {} as PathImageObj;
 
         if (image != null) {
             pathObj = await this.gen.uploadImage(
                 image,
                 `${dataCreate.name}${Date.now()}`,
-                'category',
+                'banner',
             );
         }
 
@@ -39,11 +36,11 @@ export class CategoriesService {
             dataCreate.thumbnail_path = pathObj.thumbPath;
         }
 
-        const category = await this.category.create(dataCreate);
+        const banner = await this.banner.create(dataCreate);
 
-        this.response.message = 'Success Insert Category Data';
+        this.response.message = 'Success Insert Banner Data';
         this.response.success = true;
-        this.response.datum = category;
+        this.response.datum = banner;
 
         return this.response.toJson();
     }
@@ -58,7 +55,7 @@ export class CategoriesService {
                 [Op.like]: `%${req.query.name}%`,
             };
 
-        const categories = await this.category.findAll({
+        const categories = await this.banner.findAll({
             limit: limit,
             offset: page * limit,
             where: filterData,
@@ -71,7 +68,7 @@ export class CategoriesService {
             return this.response.toJson();
         }
 
-        this.response.message = 'Success Get Category';
+        this.response.message = 'Success Get Banner';
         this.response.success = true;
         this.response.data = categories;
 
@@ -79,7 +76,7 @@ export class CategoriesService {
     }
 
     async findOne(id: string) {
-        const categories = await this.category.findOne({
+        const categories = await this.banner.findOne({
             where: { id: id },
         });
 
@@ -87,19 +84,15 @@ export class CategoriesService {
             throw new NotFoundException('Not Data Found');
         }
 
-        this.response.message = 'Success Get Category';
+        this.response.message = 'Success Get Banner';
         this.response.success = true;
         this.response.datum = categories;
 
         return this.response.toJson();
     }
 
-    async update(
-        id: string,
-        updateCategoryDto: UpdateCategoryDto,
-        image: Express.Multer.File,
-    ) {
-        const dataUpdate: any = updateCategoryDto;
+    async update(id: string, updateBannerDto: UpdateBannerDto, image: Express.Multer.File,) {
+        const dataUpdate: any = updateBannerDto;
 
         let pathObj = {} as PathImageObj;
 
@@ -108,7 +101,7 @@ export class CategoriesService {
             pathObj = await this.gen.uploadImage(
                 image,
                 `${dataUpdate.name}${Date.now()}`,
-                'category',
+                'product',
             );
         }
 
@@ -117,10 +110,10 @@ export class CategoriesService {
             dataUpdate.thumbnail_path = pathObj.thumbPath;
         }
 
-        await this.category.update(dataUpdate, { where: { id: id } });
-        const menu = await this.category.findOne({ where: { id: id } });
+        await this.banner.update(dataUpdate, { where: { id: id } });
+        const menu = await this.banner.findOne({ where: { id: id } });
 
-        this.response.message = 'Success Update Category Data';
+        this.response.message = 'Success Update Banner Data';
         this.response.success = true;
         this.response.datum = menu;
 
@@ -128,27 +121,20 @@ export class CategoriesService {
     }
 
     async remove(id: string) {
-        const category = await this.category.findOne({where:{id:id}});
-        await this.category.destroy({
+        const banner = await this.banner.findOne({where:{id:id}});
+        await this.banner.destroy({
             where: { id: id },
         });
 
-        if (category.image_path != '' || category.image_path != null) {
-            this.gen.removeImage(category.image_path);
-            this.gen.removeImage(category.thumbnail_path);
+        if (banner.image_path != '' || banner.image_path != null) {
+            this.gen.removeImage(banner.image_path);
+            this.gen.removeImage(banner.thumbnail_path);
         }
 
-        this.response.message = 'Success Delete Category Data';
+        this.response.message = 'Success Delete Banner Data';
         this.response.success = true;
         this.response.datum = null;
 
         return this.response.toJson();
-    }
-
-    async getImage(id: string): Promise<Category> {
-        const category = await this.category.findOne({
-            where: { id: id },
-        });
-        return category;
     }
 }

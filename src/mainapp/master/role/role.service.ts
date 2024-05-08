@@ -157,6 +157,7 @@ export class RoleService {
         const resSuccess = new ResponseSuccess<Role>();
         await this.role.destroy({
             where: { id: id },
+            cascade: false
         });
         await this.rolac.bulkDelete(id);
         await this.roleMenu.bulkDelete(id);
@@ -268,7 +269,7 @@ export class RoleService {
                 await this.roleSubmenu.bulkInsert(dataRoleSubmenu);
 
                 // roleSubmenus.forEach(element => {
-                //     element.roleId = id;
+                //     element.role_id = id;
                 // });
 
                 /* INSERT */
@@ -286,7 +287,7 @@ export class RoleService {
 
     /* UPDATE */
     /* ===================================================================== */
-    async updateRole(roleId: string, updateRoleDto: UpdateRoleDetailDto) {
+    async updateRole(role_id: string, updateRoleDto: UpdateRoleDetailDto) {
         let resSuccess = new ResponseSuccess<Role>();
         const dataArrayRoleAccess: CreateRoleAccessDto[] = [];
         const dataRoleSubmenu: CreateRoleSubmenuDto[] = [];
@@ -298,21 +299,21 @@ export class RoleService {
 
         try {
             await this.seq.transaction(async () => {
-                await this.update(roleId, roleDto);
+                await this.update(role_id, roleDto);
 
                 // dataArrayRole.forEach((element) => {
-                //     element.roleId = roleId;
+                //     element.role_id = role_id;
                 // });
 
                 /* DELETE */
-                await this.rolac.bulkDelete(roleId);
-                await this.roleMenu.bulkDelete(roleId);
-                await this.roleSubmenu.bulkDelete(roleId);
+                await this.rolac.bulkDelete(role_id);
+                await this.roleMenu.bulkDelete(role_id);
+                await this.roleSubmenu.bulkDelete(role_id);
 
                 /* INSERT TO ROLE MENUS AND SUBMENUS */
                 for (let index = 0; index < dataArrayMenu.length; index++) {
                     const element = dataArrayMenu[index];
-                    element.role_id = roleId;
+                    element.role_id = role_id;
 
                     /* CHECK ENABLED OR DISABLED */
                     if (element.is_checked) {
@@ -323,7 +324,7 @@ export class RoleService {
                         );
                         if (!menuHaveChild.datum.menu_have_child) {
                             tempDataRoleAccess = {
-                                role_id: roleId,
+                                role_id: role_id,
                                 menu_id: element.menu_id,
                                 submenu_id: null,
                                 frontend_url: menuHaveChild.datum.frontend_url,
@@ -347,7 +348,7 @@ export class RoleService {
                             const elm2 = element.role_submenus[index];
 
                             if (elm2.is_checked) {
-                                (elm2.role_id = roleId),
+                                (elm2.role_id = role_id),
                                     (elm2.rolemenu_id = resp.data.id);
                                 const dataSubmenu =
                                     await this.submenuSvc.findOne(
@@ -355,7 +356,7 @@ export class RoleService {
                                     );
 
                                 tempDataRoleAccess = {
-                                    role_id: roleId,
+                                    role_id: role_id,
                                     menu_id: element.menu_id,
                                     submenu_id: elm2.submenu_id,
                                     frontend_url: dataSubmenu.datum.frontend_url,
@@ -376,7 +377,7 @@ export class RoleService {
                 /* INSERT */
                 await this.roleSubmenu.bulkInsert(dataRoleSubmenu);
                 await this.rolac.bulkInsert(dataArrayRoleAccess);
-                resSuccess = await this.findOne(roleId);
+                resSuccess = await this.findOne(role_id);
                 resSuccess.message = 'Success Update Role';
             });
             return resSuccess;

@@ -118,9 +118,9 @@ export class RoleMenuService {
         return this.resSuccess;
     }
 
-    async bulkDelete(roleId: string) {
+    async bulkDelete(role_id: string) {
         await this.roleMenu.destroy({
-            where: { roleId: roleId },
+            where: { role_id: role_id },
         });
     }
 }

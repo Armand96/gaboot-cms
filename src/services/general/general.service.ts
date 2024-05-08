@@ -65,7 +65,11 @@ export class GeneralService {
     }
 
     removeImage(path: string) {
-        fs.unlinkSync(path);
+        try {
+            fs.unlinkSync(path);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     /* RESIZE FOR THUMBNAIL */

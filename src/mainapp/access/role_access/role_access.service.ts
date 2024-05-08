@@ -131,9 +131,9 @@ export class RoleAccessService {
         return this.resSuccess;
     }
 
-    async bulkDelete(roleId: string) {
+    async bulkDelete(role_id: string) {
         await this.rolac.destroy({
-            where: { roleId: roleId },
+            where: { role_id: role_id },
         });
     }
 
