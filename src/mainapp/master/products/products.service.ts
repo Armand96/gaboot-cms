@@ -49,23 +49,29 @@ export class ProductsService {
                 [Op.like]: `%${req.query.name}%`,
             };
 
-        const products = await this.product.findAll({
+        const products = await this.product.findAndCountAll({
             limit: limit,
             offset: page * limit,
             where: filterData,
             include: Category
         });
 
-        if (products?.length == 0) {
+        if (products?.rows.length == 0) {
             this.response.message = "No Data Found";
             this.response.success = false;
 
             return this.response.toJson();
         }
 
+        const lastPage =
+            Number((products.count / limit).toFixed(0)) +
+            (products.count % limit == 0 ? 0 : 1);
+
         this.response.message = 'Success Get Products';
         this.response.success = true;
-        this.response.data = products;
+        this.response.data = products.rows;
+        this.response.lastPage = lastPage;
+        this.response.totalData = products.count;
 
         return this.response.toJson();
     }
